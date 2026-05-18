@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>泰國視察行程 5/19–5/23｜列印版</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Microsoft JhengHei","Noto Sans TC",Arial,sans-serif;background:#fff;color:#000;font-size:9.5pt}
+
+/* ── 列印按鈕（只在螢幕顯示） ── */
+.print-btn{
+  display:block;text-align:center;padding:8px;background:#1A2E4A;color:#fff;
+  font-size:11pt;font-weight:700;cursor:pointer;border:none;width:100%;
+  letter-spacing:1px;
+}
+@media print{.print-btn{display:none!important}}
+
+/* ── 五欄格線 ── */
+.grid{
+  display:grid;grid-template-columns:repeat(5,1fr);
+  gap:2mm;padding:2mm 0;
+  height:calc(100vh - 32px); /* 撐滿螢幕，印出時用 @page 控制 */
+}
+@media print{
+  @page{size:A4 landscape;margin:4mm 5mm}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  .grid{height:auto;gap:2mm;padding:0}
+}
+
+/* ── 日期卡 ── */
+.day-card{border:0.5pt solid #888;border-radius:3pt;overflow:hidden;display:flex;flex-direction:column}
+.day-header{padding:1.5mm 2.5mm 1mm;background:#EBEBEB;border-bottom:1.5pt solid #888}
+.day-date{font-size:15pt;font-weight:900;color:#000;line-height:1}
+.day-weekday{font-size:8pt;color:#000;margin-top:0.5mm}
+.day-label{display:inline-block;font-size:8pt;font-weight:700;padding:0.5mm 2mm;border-radius:2pt;margin-top:1mm;background:#D0D0D0;color:#000}
+.day-body{padding:0.8mm 0;flex:1}
+
+/* ── 時段 ── */
+.slot{padding:1mm 2.5mm;margin:0.6mm 1.5mm;border-radius:2pt}
+.slot .time{font-size:8.5pt;font-weight:700;color:#000;margin-bottom:0}
+.slot .title{font-size:9.5pt;font-weight:700;line-height:1.25;color:#000}
+.slot .note{font-size:8pt;color:#333;margin-top:0.2mm;line-height:1.2}
+
+.slot.flight{background:#222;border-left:none}
+.slot.flight .time{color:#DDD}
+.slot.flight .title{color:#FFF}
+.slot.flight .note{color:#CCC}
+.slot.property{background:#F4F4F4;border-left:3pt solid #1A7A4A}
+.slot.meeting{background:#F4F4F4;border-left:3pt solid #1A50A0}
+.slot.social{background:#F4F4F4;border-left:3pt solid #5A2070}
+.slot.dinner{background:#F4F4F4;border-left:3pt solid #C06000}
+.slot.drive{background:#FFF;border-left:2pt solid #999}
+.slot.free{background:#FFF;border-left:2pt solid #CCC}
+
+.region-tag{display:inline-block;font-size:7.5pt;font-weight:700;padding:0.3mm 1.5mm;border-radius:6pt;margin-top:0.5mm;background:#E0E0E0;color:#000;border:0.5pt solid #888}
+.group-banner{border-radius:2pt;padding:1mm 2.5mm;margin:1.5mm 1.5mm 0.5mm;font-size:8.5pt;font-weight:700;text-align:center}
+.group-a{background:#DEDEDE;color:#000;border:0.5pt solid #666}
+.group-b{background:#C4C4C4;color:#000;border:0.5pt solid #666}
+.sep{height:1px;background:#999;margin:0.8mm 1.5mm}
+</style>
+</head>
+<body>
+<button class="print-btn" onclick="window.print()">🖨️ 列印 / 儲存 PDF　（A4 橫向）</button>
+
+<div class="grid">
+
+<!-- 5/19 -->
+<div class="day-card">
+  <div class="day-header">
+    <div class="day-date">5/19</div>
+    <div class="day-weekday">星期二　抵達日</div>
+    <div class="day-label">抵達 + 會計師</div>
+  </div>
+  <div class="day-body">
+    <div class="slot flight">
+      <div class="time">10:55</div>
+      <div class="title">抵達曼谷 BKK（BR67）</div>
+      <div class="note">入境、提領行李</div>
+    </div>
+    <div class="slot drive">
+      <div class="time">11:30–12:30</div>
+      <div class="title">辦理入住 ＋ 午餐</div>
+      <div class="note">Amaranth Hotel（機場旁）</div>
+    </div>
+    <div class="slot meeting">
+      <div class="time">14:00–16:00</div>
+      <div class="title">💼 HGM 會計師拜訪</div>
+      <div class="note">BOI 申請策略討論</div>
+      <span class="region-tag">曼谷</span>
+    </div>
+    <div class="slot social">
+      <div class="time">16:30–</div>
+      <div class="title">🛕 曼谷市區 ／ 四面佛</div>
+      <div class="note">自由晚餐</div>
+      <span class="region-tag">曼谷</span>
+    </div>
+  </div>
+</div>
+
+<!-- 5/20 -->
+<div class="day-card">
+  <div class="day-header">
+    <div class="day-date">5/20</div>
+    <div class="day-weekday">星期三　看房日</div>
+    <div class="day-label">春武里 → 羅勇府</div>
+  </div>
+  <div class="day-body">
+    <div class="slot drive">
+      <div class="time">08:00</div>
+      <div class="title">出發 → 春武里</div>
+      <div class="note">Hotel → 春武里，車程約 1.5h</div>
+    </div>
+    <div class="slot property">
+      <div class="time">09:30–12:15</div>
+      <div class="title">🏭 AT SOKO 看房（春武里）</div>
+      <div class="note">春武里（Chonburi）<br>AT SOKO 物件共 4 件</div>
+      <span class="region-tag">春武里</span>
+    </div>
+    <div class="slot free">
+      <div class="time">12:15–13:00</div>
+      <div class="title">午餐</div>
+      <div class="note">Si Racha 當地</div>
+    </div>
+    <div class="slot property">
+      <div class="time">13:30–15:00</div>
+      <div class="title">🏭 WHA 看房（羅勇府）</div>
+      <div class="note">羅勇府（Rayong）<br>WHA 物件共 1 件</div>
+      <span class="region-tag">羅勇府</span>
+    </div>
+    <div class="slot drive">
+      <div class="time">15:00–17:00</div>
+      <div class="title">返回飯店</div>
+      <div class="note">羅勇 → Amaranth Hotel</div>
+    </div>
+  </div>
+</div>
+
+<!-- 5/21 -->
+<div class="day-card">
+  <div class="day-header">
+    <div class="day-date">5/21</div>
+    <div class="day-weekday">星期四　看房日</div>
+    <div class="day-label">北欖府 + 北柳</div>
+  </div>
+  <div class="day-body">
+    <div class="slot drive">
+      <div class="time">08:00</div>
+      <div class="title">出發 → Lat Krabang</div>
+      <div class="note">Hotel → 曼谷，約 40min</div>
+    </div>
+    <div class="slot property">
+      <div class="time">09:00–10:00</div>
+      <div class="title">🏭 Hero 看房（Lat Krabang）</div>
+      <div class="note">曼谷拉甲邦<br>Hero 物件 1 件</div>
+      <span class="region-tag">曼谷</span>
+    </div>
+    <div class="slot property">
+      <div class="time">10:30–11:30</div>
+      <div class="title">🏭 Hero 看房（北欖府）</div>
+      <div class="note">北欖府（Samut Prakan）<br>Hero 物件 1 件</div>
+      <span class="region-tag">北欖府</span>
+    </div>
+    <div class="slot property">
+      <div class="time">11:30–12:30</div>
+      <div class="title">🏭 Hero 看房（北柳府）</div>
+      <div class="note">北柳府（Chachoengsao）<br>Hero 物件 1 件</div>
+      <span class="region-tag">北柳府</span>
+    </div>
+    <div class="slot free">
+      <div class="time">12:30–13:30</div>
+      <div class="title">午餐</div>
+      <div class="note">北柳 / 返程途中</div>
+    </div>
+    <div class="slot property">
+      <div class="time">14:00–16:00</div>
+      <div class="title">🏭 George 帶看亞洲工業區</div>
+      <div class="note">北欖府（Samut Prakan）<br>AIES 土地購買</div>
+      <span class="region-tag">北欖府</span>
+    </div>
+    <div class="slot drive">
+      <div class="time">16:00</div>
+      <div class="title">返回飯店</div>
+      <div class="note">AIES → Amaranth Hotel</div>
+    </div>
+  </div>
+</div>
+
+<!-- 5/22 -->
+<div class="day-card">
+  <div class="day-header">
+    <div class="day-date">5/22</div>
+    <div class="day-weekday">星期五　分組行程</div>
+    <div class="day-label">分二組</div>
+  </div>
+  <div class="day-body">
+    <div class="slot property">
+      <div class="time">09:30–12:00</div>
+      <div class="title">🏭 AT SOKO 看房（北欖府）</div>
+      <div class="note">AT SOKO 物件共 4 件　全員同行</div>
+      <span class="region-tag">北欖府</span>
+    </div>
+    <div class="slot meeting">
+      <div class="time">12:00–13:30</div>
+      <div class="title">🍽️ 午餐（與染料小陳）</div>
+      <div class="note">素萬那普機場附近　全員同行</div>
+      <span class="region-tag">北欖府</span>
+    </div>
+    <div class="sep"></div>
+    <div class="group-banner group-a">【A組】董事長 ＋ Alice</div>
+    <div class="slot drive">
+      <div class="time">13:30–14:30</div>
+      <div class="title">移動 → 曼谷</div>
+      <div class="note">北欖府 → 曼谷，約 45 分鐘</div>
+    </div>
+    <div class="slot social">
+      <div class="time">15:00–17:00</div>
+      <div class="title">💼 拜訪康董</div>
+      <div class="note">洽談未來合作機會</div>
+      <span class="region-tag">曼谷</span>
+    </div>
+    <div class="sep"></div>
+    <div class="group-banner group-b">【B組】總經理 ＋ Kevin</div>
+    <div class="slot drive">
+      <div class="time">13:30–15:00</div>
+      <div class="title">移動 → 大城府</div>
+      <div class="note">北欖府 → Ayutthaya，約 1.5h</div>
+    </div>
+    <div class="slot dinner">
+      <div class="time">15:00–</div>
+      <div class="title">🏭 順達參訪</div>
+      <div class="note">大城府（Ayutthaya）</div>
+      <span class="region-tag">大城府</span>
+    </div>
+  </div>
+</div>
+
+<!-- 5/23 -->
+<div class="day-card">
+  <div class="day-header">
+    <div class="day-date">5/23</div>
+    <div class="day-weekday">星期六　回程日</div>
+    <div class="day-label">回程</div>
+  </div>
+  <div class="day-body">
+    <div class="slot free">
+      <div class="time">07:00–09:00</div>
+      <div class="title">早餐 ＋ 退房</div>
+      <div class="note">Amaranth Hotel 退房</div>
+    </div>
+    <div class="slot drive">
+      <div class="time">09:30</div>
+      <div class="title">前往素萬那普機場</div>
+      <div class="note">飯店 → BKK，約 10min</div>
+    </div>
+    <div class="slot flight">
+      <div class="time">10:30</div>
+      <div class="title">建議完成 Check-in</div>
+      <div class="note">BR212 12:25 出發</div>
+    </div>
+    <div class="slot flight">
+      <div class="time">12:25</div>
+      <div class="title">BR212 出發</div>
+      <div class="note">曼谷 BKK → 桃園</div>
+    </div>
+    <div class="slot flight">
+      <div class="time">17:15</div>
+      <div class="title">抵達桃園</div>
+      <div class="note">長榮 BR212</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

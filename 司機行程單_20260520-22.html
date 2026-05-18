@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Driver Schedule 司機行程單 5/20–5/22</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Noto Sans TC",Arial,sans-serif;background:#F4F6F8;color:#1A1A1A;font-size:15px;padding:0 0 40px}
+.top-bar{background:#1A2E4A;color:white;padding:18px 16px 14px}
+.top-bar h1{font-size:18px;font-weight:800}
+.top-bar .sub{font-size:12px;opacity:.75;margin-top:4px}
+.notice{background:#FFF8E1;border-left:4px solid #F9A825;padding:10px 14px;font-size:13px;color:#5D4037;margin:12px;border-radius:4px}
+.day-section{margin:12px}
+.day-header{background:#1A2E4A;color:white;border-radius:8px 8px 0 0;padding:10px 14px;font-size:16px;font-weight:800;display:flex;align-items:center;gap:10px}
+.day-header .date{font-size:20px}
+.day-header .weekday{font-size:13px;opacity:.8}
+.stop-list{background:white;border-radius:0 0 8px 8px;overflow:hidden}
+.stop{border-bottom:1px solid #EEE;padding:14px;display:flex;gap:12px;align-items:flex-start}
+.stop:last-child{border-bottom:none}
+.stop-time{min-width:68px;font-size:17px;font-weight:800;color:#1A2E4A;padding-top:2px}
+.stop-body{flex:1}
+.stop-title{font-size:15px;font-weight:700;line-height:1.4}
+.stop-addr{font-size:12.5px;color:#555;margin-top:4px;line-height:1.6}
+.map-btn{display:inline-flex;align-items:center;gap:4px;margin-top:8px;background:#1976D2;color:white;text-decoration:none;font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:20px;margin-right:6px}
+.link-btn{display:inline-flex;align-items:center;gap:4px;margin-top:8px;background:#388E3C;color:white;text-decoration:none;font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:20px}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:5px;margin-right:4px}
+.badge-spk{background:#E0F2F1;color:#00695C}
+.badge-cnb{background:#E8F5E9;color:#2E7D32}
+.badge-ryg{background:#F3E5F5;color:#6A1B9A}
+.badge-bkk{background:#EBF1FB;color:#1565C0}
+.badge-aya{background:#FFF3E0;color:#E65100}
+.badge-cco{background:#FCE4EC;color:#880E4F}
+.divider{background:#F0F2F5;padding:7px 14px;font-size:12px;font-weight:700;color:#888;letter-spacing:.5px;border-bottom:1px solid #EEE}
+.stop-num{display:inline-block;background:#1A2E4A;color:white;font-size:11px;font-weight:800;width:20px;height:20px;border-radius:50%;text-align:center;line-height:20px;margin-right:5px;flex-shrink:0}
+.meal{background:#FFFDE7}
+.transit{background:#F9FBE7}
+.tbd-note{font-size:12px;color:#E65100;font-weight:600;margin-top:4px}
+.split-banner{background:#FFF3E0;border-left:4px solid #E65100;padding:8px 14px;font-size:13px;font-weight:700;color:#7B3F00;border-bottom:1px solid #EEE}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <h1>🚗 司機行程單　Driver Schedule</h1>
+  <div class="sub">鴻騰電子 HonTen Electronics　｜　2026年5月20日–22日</div>
+</div>
+<div class="notice">
+  📌 詳細廠房地址將於前一天提供。<br>
+  Detailed factory addresses will be provided the day before each visit.
+</div>
+
+<!-- 5/20 -->
+<div class="day-section">
+  <div class="day-header">
+    <div class="date">5/20</div>
+    <div><div>星期三　Wed</div><div class="weekday">春武里 → 羅勇府</div></div>
+  </div>
+  <div class="stop-list">
+    <div class="divider">📍 起點</div>
+    <div class="stop">
+      <div class="stop-time">08:00</div>
+      <div class="stop-body">
+        <div class="stop-title">出發 — Amaranth Suvarnabhumi Hotel</div>
+        <div class="stop-addr">Samut Prakan（北欖府）</div>
+        <span class="badge badge-spk">北欖府</span>
+      </div>
+    </div>
+
+    <div class="divider">🏭 Stop 1–2｜AT SOKO 春武里 — Don Hua Lo, Mueang Chon Buri</div>
+    <div class="stop">
+      <div class="stop-time">09:30</div>
+      <div class="stop-body">
+        <div class="stop-title"><span class="stop-num">1</span>AT SOKO — AT2114R</div>
+        <div class="stop-addr">Don Hua Lo, Mueang Chon Buri, Chonburi<br>（詳細地址前一天提供）</div>
+        <span class="badge badge-cnb">春武里</span><br>
+        <a class="map-btn" href="https://www.google.com/maps?q=Don+Hua+Lo,+Mueang+Chon+Buri,+Chon+Buri" target="_blank">📍 Map</a>
+        <a class="link-btn" href="https://www.thaiindustrialproperty.com/zh/property/factory-or-warehouse-500-sqm-for-rent-at-don-hua-lo-mueang-chon-buri-chon-buri-property-id-at2114r/" target="_blank">🔗 物件</a>
+      </div>
+    </div>
+    <div class="stop">
+      <div class="stop-time">10:00</div>
+      <div class="stop-body">
+        <div class="stop-title"><span class="stop-num">2</span>AT SOKO — AT2141R</div>
+        <div class="stop-addr">Don Hua Lo, Mueang Chon Buri, Chonburi<br>（詳細地址前一天提供）</div>
+        <span class="badge badge-cnb">春武里</span><br>
+        <a class="map-btn" href="https://www.google.com/maps/place/Don+Hua+Lo" target="_blank">📍 Map</a>
+        <a class="link-btn" href="https://www.thaiindustrialproperty.com/zh/property/factory-or-warehouse-500-sqm-for-rent-at-don-hua-lo-mueang-chon-buri-chon-buri-property-id-at2141r/" target="_blank">🔗 物件</a>
+      </div>
+    </div>
+
+    <div class="divider">🏭 Stop 3–4｜AT SOKO 春武里 — Thung Sukhla, Si Racha</div>
+    <div class="stop transit">
+      <div class="stop-time">10:30</div>
+      <div class="stop-body">
+        <div class="stop-title">🚗 移動 → Thung Sukhla, Si Racha</div>
+        <div class="stop-addr">Don Hua Lo → Thung Sukhla，車程約 30–40 分鐘</div>
+      </div>
+    </div>
+    <div class="stop">
+      <div class="stop-time">11:00</div>
+      <div class="stop-body">
+        <div class="stop-title"><span class="stop-num">3</span>AT SOKO — AT1201R</div>
+        <div class="stop-addr">Thung Sukhla, Si Racha, Chonburi<br>（詳細地址前一天提供）</div>
+        <span class="badge badge-cnb">春武里</span><br>
+        <a class="map-btn" href="https://www.google.com/maps?q=13.0948734,100.9106032" target="_blank">📍 Map</a>
+        <a class="link-btn" href="https://www.thaiindustrialproperty.com/zh/property/factory-or-warehouse-1080-sqm-for-rent-at-thung-suk-la-si-racha-chon-buri-property-id-at1201r/" target="_blank">🔗 物件</a>
+      </div>
+    </div>
+    <div class="stop">
+      <div class="stop-time">11:30</div>
+      <div class="stop-body">
+        <div class="stop-title"><span class="stop-num">4</span>AT SOKO — AT1352R</div>
+        <div class="stop-addr">Thung Sukhla, Si Racha, Chonburi<br>（詳細地址前一天提供）</div>
+        <span class="badge badge-cnb">春武里</span><br>
+        <a class="map-btn" href="https://www.google.com/maps?q=13.1311723,101.0328408" target="_blank">📍 Map</a>
+        <a class="link-btn" href="https://www.thaiindustrialproperty.com/zh/property/factory-or-warehouse-675-sqm-for-rent-at-thung-suk-la-si-racha-chon-buri-property-id-at1352r/" target="_blank">🔗 物件</a>
+      </div>
+    </div>
+
+    <div class="stop meal">
+      <div class="stop-time">12:15–13:00</div>
+      <div class="stop-body">
+        <div class="stop-title">🍽️ 午餐</div>
+        <div class="stop-addr">Si Racha / Chonburi 當地</div>
+        <span class="badge badge-cnb">春武里</span>
+      </div>
+    </div>
+
+    <div class="divider">🏭 Stop 5｜WHA 羅勇府</div>
+    <div class="stop transit">
+      <div class="stop-time">13:00–13:30</div>
+      <div class="stop-body">
+        <div class="stop-title">🚗 移動 → 羅勇府</div>
+        <div class="stop-addr">Si Racha → Eastern Seaboard IE，車程約 30 分鐘</div>
+      </div>
+    </div>
+    <div class="stop">
+      <div class="stop-time">13:30–15:00</div>
+      <div class="stop-body">
+        <div class="stop-title"><span class="stop-num">5</span>WHA — Eastern Seaboard Industrial Estate</div>
+        <div class="stop-addr">112 Moo 4, Highway 331 KM.91.5, Pluak Daeng, Rayong 21140</div>
+        <span class="badge badge-ryg">羅勇府</span><br>
+        <a class="map-btn" href="https://maps.app.goo.gl/xqS6yKZryG559AMK6" target="_blank">📍 Map</a>
+        <a class="link-btn" href="https://cdn.21impact.com/wha-industrialestate/index.html" target="_blank">🔗 物件</a>
+      </div>
+    </div>
+    <div class="stop transit">
+      <div class="stop-time">15:00</div>
+      <div class="stop-body">
+        <div class="stop-title">🚗 返回飯店</div>
+        <div class="stop-addr">羅勇 → Amaranth Hotel 北欖府，車程約 2 小時</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5/21 -->
+<div class="day-section">
+  <div class="day-header">
+    <div class="date">5/21</div>
+    <div><div>星期四　Thu</div><div class="weekday">Lat Krabang → 北欖府 → 北柳 → AIES</div></div>
+  </div>
+  <div class="stop-list">
+    <div class="divider">📍 起點</div>
+    <div class="stop">
+      <div class="stop-time">08:00</div>
+      <div class="stop-body">
+        <div class="stop-title">出發 — Amaranth Suvarnabhumi Hotel</div>
+        <div class="stop-addr">Samut Prakan → 曼谷拉甲邦，車程約 40 分鐘</div>
+        <span class="badge badge-spk">北欖府</span>
+      </div>
+    </div>
+
+    <div class="divider">🏭 Stop 1｜Hero — Lat Krabang, Bangkok（IEAT保稅區）</div>
+    <div class="stop">
+      <div class="stop-time">09:00</div>
+      <div class="stop-body">
+        <div class="stop-title"><span class="stop-num">1</span>Hero — BRE23433</div>
+        <div class="stop-addr">Lad Krabang Lam Pla Thio, Khet Lat Krabang, Bangkok 10520</div>
+        <span class="badge badge-bkk">曼谷</span><br>
+        <a class="map-btn" href="https://www.google.com/maps/place/13%C2%B046%2736.6%22N+100%C2%B047%2715.4%22E/@13.821031,100.7406041" target="_blank">📍 Map</a>
+        <a class="link-btn" href="https://herorealtor.com/zh/property/BRE23433/" target="_blank">🔗 物件</a>
+      </div>
+    </div>
+
+    <div class="divider">🏭 Stop 2｜Hero — Bang Sao Thong, Samut Prakan</div>
+    <div class="stop transit">
+      <div class="stop-time">10:00</div>
+      <div class="stop-body">
+        <div class="stop-title">🚗 移動 → 北欖府</div>
+        <div class="stop-addr">Lat Krabang → Bang Sao Thong, Samut Prakan，車程約 30 分鐘</div>
+      </div>
+    </div>
+    <div class="stop">
+      <div class="stop-time">10:30</div>
+      <div class="stop-body">
+        <div class="stop-title"><span class="stop-num">2</span>Hero — BRE25989</div>
+        <div class="stop-addr">Bang Sao Thong, Samut Prakan（詳細地址前一天提供）</div>
+        <span class="badge badge-spk">北欖府</span><br>
+        <a class="map-btn" href="https://www.google.com/maps/place/13%C2%B033%2740.3%22N+100%C2%B047%2735.5%22E" target="_blank">📍 Map</a>
+        <a class="link-btn" href="https://herorealtor.com/property/BRE25989/factory-3415-sqm-in-bang-sao-thong-bang-sao-thong-samut-prakan" target="_blank">🔗 物件</a>
+      </div>
+    </div>
+
+    <div class="divider">🏭 Stop 3｜Hero — Chachoengsao（北柳）</div>
+    <div class="stop transit">
+      <div class="stop-time">11:00</div>
+      <div class="stop-body">
+        <div class="stop-title">🚗 移動 → 北柳府</div>
+        <div class="stop-addr">Samut Prakan → Chachoengsao，車程約 30–40 分鐘</div>
+      </div>
+    </div>
+    <div class="stop">
+      <div class="stop-time">11:30</div>
+      <div class="stop-body">
+        <div class="stop-title"><span class="stop-num">3</span>Hero — HRE00443</div>
+        <div class="stop-addr">Chachoengsao（詳細地址前一天提供）</div>
+        <span class="badge badge-cco">北柳府</span><br>
+        <a class="map-btn" href="https://www.google.com/maps/place/13%C2%B028%2704.8%22N+100%C2%B059%2731.8%22E" target="_blank">📍 Map</a>
+        <a class="link-btn" href="https://herorealtor.com/zh/property/HRE00443/" target="_blank">🔗 物件</a>
+      </div>
+    </div>
+
+    <div class="stop meal">
+      <div class="stop-time">12:30</div>
+      <div class="stop-body">
+        <div class="stop-title">🍽️ 午餐</div>
+        <div class="stop-addr">Chachoengsao 或 返程途中</div>
+        <span class="badge badge-cco">北柳府</span>
+      </div>
+    </div>
+
+    <div class="divider">🏭 Stop 4｜AIES — Asia Industrial Estate, Samut Prakan</div>
+    <div class="stop">
+      <div class="stop-time">14:00</div>
+      <div class="stop-body">
+        <div class="stop-title"><span class="stop-num">4</span>AIES — 亞洲工業區看地</div>
+        <div class="stop-addr">AIES Office, Khlong Suan, Bang Bo District, Samut Prakan 10560</div>
+        <span class="badge badge-spk">北欖府</span><br>
+        <a class="map-btn" href="https://www.google.com/maps/place/AIES+Office+(ASIA+INDUSTRIAL+ESTATE)/@13.6500436,100.7360886" target="_blank">📍 Map</a>
+        <a class="link-btn" href="https://www.asiaindustrialestate.com/cn/projects/aies" target="_blank">🔗 物件</a>
+      </div>
+    </div>
+    <div class="stop transit">
+      <div class="stop-time">16:00</div>
+      <div class="stop-body">
+        <div class="stop-title">🚗 返回飯店</div>
+        <div class="stop-addr">AIES → Amaranth Hotel，車程約 30 分鐘</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5/22 -->
+<div class="day-section">
+  <div class="day-header">
+    <div class="date">5/22</div>
+    <div><div>星期五　Fri</div><div class="weekday">北欖府 AT SOKO（4件）</div></div>
+  </div>
+  <div class="stop-list">
+    <div class="divider">📍 起點</div>
+    <div class="stop">
+      <div class="stop-time">09:00</div>
+      <div class="stop-body">
+        <div class="stop-title">出發 — Amaranth Suvarnabhumi Hotel</div>
+        <div class="stop-addr">Samut Prakan（北欖府）→ 北欖府 AT SOKO 看房</div>
+        <span class="badge badge-spk">北欖府</span>
+      </div>
+    </div>
+
+    <div class="divider">🏭 Stop 1–4｜AT SOKO 北欖府（4件）　全員同行</div>
+    <div class="stop">
+      <div class="stop-time">09:30</div>
+      <div class="stop-body">
+        <div class="stop-title"><span class="stop-num">1</span>AT SOKO — AT2099R</div>
+        <div class="stop-addr">Bang Pla, Bang Phli, Samut Prakan<br>（詳細地址前一天提供）</div>
+        <span class="badge badge-spk">北欖府</span><br>
+        <a class="map-btn" href="https://www.google.com/maps?q=Bang+Pla,+Bang+Phli,+Samut+Prakan" target="_blank">📍 Map</a>
+        <a class="link-btn" href="https://www.thaiindustrialproperty.com/zh/property/factory-or-warehouse-727-sqm-for-rent-at-bang-pla-bang-phli-samut-prakan-property-id-at2099r/" target="_blank">🔗 物件</a>
+      </div>
+    </div>
+    <div class="stop">
+      <div class="stop-time">10:00</div>
+      <div class="stop-body">
+        <div class="stop-title"><span class="stop-num">2</span>AT SOKO — AT2098R</div>
+        <div class="stop-addr">Bang Sao Thong, Samut Prakan<br>（詳細地址前一天提供）</div>
+        <span class="badge badge-spk">北欖府</span><br>
+        <a class="map-btn" href="https://www.google.com/maps/place/Bang+Sao+Thong" target="_blank">📍 Map</a>
+        <a class="link-btn" href="https://www.thaiindustrialproperty.com/property/factory-or-warehouse-1170-sqm-for-rent-at-bang-sao-thong-bang-sao-thong-samut-prakan-property-id-at2098r/" target="_blank">🔗 物件</a>
+      </div>
+    </div>
+    <div class="stop">
+      <div class="stop-time">10:30</div>
+      <div class="stop-body">
+        <div class="stop-title"><span class="stop-num">3</span>AT SOKO — AT1751R</div>
+        <div class="stop-addr">Bang Pla, Bang Phli, Samut Prakan<br>（詳細地址前一天提供）</div>
+        <span class="badge badge-spk">北欖府</span><br>
+        <a class="map-btn" href="https://www.google.com/maps?q=Bang+Pla,+Bang+Phli,+Samut+Prakan" target="_blank">📍 Map</a>
+        <a class="link-btn" href="https://www.thaiindustrialproperty.com/zh/property/factory-or-warehouse-1008-sqm-for-rent-at-bang-pla-bang-phli-samut-prakan-property-id-at1751r/" target="_blank">🔗 物件</a>
+      </div>
+    </div>
+    <div class="stop">
+      <div class="stop-time">11:00</div>
+      <div class="stop-body">
+        <div class="stop-title"><span class="stop-num">4</span>AT SOKO — AT302SR</div>
+        <div class="stop-addr">Khlong Niyom Yattra, Bang Bo, Samut Prakan<br>（詳細地址前一天提供）</div>
+        <span class="badge badge-spk">北欖府</span><br>
+        <a class="map-btn" href="https://www.google.com/maps?q=Khlong+Niyom+Yattra,+Bang+Bo,+Samut+Prakan" target="_blank">📍 Map</a>
+        <a class="link-btn" href="https://www.thaiindustrialproperty.com/zh/property/factory-or-warehouse-493-sqm-for-sale-or-rent-at-bang-khlong-niyom-yattra-bang-bo-samut-prakan-property-id-at302sr/" target="_blank">🔗 物件</a>
+      </div>
+    </div>
+    <div class="stop meal">
+      <div class="stop-time">12:00–13:30</div>
+      <div class="stop-body">
+        <div class="stop-title">🍽️ 午餐（與染料小陳）　全員同行</div>
+        <div class="stop-addr">素萬那普機場附近</div>
+        <span class="badge badge-spk">北欖府</span>
+        <a class="map-btn" href="https://maps.app.goo.gl/HCXQyxfGoBmyjKfd9?g_st=il" target="_blank">📍 Map</a>
+      </div>
+    </div>
+    <div class="divider">🔀 13:30 分組出發</div>
+    <div class="stop transit">
+      <div class="stop-time">13:30–14:30</div>
+      <div class="stop-body">
+        <div class="stop-title">🚗 【A組】移動 → 曼谷</div>
+        <div class="stop-addr">北欖府 → 曼谷，車程約 45 分鐘</div>
+        <span class="badge badge-bkk">曼谷</span>
+      </div>
+    </div>
+    <div class="stop">
+      <div class="stop-time">15:00–17:00</div>
+      <div class="stop-body">
+        <div class="stop-title">💼 【A組】拜訪康董</div>
+        <div class="stop-addr">曼谷（地點待確認）</div>
+        <span class="badge badge-bkk">曼谷</span>
+      </div>
+    </div>
+    <div class="stop transit">
+      <div class="stop-time">17:00</div>
+      <div class="stop-body">
+        <div class="stop-title">🚗 返回飯店</div>
+        <div class="stop-addr">曼谷 → Amaranth Hotel 北欖府</div>
+        <span class="badge badge-spk">北欖府</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:20px;font-size:12px;color:#AAA">
+  鴻騰電子　HonTen Electronics｜整理：Alice｜2026.05<br>
+  ⚠ 詳細地址將於每日前一天另行通知
+</div>
+</body>
+</html>
