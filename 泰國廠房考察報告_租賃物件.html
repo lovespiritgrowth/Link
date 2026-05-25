@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>泰國廠房考察報告｜租賃物件評估 2026.05</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;background:#F0F4F8;color:#1A1A2E;font-size:14px;line-height:1.65}
+
+/* ── Header ── */
+.rpt-header{background:linear-gradient(135deg,#1A2E4A 0%,#2A5298 100%);color:#fff;padding:32px 40px 26px}
+.rpt-company{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;opacity:.65;margin-bottom:10px}
+.rpt-title{font-size:26px;font-weight:900;line-height:1.15;margin-bottom:6px}
+.rpt-title span{color:#93C5FD}
+.rpt-meta{font-size:12px;opacity:.65;margin-top:6px}
+.rpt-badges{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+.rpt-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.5px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.12)}
+
+/* ── Layout ── */
+.container{max-width:1100px;margin:0 auto;padding:28px 20px 72px}
+.section-title{font-size:15px;font-weight:800;color:#1A2E4A;border-left:4px solid #1A2E4A;padding-left:12px;margin:36px 0 14px}
+.card{background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.07);overflow:hidden;margin-bottom:20px}
+
+/* ── Location section ── */
+.loc-wrap{display:flex;gap:20px;flex-wrap:wrap;padding:20px}
+.loc-map-box{flex:1;min-width:280px;border-radius:10px;overflow:hidden;border:1px solid #E5E7EB;background:#EEF2F7;position:relative}
+.loc-map-box img{width:100%;height:100%;object-fit:cover;display:block;min-height:380px}
+.loc-map-placeholder{min-height:380px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:#9CA3AF;font-size:13px;text-align:center;padding:20px}
+.loc-right{min-width:240px;display:flex;flex-direction:column;gap:14px}
+.dist-tbl{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.08)}
+.dist-tbl thead th{background:#1A2E4A;color:#fff;padding:9px 14px;font-size:11px;font-weight:700;letter-spacing:.5px;text-align:left}
+.dist-tbl tbody td{padding:9px 14px;font-size:12.5px;border-bottom:1px solid #F0F0F0;vertical-align:middle}
+.dist-tbl tbody tr:last-child td{border-bottom:none}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+
+/* ── Property photo ── */
+.prop-photo{width:100%;height:220px;object-fit:cover;object-position:center;display:block;background:#F3F4F6}
+.prop-photo-wrap{position:relative;height:360px;overflow:hidden;background:#F3F4F6}
+.prop-photo-wrap img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+
+/* ── Comparison table ── */
+.cmp-tbl{width:100%;border-collapse:collapse}
+.cmp-tbl th{padding:12px 18px;font-size:13px;font-weight:700;border-bottom:2px solid #EEE;text-align:center}
+.cmp-tbl th.at{background:#ECFDF5;color:#065F46}
+.cmp-tbl th.bre{background:#EFF6FF;color:#1E40AF}
+.cmp-tbl th.lbl{background:#F8F9FA;color:#6B7280;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px}
+.cmp-tbl td{padding:10px 18px;font-size:13px;border-bottom:1px solid #F3F4F6;vertical-align:middle}
+.cmp-tbl td.at{text-align:center;border-right:1px solid #F0F0F0}
+.cmp-tbl td.bre{text-align:center}
+.cmp-tbl td.lbl{font-weight:600;color:#4B5563;background:#FAFAFA;font-size:13px}
+.cmp-tbl tr:last-child td{border-bottom:none}
+.win{color:#065F46;font-weight:800}
+.warn{color:#B45309;font-weight:800}
+.neutral{color:#374151}
+
+/* ── Property header ── */
+.prop-hdr{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:20px 24px 16px}
+.prop-code{font-size:22px;font-weight:900;font-family:monospace;letter-spacing:1px}
+.prop-loc{font-size:12px;color:#6B7280;margin-top:3px;line-height:1.4}
+.prop-badges{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.zbadge{display:inline-block;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.5px}
+.zbadge-ieat{background:#DBEAFE;color:#1E40AF;border:1px solid #93C5FD}
+.zbadge-pref{background:#DCFCE7;color:#14532D;border:1px solid #86EFAC}
+
+/* ── Info grid ── */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:1px;background:#EBEBEB}
+.info-cell{background:#fff;padding:13px 16px}
+.info-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:#9CA3AF;margin-bottom:4px}
+.info-val{font-size:14px;font-weight:700;color:#111827}
+.info-sub{font-size:11px;color:#6B7280;margin-top:2px}
+
+/* ── Price table ── */
+.price-section{padding:0 0 4px}
+.price-section-title{background:#F8F9FA;padding:10px 20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#6B7280;border-top:1px solid #EBEBEB;border-bottom:1px solid #EBEBEB}
+.price-tbl{width:100%;border-collapse:collapse}
+.price-tbl td{padding:9px 20px;font-size:13px;border-bottom:1px solid #F5F5F5}
+.price-tbl tr:last-child td{border-bottom:none}
+.price-tbl .amount{text-align:right;font-family:monospace;font-weight:600;color:#1A2E4A}
+.price-tbl .note{font-size:10px;color:#9CA3AF;margin-top:1px}
+.price-tbl tr.subtotal td{background:#EFF6FF;font-weight:800;color:#1E40AF;font-size:14px}
+.price-tbl tr.subtotal .amount{font-size:15px}
+.price-tbl tr.total-row td{background:#1A2E4A;color:#fff;font-weight:800;font-size:14px}
+.price-tbl tr.total-row .amount{font-size:15px;color:#93C5FD}
+.price-label-block{padding:14px 20px 4px;font-size:13px;font-weight:700;color:#374151;border-top:1px solid #EBEBEB;margin-top:4px}
+
+/* ── Inspection box ── */
+.insp-wrap{padding:0 20px 20px;display:flex;flex-direction:column;gap:10px}
+.insp-box{border-radius:8px;padding:14px 16px;border-left:4px solid}
+.insp-warn{background:#FFFBEB;border-left-color:#F59E0B}
+.insp-ok{background:#F0FDF4;border-left-color:#22C55E}
+.insp-info{background:#EFF6FF;border-left-color:#3B82F6}
+.insp-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.9px;margin-bottom:8px}
+.insp-warn .insp-title{color:#D97706}
+.insp-ok .insp-title{color:#16A34A}
+.insp-info .insp-title{color:#1D4ED8}
+.insp-item{font-size:13px;display:flex;gap:8px;align-items:flex-start;margin-bottom:4px}
+.insp-item:last-child{margin-bottom:0}
+.insp-icon{flex-shrink:0;font-size:13px}
+
+/* ── Buttons ── */
+.btn-bar{padding:14px 20px;border-top:1px solid #EBEBEB;display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;transition:opacity .15s}
+.btn:hover{opacity:.82}
+.btn-navy{background:#1A2E4A;color:#fff}
+.btn-green{background:#15803D;color:#fff}
+.btn-blue{background:#1D4ED8;color:#fff}
+.btn-outline{background:#fff;color:#1A2E4A;border:1.5px solid #1A2E4A}
+
+/* ── Pricing note box ── */
+.price-note-box{margin:12px 20px;background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;padding:12px 16px;font-size:13px;color:#92400E;display:flex;gap:8px;align-items:flex-start}
+
+/* ── Responsive ── */
+@media(max-width:640px){
+  .rpt-header{padding:24px 20px 20px}
+  .rpt-title{font-size:20px}
+  .loc-wrap{flex-direction:column}
+  .prop-hdr{flex-direction:column}
+  .info-grid{grid-template-columns:repeat(2,1fr)}
+  #map{height:300px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════ -->
+<div class="rpt-header">
+  <div class="rpt-company">鴻騰電子 HonTen Electronics　｜　泰國設廠計畫</div>
+  <div class="rpt-title">泰國廠房考察報告<br><span>租賃物件評估</span></div>
+  <div class="rpt-meta">考察日期：2026 年 5 月 19–23 日　｜　報告日期：2026 年 5 月 25 日　｜　作成：Alice</div>
+  <div class="rpt-badges">
+    <span class="rpt-badge">📌 BRE23433　Lat Krabang, Bangkok</span>
+    <span class="rpt-badge">📌 AT1352R　Hitech IE, Si Racha, Chonburi</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CONTAINER
+══════════════════════════════════════════ -->
+<div class="container">
+
+<!-- ── Section 1: 地理位置總覽 ── -->
+<div class="section-title">一、地理位置總覽</div>
+<div class="card">
+  <div class="loc-wrap">
+    <!-- Location Map -->
+    <div class="loc-map-box">
+      <img src="map_locations.jpg" alt="物件地理位置圖"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="loc-map-placeholder" style="display:none">
+        <div style="font-size:36px">🗺️</div>
+        <div>請將地圖截圖存為 <strong>map_locations.jpg</strong><br>放入「泰國專案」資料夾</div>
+      </div>
+    </div>
+
+    <!-- Right: Distance table + Map button -->
+    <div class="loc-right">
+      <table class="dist-tbl">
+        <thead>
+          <tr><th>物件</th><th>位置</th><th>距台達電車程</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="dot" style="background:#1D4ED8"></span><strong>BRE23433</strong></td>
+            <td>拉甲邦，曼谷</td>
+            <td><strong>約 1 小時</strong></td>
+          </tr>
+          <tr>
+            <td><span class="dot" style="background:#15803D"></span><strong>AT1352R</strong></td>
+            <td>是拉差，春武里</td>
+            <td><strong>約 1 小時 15 分</strong></td>
+          </tr>
+          <tr>
+            <td><span class="dot" style="background:#7C3AED"></span><strong>亞洲工業區</strong></td>
+            <td>北欖府</td>
+            <td><strong>約 30 分鐘</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <a href="https://maps.app.goo.gl/B4Bi2BVCf5YV6LJs7" target="_blank" class="btn btn-navy" style="text-decoration:none;display:inline-flex">
+        🗺️ 開啟 Google 地圖（含所有物件定位）
+      </a>
+      <p style="font-size:11px;color:#6B7280;line-height:1.5">台達電廠區（Wellgrow Industrial Estate, 北柳府）為距離計算基準點。點選地圖標記可查看詳細資訊。</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ── Section 2: 快速比較 ── -->
+<div class="section-title">二、物件快速比較</div>
+<div class="card">
+  <table class="cmp-tbl">
+    <thead>
+      <tr>
+        <th class="lbl" style="width:28%">項目</th>
+        <th class="at">🟢 AT1352R<br><small style="font-weight:400">Hitech IE，是拉差，春武里</small></th>
+        <th class="bre">🔵 BRE23433<br><small style="font-weight:400">拉甲邦，曼谷</small></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="lbl">區域類型</td>
+        <td class="at"><span style="background:#DCFCE7;color:#14532D;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700">IEAT 保稅工業區</span></td>
+        <td class="bre"><span style="background:#DBEAFE;color:#1E40AF;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700">IEAT 保稅工業區</span></td>
+      </tr>
+      <tr>
+        <td class="lbl">廠房面積（建坪）</td>
+        <td class="at neutral">675 m²（204坪）</td>
+        <td class="bre neutral">1,700 m²（514坪）</td>
+      </tr>
+      <tr>
+        <td class="lbl">土地佔地</td>
+        <td class="at neutral">—（20m × 30m 建物）</td>
+        <td class="bre neutral">3,200 m²</td>
+      </tr>
+      <tr>
+        <td class="lbl">月租金（含服務費+VAT）</td>
+        <td class="at win">160,140 THB/月</td>
+        <td class="bre warn">512,000 THB/月（議價中）</td>
+      </tr>
+      <tr>
+        <td class="lbl">單價（THB/m²/月）</td>
+        <td class="at win">237 THB/m²</td>
+        <td class="bre warn">301 THB/m²（議價中）</td>
+      </tr>
+      <tr>
+        <td class="lbl">電力容量</td>
+        <td class="at neutral">250 KVA</td>
+        <td class="bre win">300 KVA</td>
+      </tr>
+      <tr>
+        <td class="lbl">距台達電車程</td>
+        <td class="at warn">約 1 小時 15 分</td>
+        <td class="bre win">約 1 小時</td>
+      </tr>
+      <tr>
+        <td class="lbl">屋齡</td>
+        <td class="at win">較新（Hitech IE 現代廠區）</td>
+        <td class="bre warn">約 15 年</td>
+      </tr>
+      <tr>
+        <td class="lbl">棟向</td>
+        <td class="at neutral">—</td>
+        <td class="bre neutral">座北朝南</td>
+      </tr>
+      <tr>
+        <td class="lbl">現場缺失</td>
+        <td class="at warn">2F 地板翹起；門前花圃待整</td>
+        <td class="bre warn">鄰居可能化工廠（刺鼻味）</td>
+      </tr>
+      <tr>
+        <td class="lbl">可議購買</td>
+        <td class="at neutral">僅租賃</td>
+        <td class="bre neutral">租／買 皆可</td>
+      </tr>
+      <tr>
+        <td class="lbl">仲介</td>
+        <td class="at neutral">AT SOKO Property</td>
+        <td class="bre neutral">Hero Realtor</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     AT1352R DETAIL
+══════════════════════════════════════════ -->
+<div class="section-title">三、AT1352R 詳細評估</div>
+<div class="card">
+
+  <!-- Photo -->
+  <div class="prop-photo-wrap">
+    <img src="photo_AT1352R.jpg" alt="AT1352R 廠房外觀" onerror="this.parentElement.innerHTML='<div style=\'height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;color:#9CA3AF\'><div style=\'font-size:32px\'>🏭</div><div style=\'font-size:12px\'>廠房照片：請將 photo_AT1352R.jpg 存至此資料夾</div></div>'"/>
+  </div>
+
+  <!-- Property header -->
+  <div class="prop-hdr">
+    <div>
+      <div class="prop-code" style="color:#15803D">AT1352R</div>
+      <div class="prop-loc">
+        Plot G8/20，Hitech Industrial Estate，Thung Suk La，Si Racha，Chonburi 20230<br>
+        春武里府是拉差縣通蘇拉地區
+      </div>
+    </div>
+    <div class="prop-badges">
+      <span class="zbadge zbadge-ieat">IEAT 保稅工業區</span>
+      <span class="zbadge zbadge-pref">✅ 優先中意物件</span>
+    </div>
+  </div>
+
+  <!-- Info grid -->
+  <div class="info-grid">
+    <div class="info-cell">
+      <div class="info-lbl">廠房面積</div>
+      <div class="info-val">675 m²</div>
+      <div class="info-sub">204 坪｜建物 20m × 30m</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-lbl">區域類型</div>
+      <div class="info-val">IEAT 保稅區</div>
+      <div class="info-sub">Hitech Industrial Estate</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-lbl">電力容量</div>
+      <div class="info-val">250 KVA</div>
+      <div class="info-sub">省電力局直接繳費</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-lbl">月租費率</div>
+      <div class="info-val">230 THB/m²</div>
+      <div class="info-sub">含租金＋服務費（未含 VAT）</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-lbl">租期</div>
+      <div class="info-val">36 個月</div>
+      <div class="info-sub">3 年合約</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-lbl">用水</div>
+      <div class="info-val">工業區直繳</div>
+      <div class="info-sub">Water Supply to IE</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-lbl">房東／業主</div>
+      <div class="info-val">JCK International</div>
+      <div class="info-sub">Public Co., Ltd.（上市公司）</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-lbl">距台達電</div>
+      <div class="info-val">約 1h 15min</div>
+      <div class="info-sub">春武里至 Wellgrow IE</div>
+    </div>
+  </div>
+
+  <!-- Monthly Cost -->
+  <div class="price-section">
+    <div class="price-section-title">📋 每月費用明細（依報價單）</div>
+    <table class="price-tbl">
+      <tr>
+        <td>① 廠房租金（Rental Fee）</td>
+        <td class="amount">85,387.50 THB</td>
+      </tr>
+      <tr>
+        <td>② 服務費（Service Fee）</td>
+        <td class="amount">69,862.50 THB</td>
+      </tr>
+      <tr>
+        <td>③ 服務費 VAT 7%</td>
+        <td class="amount">4,890.38 THB</td>
+      </tr>
+      <tr class="subtotal">
+        <td><strong>④ 每月應付合計（①＋②＋③）</strong></td>
+        <td class="amount"><strong>160,140.38 THB</strong></td>
+      </tr>
+    </table>
+
+    <div class="price-label-block">💰 初期費用明細</div>
+    <table class="price-tbl">
+      <tr>
+        <td>
+          ⑤ 訂金（Booking Fee）
+          <div class="note">※ 計入第一個月預付款</div>
+        </td>
+        <td class="amount">155,250.00 THB</td>
+      </tr>
+      <tr>
+        <td>
+          ⑥ 押金（Security Deposit，5 個月）
+          <div class="note">簽約日繳付；合約期滿後退還；= ④ × 5 個月</div>
+        </td>
+        <td class="amount">800,701.88 THB</td>
+      </tr>
+      <tr>
+        <td>
+          ⑦ 印花稅（Revenue Stamp）
+          <div class="note">簽約日繳付；由承租方負擔</div>
+        </td>
+        <td class="amount">3,078.95 THB</td>
+      </tr>
+      <tr>
+        <td>
+          ⑧ 財產保險（Property Insurance，估算）
+          <div class="note">不含承租方自有財產；由承租方負擔</div>
+        </td>
+        <td class="amount">35,000.00 THB</td>
+      </tr>
+      <tr>
+        <td>
+          ⑨ 房屋稅（Property Tax，估算）
+          <div class="note">由承租方負擔</div>
+        </td>
+        <td class="amount">90,000.00 THB</td>
+      </tr>
+    </table>
+    <p style="font-size:11px;color:#9CA3AF;padding:8px 20px 12px">⑧⑨ 為估算金額，實際依合約而定。每月租費於每月 5 日前繳付。</p>
+  </div>
+
+  <!-- Inspection notes -->
+  <div class="insp-wrap">
+    <div class="insp-box insp-warn">
+      <div class="insp-title">⚠️ 現場視察缺失（承諾承租前修復）</div>
+      <div class="insp-item"><span class="insp-icon">🔧</span><span>2 樓地板局部翹起，需整平修繕</span></div>
+      <div class="insp-item"><span class="insp-icon">🌿</span><span>正門前花圃區凌亂，承租前需整理美化</span></div>
+      <div class="insp-item"><span class="insp-icon">📋</span><span>上述缺失業主（JCK）已口頭承諾於正式進駐前完成修復，建議列入合約附件確認</span></div>
+    </div>
+    <div class="insp-box insp-ok">
+      <div class="insp-title">✅ 正面優勢</div>
+      <div class="insp-item"><span class="insp-icon">🏭</span><span>IEAT 保稅區資格，符合出口導向生產需求（免關稅進口原料）</span></div>
+      <div class="insp-item"><span class="insp-icon">💡</span><span>月租 160,140 THB，三者中成本最低，單價 237 THB/m²</span></div>
+      <div class="insp-item"><span class="insp-icon">🏗️</span><span>Hitech Industrial Estate 為現代化工業區，設施完善</span></div>
+      <div class="insp-item"><span class="insp-icon">🤝</span><span>房東為上市公司（JCK International），信用與履約保障較高</span></div>
+    </div>
+    <div class="insp-box insp-info">
+      <div class="insp-title">ℹ️ 注意事項</div>
+      <div class="insp-item"><span class="insp-icon">📍</span><span>距台達電約 1 小時 15 分（三案中最遠），若需頻繁往來客戶廠需評估交通成本</span></div>
+      <div class="insp-item"><span class="insp-icon">📐</span><span>675 m² 為三案最小規模，若業務快速擴張可能需考慮後續彈性</span></div>
+    </div>
+  </div>
+
+  <!-- Button bar -->
+  <div class="btn-bar">
+    <a href="https://www.thaiindustrialproperty.com/zh/property/factory-or-warehouse-675-sqm-for-rent-at-thung-suk-la-si-racha-chon-buri-property-id-at1352r/" target="_blank" class="btn btn-green">🔗 AT SOKO 物件頁面</a>
+    <a href="https://www.google.com/maps?q=13.08567,100.90331" target="_blank" class="btn btn-outline">📍 Google Maps</a>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     BRE23433 DETAIL
+══════════════════════════════════════════ -->
+<div class="section-title">四、BRE23433 詳細評估</div>
+<div class="card">
+
+  <!-- Photo -->
+  <div class="prop-photo-wrap">
+    <img src="photo_BRE23433.jpg" alt="BRE23433 廠房外觀" onerror="this.parentElement.innerHTML='<div style=\'height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;color:#9CA3AF\'><div style=\'font-size:32px\'>🏭</div><div style=\'font-size:12px\'>廠房照片：請將 photo_BRE23433.jpg 存至此資料夾</div></div>'"/>
+  </div>
+
+  <!-- Property header -->
+  <div class="prop-hdr">
+    <div>
+      <div class="prop-code" style="color:#1D4ED8">BRE23433</div>
+      <div class="prop-loc">
+        Lad Krabang Lam Pla Thio，Khet Lat Krabang，Bangkok 10520<br>
+        曼谷拉甲邦區
+      </div>
+    </div>
+    <div class="prop-badges">
+      <span class="zbadge zbadge-ieat">IEAT 保稅工業區</span>
+      <span style="background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700">⚠️ 需進一步評估</span>
+    </div>
+  </div>
+
+  <!-- Info grid -->
+  <div class="info-grid">
+    <div class="info-cell">
+      <div class="info-lbl">廠房面積（建坪）</div>
+      <div class="info-val">1,700 m²</div>
+      <div class="info-sub">514 坪</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-lbl">土地佔地面積</div>
+      <div class="info-val">3,200 m²</div>
+      <div class="info-sub">含廠房外停車及通道</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-lbl">區域類型</div>
+      <div class="info-val">IEAT 保稅區</div>
+      <div class="info-sub">Lat Krabang，Bangkok</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-lbl">電力容量</div>
+      <div class="info-val">300 KVA</div>
+      <div class="info-sub">高於 AT1352R 之 250 KVA</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-lbl">月租金（報價中）</div>
+      <div class="info-val">512,000 THB</div>
+      <div class="info-sub">301 THB/m²/月｜議價空間大</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-lbl">可購買（選項）</div>
+      <div class="info-val">75,000,000 THB</div>
+      <div class="info-sub">44,118 THB/m²（買地+廠）</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-lbl">屋齡</div>
+      <div class="info-val">約 15 年</div>
+      <div class="info-sub">建議進行專業結構檢驗</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-lbl">棟向</div>
+      <div class="info-val">座北朝南</div>
+      <div class="info-sub">正向採光，夏日遮蔭有利</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-lbl">距台達電</div>
+      <div class="info-val">約 1 小時</div>
+      <div class="info-sub">三案中位置最近</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-lbl">仲介</div>
+      <div class="info-val">Hero Realtor</div>
+      <div class="info-sub">herorealtor.com</div>
+    </div>
+  </div>
+
+  <!-- Cost section -->
+  <div class="price-section">
+    <div class="price-section-title">📋 費用摘要</div>
+
+    <div class="price-note-box">
+      <span style="font-size:16px;flex-shrink:0">📄</span>
+      <div>
+        <strong>正式報價單取得中，議價空間大。</strong><br>
+        以下為目前掌握之報價參考數字，詳細押金、稅費等項目俟業主（Hero Realtor）提供正式報價單後補充。
+      </div>
+    </div>
+
+    <table class="price-tbl">
+      <tr>
+        <td>月租金（含服務費，報價參考）</td>
+        <td class="amount">512,000 THB/月</td>
+      </tr>
+      <tr>
+        <td>單位租金</td>
+        <td class="amount">301 THB/m²/月</td>
+      </tr>
+      <tr class="subtotal">
+        <td><strong>購買選項（土地＋廠房）</strong></td>
+        <td class="amount"><strong>75,000,000 THB</strong></td>
+      </tr>
+      <tr>
+        <td style="color:#6B7280;font-size:12px">購地單價</td>
+        <td class="amount" style="color:#6B7280;font-size:12px">約 44,118 THB/m²</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Inspection notes -->
+  <div class="insp-wrap">
+    <div class="insp-box insp-warn">
+      <div class="insp-title">⚠️ 現場視察疑慮</div>
+      <div class="insp-item"><span class="insp-icon">👃</span><span><strong>鄰居可能為化工廠</strong>：對面為三菱相關廠房，現場視察時聞到刺鼻氣味，需進一步確認排放屬性及對員工健康的影響</span></div>
+      <div class="insp-item"><span class="insp-icon">🏗️</span><span>廠房屋齡約 15 年，建議進行專業結構安全檢驗（DD 盡職調查）再決定</span></div>
+      <div class="insp-item"><span class="insp-icon">💰</span><span>月租 512,000 THB 為 AT1352R 之 3.2 倍，面積雖為 2.5 倍，但成本壓力顯著較高</span></div>
+    </div>
+    <div class="insp-box insp-ok">
+      <div class="insp-title">✅ 正面優勢</div>
+      <div class="insp-item"><span class="insp-icon">📍</span><span>位於曼谷拉甲邦 IEAT 保稅區，距台達電最近（約 1 小時），物流效率最佳</span></div>
+      <div class="insp-item"><span class="insp-icon">⚡</span><span>電力容量 300 KVA，較 AT1352R 高，適合用電需求較大之製程</span></div>
+      <div class="insp-item"><span class="insp-icon">📐</span><span>1,700 m² 廠房面積及 3,200 m² 地坪，空間充裕，具擴展彈性</span></div>
+      <div class="insp-item"><span class="insp-icon">🏠</span><span>租購兩用，若長期規劃可考慮購買（7,500 萬 THB）轉為自有資產</span></div>
+    </div>
+    <div class="insp-box insp-info">
+      <div class="insp-title">🔍 後續待確認事項</div>
+      <div class="insp-item"><span class="insp-icon">1️⃣</span><span>向主管機關或工業區確認鄰近廠商排放許可及類型（是否為有害化學品）</span></div>
+      <div class="insp-item"><span class="insp-icon">2️⃣</span><span>取得業主正式租賃報價單（含押金、稅費細項）並進行議價</span></div>
+      <div class="insp-item"><span class="insp-icon">3️⃣</span><span>進行廠房結構安全評估（可委託泰國認可工程師）</span></div>
+    </div>
+  </div>
+
+  <!-- Button bar -->
+  <div class="btn-bar">
+    <a href="https://herorealtor.com/zh/property/BRE23433/" target="_blank" class="btn btn-blue">🔗 Hero Realtor 物件頁面</a>
+    <a href="https://www.google.com/maps/place/13%C2%B046%2736.6%22N+100%C2%B047%2715.4%22E/@13.776833,100.787611" target="_blank" class="btn btn-outline">📍 Google Maps</a>
+  </div>
+</div>
+
+<!-- Footer -->
+<div style="margin-top:48px;padding-top:20px;border-top:1px solid #E5E7EB;text-align:center;font-size:11px;color:#9CA3AF">
+  鴻騰電子 HonTen Electronics｜泰國設廠計畫｜本報告作成：2026.05.25<br>
+  本文件為內部考察紀錄，涉及商業敏感資訊，請妥善保管。
+</div>
+
+</div><!-- /container -->
+
+</body>
+</html>
