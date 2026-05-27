@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三角貿易模式分析｜鴻騰台灣 × 鴻騰泰國 × 順達</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;background:#F0F4F8;color:#1A1A2E;font-size:14px;line-height:1.7}
+
+.rpt-header{background:linear-gradient(135deg,#1A2E4A,#2A5298);color:#fff;padding:32px 40px 26px}
+.rpt-company{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.65;margin-bottom:10px}
+.rpt-title{font-size:24px;font-weight:900;line-height:1.2;margin-bottom:6px}
+.rpt-title span{color:#93C5FD}
+.rpt-meta{font-size:12px;opacity:.65;margin-top:6px}
+
+.container{max-width:1050px;margin:0 auto;padding:28px 20px 72px}
+.section-title{font-size:15px;font-weight:800;color:#1A2E4A;border-left:4px solid #1A2E4A;padding-left:12px;margin:36px 0 18px}
+.card{background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.07);overflow:hidden;margin-bottom:20px}
+.card-body{padding:24px}
+
+/* ── Principal model highlight box ── */
+.principal-box{background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border:2px solid #86EFAC;border-radius:12px;padding:20px 24px;margin-bottom:20px}
+.principal-title{font-size:14px;font-weight:900;color:#14532D;margin-bottom:12px}
+.principal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.principal-role{background:#fff;border-radius:8px;padding:12px 14px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.principal-role-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#6B7280;margin-bottom:4px}
+.principal-role-title{font-size:13px;font-weight:800;margin-bottom:6px}
+.principal-role-desc{font-size:11px;color:#6B7280;line-height:1.5}
+
+/* ── Industry models comparison ── */
+.models-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:20px}
+.model-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.07);border-top:4px solid #E5E7EB;position:relative}
+.model-card.m1{border-top-color:#3B82F6}
+.model-card.m2{border-top-color:#22C55E}
+.model-card.m3{border-top-color:#F59E0B}
+.model-card.m4{border-top-color:#8B5CF6}
+.model-card.active-model{box-shadow:0 4px 16px rgba(59,130,246,.2);border:2px solid #93C5FD;border-top:4px solid #3B82F6}
+.model-num{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#9CA3AF;margin-bottom:6px}
+.model-name{font-size:14px;font-weight:900;color:#1A2E4A;margin-bottom:10px}
+.model-flow{background:#F8FAFC;border-radius:8px;padding:10px 14px;font-size:12px;font-weight:700;color:#374151;text-align:center;margin-bottom:12px;letter-spacing:.3px}
+.model-desc{font-size:12.5px;color:#4B5563;line-height:1.65;margin-bottom:12px}
+.model-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.model-tag{font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px}
+.tag-blue{background:#DBEAFE;color:#1E40AF}
+.tag-green{background:#D1FAE5;color:#065F46}
+.tag-yellow{background:#FEF3C7;color:#92400E}
+.tag-purple{background:#EDE9FE;color:#6D28D9}
+.tag-gray{background:#F3F4F6;color:#374151}
+.model-companies{font-size:11px;color:#9CA3AF;margin-top:6px}
+.model-companies strong{color:#6B7280}
+.active-badge{display:inline-block;background:#DBEAFE;color:#1E40AF;border:1px solid #93C5FD;border-radius:10px;font-size:10px;font-weight:800;padding:2px 10px;margin-bottom:8px}
+
+/* ── Honten comparison row ── */
+.model-compare-box{background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border:1px solid #93C5FD;border-radius:10px;padding:14px 18px;margin-top:4px;font-size:13px;color:#1E40AF;line-height:1.65}
+
+/* ── Flow diagram ── */
+.flow-stage{display:flex;align-items:stretch;gap:0;margin-bottom:28px;flex-wrap:wrap}
+.stage-zone{flex:1;min-width:260px;border-radius:12px;padding:18px 16px;margin:6px}
+.zone-tw{background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border:2px solid #93C5FD}
+.zone-th{background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border:2px solid #86EFAC}
+.zone-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px}
+.zone-tw .zone-label{color:#1D4ED8}
+.zone-th .zone-label{color:#15803D}
+
+.entity{background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:10px;box-shadow:0 1px 6px rgba(0,0,0,.08)}
+.entity-code{font-size:20px;font-weight:900;letter-spacing:1px}
+.entity-name{font-size:12px;color:#6B7280;margin-top:2px;line-height:1.4}
+.entity-substance{font-size:11px;margin-top:8px;padding:6px 10px;border-radius:6px;background:#F0FDF4;color:#15803D;font-weight:600;border-left:3px solid #22C55E}
+.entity-tag{display:inline-block;margin-top:6px;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700;letter-spacing:.5px}
+.tag-tw{background:#DBEAFE;color:#1E40AF}
+.tag-ieat{background:#DCFCE7;color:#14532D}
+.tag-bonded{background:#FEF3C7;color:#92400E}
+
+/* ── Step-by-step ── */
+.steps{display:flex;flex-direction:column;gap:0}
+.step{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid #F3F4F6;align-items:flex-start}
+.step:last-child{border-bottom:none}
+.step-num{flex-shrink:0;width:36px;height:36px;border-radius:50%;background:#1A2E4A;color:#fff;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.step-content{flex:1}
+.step-title{font-size:14px;font-weight:800;color:#1A2E4A;margin-bottom:6px}
+.step-desc{font-size:13px;color:#374151;line-height:1.65}
+.step-highlight{background:#FFF7ED;border:1px solid #FED7AA;border-radius:6px;padding:8px 12px;margin-top:8px;font-size:12px;color:#92400E;font-weight:600}
+.step-highlight.green{background:#F0FDF4;border-color:#86EFAC;color:#14532D}
+
+/* ── Flow visual ── */
+.flow-visual{background:#F8FAFC;border-radius:12px;padding:24px;margin-bottom:4px;overflow-x:auto}
+.flow-row{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:nowrap;min-width:600px}
+.flow-box{background:#fff;border-radius:10px;padding:12px 16px;text-align:center;box-shadow:0 1px 6px rgba(0,0,0,.1);min-width:130px;flex-shrink:0}
+.flow-box.a{border-top:4px solid #3B82F6}
+.flow-box.b{border-top:4px solid #22C55E}
+.flow-box.s{border-top:4px solid #F59E0B}
+.flow-box-code{font-size:18px;font-weight:900}
+.flow-box-name{font-size:10px;color:#6B7280;margin-top:2px;line-height:1.3}
+.flow-box.a .flow-box-code{color:#3B82F6}
+.flow-box.b .flow-box-code{color:#22C55E}
+.flow-box.s .flow-box-code{color:#F59E0B}
+
+.arrow-col{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0 6px;min-width:90px;flex-shrink:0}
+.arr{font-size:18px;line-height:1}
+.arr-label{font-size:9.5px;text-align:center;color:#6B7280;font-weight:600;line-height:1.3}
+.arr-money{color:#F59E0B}
+.divider-row{display:flex;gap:6px;margin:8px 0;justify-content:center;align-items:center;min-width:600px}
+.divider-label{font-size:10px;font-weight:700;color:#9CA3AF;white-space:nowrap;padding:0 8px}
+.divider-line{flex:1;height:1px;background:#E5E7EB}
+
+/* ── Analysis ── */
+.concern-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:20px}
+.concern-card{border-radius:10px;padding:16px 18px;border-left:4px solid}
+.concern-high{background:#FEF2F2;border-left-color:#EF4444}
+.concern-mid{background:#FFFBEB;border-left-color:#F59E0B}
+.concern-low{background:#F0FDF4;border-left-color:#22C55E}
+.concern-info{background:#EFF6FF;border-left-color:#3B82F6}
+.concern-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.concern-high .concern-title{color:#B91C1C}
+.concern-mid .concern-title{color:#D97706}
+.concern-low .concern-title{color:#15803D}
+.concern-info .concern-title{color:#1D4ED8}
+.concern-body{font-size:13px;color:#374151;line-height:1.6}
+
+.pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.pros{background:#F0FDF4;border-radius:10px;padding:16px}
+.cons{background:#FEF2F2;border-radius:10px;padding:16px}
+.pros h4{color:#15803D;font-size:13px;font-weight:800;margin-bottom:10px}
+.cons h4{color:#B91C1C;font-size:13px;font-weight:800;margin-bottom:10px}
+.pc-item{font-size:13px;color:#374151;margin-bottom:6px;display:flex;gap:8px;align-items:flex-start}
+.pc-item:last-child{margin-bottom:0}
+
+.rec-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.rec-item{display:flex;gap:14px;align-items:flex-start;background:#fff;border-radius:8px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.rec-num{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:#1A2E4A;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.rec-text{font-size:13px;color:#374151;line-height:1.6;padding-top:3px}
+.rec-text strong{color:#1A2E4A}
+
+.risk-badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:800;margin-left:4px;vertical-align:middle}
+.risk-high{background:#FEE2E2;color:#991B1B}
+.risk-mid{background:#FEF3C7;color:#92400E}
+.risk-low{background:#D1FAE5;color:#065F46}
+
+/* Risk summary table */
+.risk-table{width:100%;border-collapse:collapse;margin-bottom:20px}
+.risk-table th{background:#1A2E4A;color:#fff;padding:10px 14px;font-size:11px;font-weight:700;text-align:left}
+.risk-table td{padding:10px 14px;font-size:13px;border-bottom:1px solid #F0F0F0;vertical-align:middle}
+.risk-table tr:last-child td{border-bottom:none}
+.risk-table tr:nth-child(even) td{background:#FAFAFA}
+
+.disclaimer{background:#F8F9FA;border:1px solid #E5E7EB;border-radius:8px;padding:12px 16px;font-size:11px;color:#6B7280;line-height:1.5;margin-top:24px}
+
+@media(max-width:640px){
+  .rpt-header{padding:24px 20px 20px}
+  .rpt-title{font-size:20px}
+  .pros-cons{grid-template-columns:1fr}
+  .concern-grid{grid-template-columns:1fr}
+  .principal-grid{grid-template-columns:1fr}
+  .models-grid{grid-template-columns:1fr}
+  .flow-visual{padding:16px 12px}
+}
+</style>
+</head>
+<body>
+
+<div class="rpt-header">
+  <div class="rpt-company">鴻騰電子 HonTen Electronics　｜　泰國設廠計畫</div>
+  <div class="rpt-title">保稅區三角貿易模式<br><span>流程解析與專業評估</span></div>
+  <div class="rpt-meta">文件基礎：保稅區/自由貿易區三角貿易模式建議書　｜　分析日期：2026.05</div>
+</div>
+
+<div class="container">
+
+<!-- ─────────────────────────────────────────
+     PRINCIPAL MODEL INTRO
+───────────────────────────────────────── -->
+<div class="section-title">前言：此結構在國際稅務上的定性</div>
+<div class="principal-box">
+  <div class="principal-title">🎯 這是標準「主要公司模式（Principal Model）」— 國際大型跨國企業廣泛採用的合規架構</div>
+  <div style="font-size:13px;color:#166534;margin-bottom:16px;line-height:1.7">
+    鴻騰台灣（A）持有所有技術、模具，全部 RD 人員在台灣處理訂單，且已是順達泰國的現有直接供應商。<br>
+    A 是真正的<strong>價值創造核心</strong>，而非空殼中間商——這讓整個三角貿易架構具備充分的法律防禦性。
+  </div>
+  <div class="principal-grid">
+    <div class="principal-role">
+      <div class="principal-role-name">A 的角色</div>
+      <div class="principal-role-title" style="color:#3B82F6">Principal<br>主要公司</div>
+      <div class="principal-role-desc">IP 所有人、模具持有人、RD 中心、商業主體、承擔合約風險</div>
+    </div>
+    <div class="principal-role">
+      <div class="principal-role-name">B 的角色</div>
+      <div class="principal-role-title" style="color:#22C55E">Limited Risk Manufacturer<br>有限風險製造商</div>
+      <div class="principal-role-desc">按 A 規格代工生產，使用 A 的模具與技術，賺取加工費</div>
+    </div>
+    <div class="principal-role">
+      <div class="principal-role-name">A 留存利差的依據</div>
+      <div class="principal-role-title" style="color:#F59E0B">IP Return<br>+ R&D 回報</div>
+      <div class="principal-role-desc">A 的利差 = IP 授權報酬 + RD 成本攤回 + 模具折舊 + 客戶關係管理費</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────────
+     SECTION 1 : 三方主體
+───────────────────────────────────────── -->
+<div class="section-title">一、交易三方主體</div>
+<div class="flow-stage">
+  <div class="stage-zone zone-tw">
+    <div class="zone-label">🇹🇼 台灣</div>
+    <div class="entity">
+      <div class="entity-code" style="color:#3B82F6">A　鴻騰台灣</div>
+      <div class="entity-name">商業主體 ／ IP 持有人 ／ RD 中心<br>現有供應商：直接出貨給順達泰國<br>負責簽合約、開發票、收付款</div>
+      <div class="entity-substance">✅ 實質：技術、模具、全部 RD 人員均在台灣，現有客戶關係</div>
+      <span class="entity-tag tag-tw">台灣登記公司</span>
+    </div>
+  </div>
+
+  <div class="stage-zone zone-th">
+    <div class="zone-label">🇹🇭 泰國</div>
+    <div class="entity">
+      <div class="entity-code" style="color:#22C55E">B　鴻騰泰國廠</div>
+      <div class="entity-name">有限風險製造商（待設立）<br>按 A 規格生產、使用 A 模具代工、出貨給 S</div>
+      <span class="entity-tag tag-ieat">IEAT 保稅區 ＋ BOI</span>
+    </div>
+    <div class="entity" style="margin-top:14px">
+      <div class="entity-code" style="color:#F59E0B">S　泰國順達（DynaPack）</div>
+      <div class="entity-name">現有客戶（A 目前直接供貨對象）<br>成品 100% 出口，具保稅資格</div>
+      <span class="entity-tag tag-bonded">保稅區 ／ 100% 出口</span>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────────
+     SECTION 2 : 流程圖
+───────────────────────────────────────── -->
+<div class="section-title">二、交易流程圖</div>
+<div class="card">
+<div class="card-body">
+
+<div style="text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9CA3AF;margin-bottom:16px">📋 合約 ＆ 發票流（紙面交易）</div>
+<div class="flow-visual">
+  <div class="flow-row">
+    <div class="flow-box s"><div class="flow-box-code">S</div><div class="flow-box-name">泰國順達<br>（現有客戶）</div></div>
+    <div class="arrow-col">
+      <div class="arr" style="color:#3B82F6">→→→</div>
+      <div class="arr-label">①下單給 A<br>A開Invoice給S</div>
+    </div>
+    <div class="flow-box a"><div class="flow-box-code">A</div><div class="flow-box-name">鴻騰台灣<br>（IP持有／商業主體）</div></div>
+    <div class="arrow-col">
+      <div class="arr" style="color:#3B82F6">→→→</div>
+      <div class="arr-label">②A轉單給B<br>B開Invoice給A<br>（製造費）</div>
+    </div>
+    <div class="flow-box b"><div class="flow-box-code">B</div><div class="flow-box-name">鴻騰泰國廠<br>（代工製造）</div></div>
+  </div>
+
+  <div class="divider-row">
+    <div class="divider-line"></div>
+    <div class="divider-label">↓ 技術 ＆ 模具提供（A→B）</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="flow-row" style="margin-top:4px">
+    <div style="min-width:130px;flex-shrink:0"></div>
+    <div class="arrow-col">
+      <div class="arr" style="color:#7C3AED">→→→</div>
+      <div class="arr-label" style="color:#7C3AED">A 提供技術規格<br>模具（A持有所有權）<br>給 B 廠使用</div>
+    </div>
+    <div style="min-width:130px;flex-shrink:0"></div>
+    <div class="arrow-col"></div>
+    <div style="min-width:130px;flex-shrink:0"></div>
+  </div>
+
+  <div class="divider-row">
+    <div class="divider-line"></div>
+    <div class="divider-label">↓ 報關 ＆ 貨物（實體移動）</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="flow-row" style="margin-top:4px">
+    <div class="flow-box s"><div class="flow-box-code">S</div><div class="flow-box-name">泰國順達<br>（收貨）</div></div>
+    <div class="arrow-col">
+      <div class="arr" style="color:#22C55E">←←←</div>
+      <div class="arr-label" style="color:#15803D">③貨物直送<br>B廠→S倉庫<br>保稅區間轉移</div>
+    </div>
+    <div style="min-width:130px;flex-shrink:0"></div>
+    <div class="arrow-col">
+      <div class="arr" style="color:#22C55E">←←←</div>
+      <div class="arr-label" style="color:#15803D">實體卡車運送<br>泰國境內</div>
+    </div>
+    <div class="flow-box b"><div class="flow-box-code">B</div><div class="flow-box-name">鴻騰泰國廠<br>（出貨方）</div></div>
+  </div>
+
+  <div class="divider-row">
+    <div class="divider-line"></div>
+    <div class="divider-label">↓ 金流（美金匯款）</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="flow-row" style="margin-top:4px">
+    <div class="flow-box s"><div class="flow-box-code">S</div><div class="flow-box-name">泰國順達<br>（付款方）</div></div>
+    <div class="arrow-col">
+      <div class="arr arr-money">→→→</div>
+      <div class="arr-label">④S匯USD給A<br>憑進口報單<br>合法結匯</div>
+    </div>
+    <div class="flow-box a"><div class="flow-box-code">A</div><div class="flow-box-name">鴻騰台灣<br>💰 IP回報＋利差</div></div>
+    <div class="arrow-col">
+      <div class="arr arr-money">→→→</div>
+      <div class="arr-label">⑤A匯製造費給B<br>扣除IP回報後匯出</div>
+    </div>
+    <div class="flow-box b"><div class="flow-box-code">B</div><div class="flow-box-name">鴻騰泰國廠<br>FCD帳戶收款</div></div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- ─────────────────────────────────────────
+     SECTION 3 : 五大步驟
+───────────────────────────────────────── -->
+<div class="section-title">三、五大步驟詳解</div>
+<div class="card">
+<div class="card-body">
+<div class="steps">
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <div class="step-title">簽訂合約</div>
+      <div class="step-desc">
+        S（順達）向 <strong>A（鴻騰台灣）</strong> 下採購訂單，A 開具 Invoice 給 S——<em>此為現有業務的延伸，合約關係不變</em>。<br>
+        A 同時向 <strong>B（鴻騰泰國廠）</strong> 下代工製造訂單，B 按 A 的技術規格與模具生產，B 開具製造費 Invoice 給 A。
+      </div>
+      <div class="step-highlight green">✅ A 與 S 的合約關係維持原樣，S 無感知變化，降低客戶配合的阻力。</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <div class="step-title">核心：「名義進出口」保稅區間轉移報關</div>
+      <div class="step-desc">
+        貨物從未離開泰國，但透過報關行向泰國海關辦理：<br><br>
+        🏭 <strong>B廠報關端：</strong>憑 B 開給 A 的 Invoice，向海關申報「出口（保稅區轉出）」→ <strong>0% VAT</strong><br>
+        🏭 <strong>S客戶報關端：</strong>憑 A 開給 S 的 Invoice，申報「進口（保稅區轉入）」→ <strong>0% VAT</strong>
+      </div>
+      <div class="step-highlight">⚠️ 關鍵：Bonded-to-Bonded Transfer 需由熟悉 BOI/IEAT 的專業報關行執行，文件格式不能有誤。</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <div class="step-title">實體貨運</div>
+      <div class="step-desc">
+        報關手續完成後，貨物從 B 工廠以卡車直接送至 S 客戶倉庫。物理上在泰國境內移動，海關帳上已完成合法「出口＋進口」。
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-content">
+      <div class="step-title">S 客戶合法外匯付款給台灣 A</div>
+      <div class="step-desc">
+        S 持泰國海關核發的<strong>進口報單（Import Entry Form）</strong>，上面債權人記載為「台灣 A 公司」。<br>
+        S 持此報單至泰國銀行申請結匯，以美金匯款給台灣 A 公司，泰國外匯管制完全放行。
+      </div>
+      <div class="step-highlight green">✅ 對 S 而言，付款對象仍是熟悉的台灣鴻騰，流程與現在幾乎相同。</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-content">
+      <div class="step-title">台灣 A 付款給泰國 B（扣除 IP 回報後）</div>
+      <div class="step-desc">
+        台灣 A 收到 S 的全額美金後，<strong>扣留 IP 回報、RD 成本、模具攤提及商業利潤</strong>，<br>
+        再將 B 廠應得的<strong>製造加工費（Cost Plus，約製造成本的 5–10%）</strong>從台灣匯至 B 工廠的外幣帳戶（FCD）。
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+</div>
+
+<!-- ─────────────────────────────────────────
+     SECTION 4 : 四大好處
+───────────────────────────────────────── -->
+<div class="section-title">四、此架構的四大優勢</div>
+<div class="concern-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+  <div class="concern-card concern-info">
+    <div class="concern-title">💰 利潤合法留台灣</div>
+    <div class="concern-body">A 的利差有 IP、RD、模具等充分依據，在移轉訂價上站得住腳，稅局難以挑戰。</div>
+  </div>
+  <div class="concern-card concern-info">
+    <div class="concern-title">🧾 雙方 0% VAT</div>
+    <div class="concern-body">B 出口、S 進口，皆為保稅區交易，增值稅率為零，無 VAT 補繳問題。</div>
+  </div>
+  <div class="concern-card concern-info">
+    <div class="concern-title">💱 外匯管制解套</div>
+    <div class="concern-body">S 有合法進口報單，泰國銀行核准結匯，美金合法匯出泰國給台灣 A。</div>
+  </div>
+  <div class="concern-card concern-info">
+    <div class="concern-title">🏅 符合 BOI 間接出口</div>
+    <div class="concern-body">B 廠銷售給保稅區 100% 出口客戶，可認定為「間接出口」，BOI 稅收優惠不受影響。</div>
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────────
+     SECTION 5 : 風險概覽表
+───────────────────────────────────────── -->
+<div class="section-title">五、風險評估概覽</div>
+
+<table class="risk-table">
+  <thead>
+    <tr><th>風險項目</th><th>風險級別</th><th>說明</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>移轉訂價（Transfer Pricing）</td>
+      <td><span class="risk-badge risk-mid">🟡 中</span></td>
+      <td>A 有 IP/RD/模具，利差依據充分，但仍需每年備妥 TP 文件</td>
+    </tr>
+    <tr>
+      <td>A 公司實質性</td>
+      <td><span class="risk-badge risk-low">🟢 低</span></td>
+      <td>A 有員工、技術、模具、現有客戶，完全符合 Principal 公司實質要求</td>
+    </tr>
+    <tr>
+      <td>台灣 CFC 規則</td>
+      <td><span class="risk-badge risk-mid">🟡 中</span></td>
+      <td>B 廠未分配盈餘仍可能觸發台灣 CFC，需規劃分配時機</td>
+    </tr>
+    <tr>
+      <td>報關文件錯誤</td>
+      <td><span class="risk-badge risk-mid">🟡 中</span></td>
+      <td>Bonded-to-Bonded 流程需熟練報關行執行，不得大意</td>
+    </tr>
+    <tr>
+      <td>BOI 間接出口認定</td>
+      <td><span class="risk-badge risk-mid">🟡 中</span></td>
+      <td>建議事前取得 BOI 書面確認（Ruling）</td>
+    </tr>
+    <tr>
+      <td>模具所有權文件化</td>
+      <td><span class="risk-badge risk-mid">🟡 中</span></td>
+      <td>模具實體移往泰國，法律所有權需明確留在 A，需簽模具借用協議</td>
+    </tr>
+    <tr>
+      <td>公司間製造協議</td>
+      <td><span class="risk-badge risk-mid">🟡 中</span></td>
+      <td>A 與 B 之間需正式代工合約，載明 IP 授權範圍、費用結構、責任歸屬</td>
+    </tr>
+    <tr>
+      <td>客戶（S）配合度</td>
+      <td><span class="risk-badge risk-low">🟢 低</span></td>
+      <td>A 是 S 現有供應商，關係穩固，合約對象不變，S 配合阻力極小</td>
+    </tr>
+    <tr>
+      <td>商業集中風險</td>
+      <td><span class="risk-badge risk-low">🟢 低</span></td>
+      <td>現有合作關係風險相對已知，中期建議開發第二客戶</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ─────────────────────────────────────────
+     SECTION 6 : 詳細評估
+───────────────────────────────────────── -->
+<div class="section-title">六、關鍵 Concern 詳細說明</div>
+<div class="concern-grid">
+
+  <div class="concern-card concern-mid">
+    <div class="concern-title">🟡 移轉訂價：有依據但不等於不需文件</div>
+    <div class="concern-body">
+      A 保留的利差有充分的功能依據（IP、RD、模具、客戶關係），在移轉訂價分析上屬「<strong>Principal 享受較高利潤回報</strong>」的標準論述，稅局難以否定。<br><br>
+      但「有依據」≠「不需文件」——台灣與泰國稅法<strong>均要求年度移轉訂價報告</strong>，需記錄功能分析、可比交易資料、利潤區間等。建議委聘會計師事務所每年出具正式 TP 文件。
+    </div>
+  </div>
+
+  <div class="concern-card concern-low">
+    <div class="concern-title">🟢 A 公司實質性：充分符合要求</div>
+    <div class="concern-body">
+      鴻騰台灣（A）具備：<br>
+      • 全部 RD 人員及工程能力<br>
+      • 技術與製程知識產權<br>
+      • 模具實體持有<br>
+      • 與順達的現有商業合約及歷史往來<br><br>
+      A 完全符合「Principal 公司」的實質要求，OECD BEPS 下的常設機構（PE）風險極低。
+    </div>
+  </div>
+
+  <div class="concern-card concern-mid">
+    <div class="concern-title">🟡 模具所有權：需白紙黑字確立</div>
+    <div class="concern-body">
+      模具實體移到泰國 B 廠後，<strong>法律所有權必須明確保留在台灣 A</strong>。<br><br>
+      若未妥善處理，泰國稅局可能認定 A 將資產「無償移轉」給 B，並要求補徵相關稅款。<br><br>
+      建議做法：<br>
+      • 與 B 廠簽署「模具借用協議（Tooling Loan Agreement）」<br>
+      • 或收取象徵性模具使用費，建立付費關係<br>
+      • 模具在台灣財報上繼續提列折舊
+    </div>
+  </div>
+
+  <div class="concern-card concern-mid">
+    <div class="concern-title">🟡 公司間製造協議不可省略</div>
+    <div class="concern-body">
+      A 與 B 之間需要一份正式的<strong>代工製造協議（Intercompany Manufacturing Agreement）</strong>，載明：<br><br>
+      • B 是依 A 的技術規格與指示生產（Toll / Contract Manufacturing）<br>
+      • 模具由 A 提供，IP 歸屬於 A<br>
+      • B 的報酬為「製造成本加成（Cost Plus）」，建議 5–10%<br>
+      • 產品瑕疵、退貨的責任歸屬<br><br>
+      此協議是移轉訂價文件的核心基礎，也是 BOI 審查時的重要依據。
+    </div>
+  </div>
+
+  <div class="concern-card concern-mid">
+    <div class="concern-title">🟡 台灣 CFC 規則</div>
+    <div class="concern-body">
+      台灣自 2023 年起實施受控外國公司（CFC）規定。B 廠若盈利但不分配，台灣股東可能<strong>被視為已認列 B 的盈餘並繳納所得稅</strong>，即使錢還在泰國。<br><br>
+      需與台灣稅務顧問確認適用範圍及豁免條件，並規劃合適的股利分配時機。
+    </div>
+  </div>
+
+  <div class="concern-card concern-mid">
+    <div class="concern-title">🟡 RD 成本文件化：A 最強的利差防護</div>
+    <div class="concern-body">
+      台灣 RD 人員的薪資、測試費、工程費、模具攤提等，應<strong>系統性建立 RD 成本追蹤機制</strong>，並與 B 廠生產的產品明確對應。<br><br>
+      這些成本記錄是移轉訂價「功能分析」的核心，也是 A 主張保留較高利差的最強法律依據。每年的 TP 文件準備成本因此大幅降低。
+    </div>
+  </div>
+
+</div>
+
+<!-- ─────────────────────────────────────────
+     SECTION 7 : 利弊分析
+───────────────────────────────────────── -->
+<div class="section-title">七、利弊分析</div>
+
+<div style="margin-bottom:16px">
+  <h4 style="font-size:13px;font-weight:800;color:#1A2E4A;margin-bottom:10px">▍對 鴻騰整體（A ＋ B）</h4>
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>✅ 優點</h4>
+      <div class="pc-item"><span>🔹</span><span>IP / RD / 模具留在台灣，利潤中心合法在台，享台灣稅率</span></div>
+      <div class="pc-item"><span>🔹</span><span>B 廠享 BOI 免企業所得稅（最長 8 年），節省泰國 20% 企業稅</span></div>
+      <div class="pc-item"><span>🔹</span><span>A 的利差有充分依據，移轉訂價防禦性強</span></div>
+      <div class="pc-item"><span>🔹</span><span>現有 A–S 客戶關係不中斷，過渡期業務連續性最佳</span></div>
+      <div class="pc-item"><span>🔹</span><span>台灣繼續保留 RD 能力，符合「根留台灣」政策，未來申請補助或貸款有利</span></div>
+    </div>
+    <div class="cons">
+      <h4>⚠️ 需注意</h4>
+      <div class="pc-item"><span>🔸</span><span>每年仍需備妥移轉訂價文件（約 NT$30–80 萬/年）</span></div>
+      <div class="pc-item"><span>🔸</span><span>模具借用協議、代工製造協議需在 B 廠成立前就位，不可事後補簽</span></div>
+      <div class="pc-item"><span>🔸</span><span>CFC 規則需提前規劃 B 廠利潤的分配策略</span></div>
+      <div class="pc-item"><span>🔸</span><span>Bonded-to-Bonded 報關流程有一定行政複雜度，需確保報關行夠專業</span></div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <h4 style="font-size:13px;font-weight:800;color:#1A2E4A;margin-bottom:10px">▍對 客戶 S（順達/DynaPack）</h4>
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>✅ 優點</h4>
+      <div class="pc-item"><span>🔹</span><span>合約對象不變（仍是台灣鴻騰 A），流程熟悉，幾乎無感知變化</span></div>
+      <div class="pc-item"><span>🔹</span><span>維持 0% VAT，採購成本不增加</span></div>
+      <div class="pc-item"><span>🔹</span><span>貨物從泰國本地直接交付，交期更短、物流成本更低</span></div>
+      <div class="pc-item"><span>🔹</span><span>付款有合法海關文件依據，外匯合規</span></div>
+    </div>
+    <div class="cons">
+      <h4>⚠️ 需確認</h4>
+      <div class="pc-item"><span>🔸</span><span>S 的報關行需配合 Bonded-to-Bonded 特殊申報格式，需提前確認</span></div>
+      <div class="pc-item"><span>🔸</span><span>S 的採購系統若要求供應商必須是「泰國本地公司」，需提前溝通確認</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────────
+     SECTION 8 : 實務建議
+───────────────────────────────────────── -->
+<div class="section-title">八、實務建議（優先順序）</div>
+<ul class="rec-list">
+
+  <li class="rec-item">
+    <div class="rec-num">1</div>
+    <div class="rec-text">
+      <strong>B 廠成立前：簽妥兩份公司間協議</strong><br>
+      （一）<strong>模具借用協議（Tooling Loan Agreement）</strong>：明確模具所有權歸 A，B 無償或付費借用。<br>
+      （二）<strong>代工製造協議（Intercompany Manufacturing Agreement）</strong>：明確 B 是按 A 指示代工，報酬為 Cost Plus 5–10%，IP 歸屬 A。<br>
+      這是整個架構的法律基礎，必須在第一批貨出廠前就位。
+    </div>
+  </li>
+
+  <li class="rec-item">
+    <div class="rec-num">2</div>
+    <div class="rec-text">
+      <strong>建立 RD 成本追蹤系統</strong><br>
+      將台灣 RD 人員薪資、工程費、測試費、模具折舊按產品別做明細記錄，並與 B 廠各產線的生產對應起來。這是 A 保留高利差最強力的法律護盾，也讓每年的 TP 文件準備省時省錢。
+    </div>
+  </li>
+
+  <li class="rec-item">
+    <div class="rec-num">3</div>
+    <div class="rec-text">
+      <strong>委聘台泰雙邊移轉訂價顧問，首年出具 TP 研究報告</strong><br>
+      由於 A 有充分的實質和功能依據，首份 TP 報告的準備相對容易，但仍須委由具執業資格的稅務師正式出具。往後每年維護更新。預估費用：台灣端 NT$30–80 萬，泰國端 THB 200–400 萬。
+    </div>
+  </li>
+
+  <li class="rec-item">
+    <div class="rec-num">4</div>
+    <div class="rec-text">
+      <strong>事前向 BOI 取得「間接出口」書面確認（Advance Ruling）</strong><br>
+      就「B 廠銷售給保稅區 100% 出口客戶是否認定為間接出口」提交書面申請，取得 BOI 正式函覆，確保 B 廠的免稅優惠在日後審查時不被撤銷。
+    </div>
+  </li>
+
+  <li class="rec-item">
+    <div class="rec-num">5</div>
+    <div class="rec-text">
+      <strong>儘早與順達財務部門確認報關配合度</strong><br>
+      雖然 A–S 關係穩固，但仍需確認順達的報關行是否熟悉 Bonded-to-Bonded 申報格式，並取得書面確認。這是整個流程能否順暢落地的前提條件。
+    </div>
+  </li>
+
+  <li class="rec-item">
+    <div class="rec-num">6</div>
+    <div class="rec-text">
+      <strong>B 廠同步開立外幣帳戶（FCD）</strong><br>
+      B 廠成立初期，在泰國當地銀行（建議曼谷銀行或開泰銀行）開設美元 FCD 帳戶，避免台灣匯款時被強制換泰銖，長期可節省 0.5–1% 匯損。
+    </div>
+  </li>
+
+  <li class="rec-item">
+    <div class="rec-num">7</div>
+    <div class="rec-text">
+      <strong>CFC 分配策略規劃</strong><br>
+      與台灣稅務顧問評估 B 廠利潤是否觸發 CFC，並提前規劃股利分配時機或豁免路徑，避免台灣股東在不知情的情況下被課稅。
+    </div>
+  </li>
+
+</ul>
+
+<!-- ─────────────────────────────────────────
+     SECTION 9 : 總結
+───────────────────────────────────────── -->
+<div class="section-title">九、總結</div>
+<div class="card">
+<div class="card-body">
+  <p style="font-size:14px;color:#374151;line-height:1.8;margin-bottom:12px">
+    鴻騰台灣（A）持有技術、模具、全部 RD 人員，且已是順達泰國的現有直接供應商，具備完整商業實質。
+    此三角貿易架構完全符合國際稅務主流的「<strong>Principal—有限風險製造商</strong>」模型，法律防禦性強。
+  </p>
+  <p style="font-size:14px;color:#374151;line-height:1.8;margin-bottom:12px">
+    在業界同類架構中，此為台商、日商赴東南亞設廠最常採用的正規結構之一（模式一），大型日系電子供應鏈廠商普遍使用。
+    鴻騰現有的商業實質，使得 A 保留較高利差的依據遠優於一般案例。
+  </p>
+  <p style="font-size:14px;color:#374151;line-height:1.8;margin-bottom:12px">
+    <strong>最需要優先處理的三件事：</strong><br>
+    ① 簽妥模具借用協議與代工製造協議（B 廠開業前）<br>
+    ② 建立 RD 成本追蹤紀錄（越早越好）<br>
+    ③ 取得 BOI 間接出口書面確認（開始出貨前）
+  </p>
+  <p style="font-size:14px;color:#374151;line-height:1.8">
+    做到以上三點，整個架構的法律防禦性將達到相當高的水準，可放心推進。
+  </p>
+</div>
+</div>
+
+<!-- ─────────────────────────────────────────
+     APPENDIX : 業界常見架構比較
+───────────────────────────────────────── -->
+<div class="section-title">附錄：台商／日商在泰國廠常見的四種貿易架構</div>
+<p style="font-size:13px;color:#4B5563;margin-bottom:18px;line-height:1.7">
+  除了鴻騰規劃的模式，市場上台商、日商普遍使用以下幾種結構，各有適用情境與優缺點，供參考比較。
+</p>
+
+<div class="models-grid">
+
+  <!-- 模式一 -->
+  <div class="model-card m1 active-model">
+    <div class="active-badge">✅ 鴻騰規劃採用</div>
+    <div class="model-num">模式一</div>
+    <div class="model-name">委託製造模式（Principal Model）</div>
+    <div class="model-flow">台灣/日本母公司（Principal）→ 泰國廠（代工）→ 客戶</div>
+    <div class="model-desc">
+      母國公司持有 IP、技術、模具，泰國廠按指示代工，賺取製造加成（Cost Plus 5–10%）。
+      母國保留主要利潤，泰國廠僅為有限風險製造商。合約對象、開票、收款全在母國。
+    </div>
+    <div class="model-tags">
+      <span class="model-tag tag-blue">利潤留母國</span>
+      <span class="model-tag tag-green">BOI 稅務優化</span>
+      <span class="model-tag tag-yellow">需 TP 文件</span>
+    </div>
+    <div class="model-companies"><strong>代表企業：</strong>大量日系精密零件廠、電子連接器廠、台系中型製造商赴東南亞初期</div>
+  </div>
+
+  <!-- 模式二 -->
+  <div class="model-card m2">
+    <div class="model-num">模式二</div>
+    <div class="model-name">泰國子公司獨立買賣模式（Full Buy-Sell）</div>
+    <div class="model-flow">台灣/日本母廠（供料）→ 泰國子公司（買斷、加工、售出）→ 客戶</div>
+    <div class="model-desc">
+      泰國廠自行向母廠採購材料或半成品，加工後以自己名義開票賣給客戶，完整承擔 P&amp;L 風險。
+      泰國廠有完整的進銷貨關係，結構最簡單清楚。若泰國廠有 BOI 免稅，在泰國端留利潤反而划算。
+    </div>
+    <div class="model-tags">
+      <span class="model-tag tag-green">結構簡單</span>
+      <span class="model-tag tag-green">泰廠自主</span>
+      <span class="model-tag tag-yellow">母國利潤薄</span>
+    </div>
+    <div class="model-companies"><strong>代表企業：</strong>正新橡膠泰廠、台達電泰廠、多數已在泰深耕多年的大型台資廠</div>
+  </div>
+
+  <!-- 模式三 -->
+  <div class="model-card m3">
+    <div class="model-num">模式三</div>
+    <div class="model-name">母國直接出貨、泰國廠為純生產基地</div>
+    <div class="model-flow">台灣/日本母公司（開票收款）← 訂單 ← 客戶　｜　泰國廠（代為出貨）</div>
+    <div class="model-desc">
+      母國持續開發票給客戶，泰國廠只是物理上的生產與出貨點，對外沒有商業行為。
+      泰國廠以「成本中心」或內部轉帳方式與母公司結算，不對外簽約。適合剛進入泰國的過渡期。
+    </div>
+    <div class="model-tags">
+      <span class="model-tag tag-blue">最快速部署</span>
+      <span class="model-tag tag-yellow">無法享 BOI 出口優惠</span>
+      <span class="model-tag tag-gray">過渡期用</span>
+    </div>
+    <div class="model-companies"><strong>代表企業：</strong>台商中小型製造廠初進泰國常用，待規模穩定後多轉換為模式一或二</div>
+  </div>
+
+  <!-- 模式四 -->
+  <div class="model-card m4">
+    <div class="model-num">模式四</div>
+    <div class="model-name">第三地控股＋區域採購銷售中心</div>
+    <div class="model-flow">台灣/日本（研發）→ 新加坡/香港（採購銷售樞紐）→ 泰國廠（製造）→ 客戶</div>
+    <div class="model-desc">
+      在新加坡或香港設立區域採購中心，作為母國與泰國廠之間的貿易樞紐。
+      新加坡企業稅率 17%（另有各類優惠），資金調度靈活、多幣別帳戶方便。
+      適合多國生產佈局、集團規模大、需要資金靈活度的企業。
+    </div>
+    <div class="model-tags">
+      <span class="model-tag tag-purple">稅務優化極大化</span>
+      <span class="model-tag tag-purple">資金最靈活</span>
+      <span class="model-tag tag-yellow">維護成本高</span>
+    </div>
+    <div class="model-companies"><strong>代表企業：</strong>鴻海、廣達供應鏈廠商、豐田泰國供應商群、大型日本電子集團泰國子公司</div>
+  </div>
+
+</div>
+
+<div class="model-compare-box">
+  💡 <strong>鴻騰的情況：</strong>技術、模具、客戶關係集中在台灣，泰國廠規模初期較小，<strong>模式一（Principal Model）是最適合的起點</strong>——
+  兼顧法律合規、稅務效益，且台灣繼續保有技術核心。若日後泰廠規模擴大、增加多個客戶，可評估是否演進至模式二或加入模式四的架構。
+</div>
+
+<div class="disclaimer">
+  ⚠️ 本分析係就一般國際稅務原則提出評估意見，不構成正式法律或稅務建議。實際執行前，請務必委聘在台灣及泰國具執業資格之稅務律師或會計師進行完整的盡職調查（Due Diligence）。
+</div>
+
+</div>
+</body>
+</html>
