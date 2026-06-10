@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三角貿易運行模式說明｜鴻騰台灣 × 鴻騰泰國 × 順達</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;background:#F0F4F8;color:#1A1A2E;font-size:14px;line-height:1.7}
+
+.rpt-header{background:linear-gradient(135deg,#1A2E4A,#2A5298);color:#fff;padding:28px 40px 22px}
+.rpt-company{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.65;margin-bottom:8px}
+.rpt-title{font-size:22px;font-weight:900;line-height:1.2;margin-bottom:4px}
+.rpt-title span{color:#93C5FD}
+.rpt-meta{font-size:12px;opacity:.65;margin-top:6px}
+.rpt-audience{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.audience-tag{display:inline-block;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.5px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.15)}
+
+.container{max-width:1000px;margin:0 auto;padding:24px 20px 60px}
+.section-title{font-size:15px;font-weight:800;color:#1A2E4A;border-left:4px solid #1A2E4A;padding-left:12px;margin:32px 0 16px}
+.card{background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.07);overflow:hidden;margin-bottom:18px}
+.card-body{padding:22px}
+
+/* ── Three parties ── */
+.parties-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:4px}
+.party-card{background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.07);padding:18px 20px}
+.party-code{font-size:28px;font-weight:900;letter-spacing:1px;margin-bottom:6px}
+.party-code.a{color:#3B82F6}
+.party-code.b{color:#22C55E}
+.party-code.s{color:#F59E0B}
+.party-name{font-size:13px;font-weight:800;color:#1A2E4A;margin-bottom:8px}
+.party-divider{height:2px;border-radius:2px;margin-bottom:10px}
+.div-a{background:#DBEAFE}
+.div-b{background:#DCFCE7}
+.div-s{background:#FEF3C7}
+.party-row{display:flex;gap:8px;margin-bottom:5px;align-items:flex-start;font-size:12.5px;color:#374151}
+.party-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#9CA3AF;min-width:52px;padding-top:2px}
+.party-tag{display:inline-block;margin-top:4px;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700}
+.tag-tw{background:#DBEAFE;color:#1E40AF}
+.tag-ieat{background:#DCFCE7;color:#14532D}
+.tag-bonded{background:#FEF3C7;color:#92400E}
+.tag-ind{background:#EDE9FE;color:#5B21B6}
+
+/* ── Key facts box ── */
+.facts-box{background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:10px;padding:16px 20px;margin-bottom:4px}
+.facts-title{font-size:12px;font-weight:800;color:#14532D;margin-bottom:10px;text-transform:uppercase;letter-spacing:.7px}
+.facts-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.fact-item{display:flex;gap:8px;font-size:12.5px;color:#374151;align-items:flex-start}
+
+/* ── Flow diagram ── */
+.flow-visual{background:#F8FAFC;border-radius:12px;padding:22px;overflow-x:auto}
+.flow-row{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:nowrap;min-width:580px}
+.flow-box{background:#fff;border-radius:10px;padding:11px 14px;text-align:center;box-shadow:0 1px 6px rgba(0,0,0,.1);min-width:125px;flex-shrink:0}
+.flow-box.a{border-top:4px solid #3B82F6}
+.flow-box.b{border-top:4px solid #22C55E}
+.flow-box.s{border-top:4px solid #F59E0B}
+.flow-box-code{font-size:17px;font-weight:900}
+.flow-box-name{font-size:9.5px;color:#6B7280;margin-top:1px;line-height:1.3}
+.flow-box.a .flow-box-code{color:#3B82F6}
+.flow-box.b .flow-box-code{color:#22C55E}
+.flow-box.s .flow-box-code{color:#F59E0B}
+.arrow-col{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:0 4px;min-width:84px;flex-shrink:0}
+.arr{font-size:16px;line-height:1}
+.arr-label{font-size:9px;text-align:center;color:#6B7280;font-weight:600;line-height:1.3}
+.arr-money{color:#F59E0B}
+.divider-row{display:flex;gap:6px;margin:7px 0;justify-content:center;align-items:center;min-width:580px}
+.divider-label{font-size:9.5px;font-weight:700;color:#9CA3AF;white-space:nowrap;padding:0 8px}
+.divider-line{flex:1;height:1px;background:#E5E7EB}
+.flow-section-label{text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9CA3AF;margin-bottom:14px}
+
+/* ── Steps ── */
+.steps{display:flex;flex-direction:column;gap:0}
+.step{display:flex;gap:14px;padding:15px 0;border-bottom:1px solid #F3F4F6;align-items:flex-start}
+.step:last-child{border-bottom:none}
+.step-num{flex-shrink:0;width:32px;height:32px;border-radius:50%;background:#1A2E4A;color:#fff;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.step-content{flex:1}
+.step-title{font-size:13px;font-weight:800;color:#1A2E4A;margin-bottom:4px}
+.step-desc{font-size:12.5px;color:#374151;line-height:1.65}
+.step-note{background:#FFF7ED;border:1px solid #FED7AA;border-radius:6px;padding:7px 11px;margin-top:7px;font-size:11.5px;color:#92400E;font-weight:600}
+.step-note.green{background:#F0FDF4;border-color:#86EFAC;color:#14532D}
+.step-note.blue{background:#EFF6FF;border-color:#93C5FD;color:#1E40AF}
+
+/* ── Customs table ── */
+.customs-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.customs-table th{background:#1A2E4A;color:#fff;padding:9px 14px;font-size:11px;font-weight:700;text-align:left}
+.customs-table td{padding:9px 14px;border-bottom:1px solid #F0F0F0;vertical-align:top}
+.customs-table tr:last-child td{border-bottom:none}
+.customs-table tr:nth-child(even) td{background:#FAFAFA}
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:800}
+.badge-blue{background:#DBEAFE;color:#1E40AF}
+.badge-green{background:#D1FAE5;color:#065F46}
+.badge-yellow{background:#FEF3C7;color:#92400E}
+
+/* ── Invoice chain ── */
+.inv-chain{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin-bottom:14px}
+.inv-box{background:#fff;border:1.5px solid #E5E7EB;border-radius:8px;padding:10px 14px;min-width:140px;text-align:center}
+.inv-box-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#9CA3AF;margin-bottom:3px}
+.inv-box-main{font-size:12px;font-weight:700;color:#1A2E4A;line-height:1.4}
+.inv-box-sub{font-size:10.5px;color:#6B7280;margin-top:2px}
+.inv-arr{font-size:20px;color:#9CA3AF;padding:0 6px;flex-shrink:0}
+
+.disclaimer{background:#F8F9FA;border:1px solid #E5E7EB;border-radius:8px;padding:11px 15px;font-size:11px;color:#6B7280;line-height:1.5;margin-top:20px}
+
+@media(max-width:700px){
+  .parties-grid{grid-template-columns:1fr}
+  .facts-grid{grid-template-columns:1fr}
+  .rpt-header{padding:20px}
+  .flow-visual{padding:14px 10px}
+}
+</style>
+</head>
+<body>
+
+<div class="rpt-header">
+  <div class="rpt-company">鴻騰電子 HonTen Electronics　｜　泰國設廠計畫</div>
+  <div class="rpt-title">保稅區三角貿易<span>　運行模式說明</span></div>
+  <div class="rpt-meta">說明日期：2026.05　｜　架構版本：模式一（台灣銷售 ＋ 泰國獨立製造商）</div>
+  <div class="rpt-audience">
+    <span class="audience-tag">📋 適用對象：泰國會計師 ／ 法務顧問</span>
+    <span class="audience-tag">🚢 適用對象：泰國報關行</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ─── 一、三方主體 ─── -->
+<div class="section-title">一、交易三方主體</div>
+
+<div class="parties-grid">
+
+  <div class="party-card">
+    <div class="party-code a">A</div>
+    <div class="party-name">鴻騰台灣（HonTen Taiwan）</div>
+    <div class="party-divider div-a"></div>
+    <div class="party-row"><span class="party-label">角色</span><span>銷售方 ／ 委託製造方</span></div>
+    <div class="party-row"><span class="party-label">職能</span><span>持有客戶合約、接單、開立 Invoice 給 S、委外給 B 生產、收付款</span></div>
+    <div class="party-row"><span class="party-label">與B關係</span><span>委外採購關係，依市場行情付款；B 是 A 的供應商之一</span></div>
+    <div style="margin-top:8px"><span class="party-tag tag-tw">台灣登記公司</span></div>
+  </div>
+
+  <div class="party-card">
+    <div class="party-code b">B</div>
+    <div class="party-name">鴻騰泰國廠（HonTen Thailand）</div>
+    <div class="party-divider div-b"></div>
+    <div class="party-row"><span class="party-label">角色</span><span>獨立製造商 ／ 供應商</span></div>
+    <div class="party-row"><span class="party-label">職能</span><span>承接 A 的委外訂單，執行沖壓、貼背膠、組裝等工序，出貨給 S，開立製造服務費 Invoice 給 A</span></div>
+    <div class="party-row"><span class="party-label">股權</span><span>由個人名義投資設立，與鴻騰台灣無股權關係，為獨立泰國法人</span></div>
+    <div style="margin-top:8px">
+      <span class="party-tag tag-ieat">IEAT 保稅區</span>
+      <span class="party-tag tag-ind" style="margin-left:5px">BOI 申請中</span>
+      <span class="party-tag" style="background:#F3F4F6;color:#374151;margin-left:5px">獨立法人</span>
+    </div>
+  </div>
+
+  <div class="party-card">
+    <div class="party-code s">S</div>
+    <div class="party-name">泰國順達（DynaPack Thailand）</div>
+    <div class="party-divider div-s"></div>
+    <div class="party-row"><span class="party-label">角色</span><span>終端客戶 ／ 收貨方</span></div>
+    <div class="party-row"><span class="party-label">職能</span><span>向 A 採購，持進口報單合法匯款給 A，收取 B 出貨的成品</span></div>
+    <div class="party-row"><span class="party-label">特性</span><span>成品 100% 出口，具保稅區資格</span></div>
+    <div style="margin-top:8px"><span class="party-tag tag-bonded">IEAT 保稅區 ／ 100% 出口</span></div>
+  </div>
+
+</div>
+
+<div class="facts-box" style="margin-top:14px">
+  <div class="facts-title">⚑ 架構關鍵事實</div>
+  <div class="facts-grid">
+    <div class="fact-item"><span>✅</span><span><strong>A、B 無股權關係</strong>，B 由個人名義投資，非 A 的子公司，無關係人交易</span></div>
+    <div class="fact-item"><span>✅</span><span><strong>定價依市場行情</strong>，與現有台灣委外廠商同等標準，客觀透明</span></div>
+    <div class="fact-item"><span>✅</span><span><strong>B 為獨立商業主體</strong>，可承接其他客戶訂單，A 是其客戶之一</span></div>
+    <div class="fact-item"><span>✅</span><span><strong>A–S 合約關係不變</strong>，S 的合約對象及付款對象仍為台灣鴻騰</span></div>
+  </div>
+</div>
+
+<!-- ─── 二、交易流程圖 ─── -->
+<div class="section-title">二、交易流程圖</div>
+<div class="card">
+<div class="card-body">
+
+  <div class="flow-section-label">① 合約 ＆ 發票流（紙面交易）</div>
+  <div class="flow-visual" style="margin-bottom:18px">
+    <div class="flow-row">
+      <div class="flow-box s"><div class="flow-box-code">S</div><div class="flow-box-name">泰國順達<br>（終端客戶）</div></div>
+      <div class="arrow-col">
+        <div class="arr" style="color:#3B82F6">→→→</div>
+        <div class="arr-label">下單給 A<br>A 開 Invoice 給 S</div>
+      </div>
+      <div class="flow-box a"><div class="flow-box-code">A</div><div class="flow-box-name">鴻騰台灣<br>（銷售 ／ 委託方）</div></div>
+      <div class="arrow-col">
+        <div class="arr" style="color:#3B82F6">→→→</div>
+        <div class="arr-label">A 委外下單給 B<br>B 開 Invoice 給 A<br>（製造服務費）</div>
+      </div>
+      <div class="flow-box b"><div class="flow-box-code">B</div><div class="flow-box-name">鴻騰泰國廠<br>（獨立製造商）</div></div>
+    </div>
+  </div>
+
+  <div class="flow-section-label">② 報關 ＆ 實體貨物（泰國境內移動）</div>
+  <div class="flow-visual" style="margin-bottom:18px">
+    <div class="flow-row">
+      <div class="flow-box s"><div class="flow-box-code">S</div><div class="flow-box-name">泰國順達<br>（收貨）</div></div>
+      <div class="arrow-col">
+        <div class="arr" style="color:#22C55E">←←←</div>
+        <div class="arr-label" style="color:#15803D">貨物直送<br>B廠 → S 倉庫<br>保稅區間轉移</div>
+      </div>
+      <div style="min-width:125px;flex-shrink:0"></div>
+      <div class="arrow-col">
+        <div class="arr" style="color:#22C55E">←←←</div>
+        <div class="arr-label" style="color:#15803D">卡車運送<br>泰國境內</div>
+      </div>
+      <div class="flow-box b"><div class="flow-box-code">B</div><div class="flow-box-name">鴻騰泰國廠<br>（出貨方）</div></div>
+    </div>
+  </div>
+
+  <div class="flow-section-label">③ 金流（美金匯款）</div>
+  <div class="flow-visual">
+    <div class="flow-row">
+      <div class="flow-box s"><div class="flow-box-code">S</div><div class="flow-box-name">泰國順達<br>（付款方）</div></div>
+      <div class="arrow-col">
+        <div class="arr arr-money">→→→</div>
+        <div class="arr-label">S 匯 USD 給 A<br>憑進口報單結匯</div>
+      </div>
+      <div class="flow-box a"><div class="flow-box-code">A</div><div class="flow-box-name">鴻騰台灣<br>（收款方）</div></div>
+      <div class="arrow-col">
+        <div class="arr arr-money">→→→</div>
+        <div class="arr-label">A 支付製造服務費給 B<br>依委外行情</div>
+      </div>
+      <div class="flow-box b"><div class="flow-box-code">B</div><div class="flow-box-name">鴻騰泰國廠<br>FCD 外幣帳戶</div></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ─── 三、發票鏈 ─── -->
+<div class="section-title">三、發票鏈（Invoice Chain）</div>
+<div class="card">
+<div class="card-body">
+
+  <div style="font-size:12px;color:#6B7280;margin-bottom:12px">同一批貨物涉及兩張獨立 Invoice，報關行需依據各自 Invoice 辦理對應報關手續：</div>
+
+  <div class="inv-chain">
+    <div class="inv-box">
+      <div class="inv-box-title">Invoice ①</div>
+      <div class="inv-box-main">A（台灣）→ S（泰國順達）</div>
+      <div class="inv-box-sub">銷售 Invoice<br>S 用此單辦理<span style="color:#D97706;font-weight:700">保稅區進口報關</span><br>並作為泰國銀行結匯依據</div>
+    </div>
+    <div class="inv-arr">＋</div>
+    <div class="inv-box">
+      <div class="inv-box-title">Invoice ②</div>
+      <div class="inv-box-main">B（泰國廠）→ A（台灣）</div>
+      <div class="inv-box-sub">製造服務費 Invoice<br>B 用此單辦理<span style="color:#15803D;font-weight:700">保稅區出口報關</span><br>A 憑此付款給 B</div>
+    </div>
+    <div class="inv-arr">→</div>
+    <div class="inv-box" style="border-color:#86EFAC;background:#F0FDF4">
+      <div class="inv-box-title" style="color:#15803D">結果</div>
+      <div class="inv-box-main" style="color:#15803D">Bonded-to-Bonded Transfer</div>
+      <div class="inv-box-sub">B 出口 0% VAT<br>S 進口 0% VAT<br>貨物不離開泰國</div>
+    </div>
+  </div>
+
+  <div style="background:#FFFBEB;border:1px solid #FED7AA;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400E;font-weight:600">
+    ⚠️ 報關行注意：Invoice ① 與 Invoice ② 為不同金額（① 含 A 的銷售利潤，② 為製造服務費），兩張 Invoice 均須齊備，分別用於 S 端進口報關與 B 端出口報關。
+  </div>
+
+</div>
+</div>
+
+<!-- ─── 四、逐步說明 ─── -->
+<div class="section-title">四、五步驟運行說明</div>
+<div class="card">
+<div class="card-body">
+<div class="steps">
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <div class="step-title">接單與委外下單</div>
+      <div class="step-desc">
+        <strong>S 向 A 下採購訂單</strong>，A 開立銷售 Invoice 給 S（Invoice ①）。<br>
+        A 同時向 <strong>B 下委外製造訂單</strong>，委託項目：沖壓、貼背膠、組裝。B 開立製造服務費 Invoice 給 A（Invoice ②）。
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <div class="step-title">B 廠出口報關（保稅區轉出）</div>
+      <div class="step-desc">
+        B 廠委任報關行，憑 <strong>Invoice ②（B→A）</strong> 向泰國海關申報「<strong>保稅區出口</strong>」。<br>
+        稅率：VAT 0%。出口報單債權人記載為台灣 A 公司。
+      </div>
+      <div class="step-note">📌 報關行：此為 Bonded Zone to Bonded Zone Transfer，憑 B 開給 A 的 Invoice 辦理出口，非一般出口程序。</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <div class="step-title">實體貨運（泰國境內）</div>
+      <div class="step-desc">
+        報關手續完成後，貨物由卡車從 B 廠直接運送至 S 倉庫。貨物全程在泰國境內移動，不涉及實際進出口邊境。
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-content">
+      <div class="step-title">S 端進口報關（保稅區轉入）＆ 付款</div>
+      <div class="step-desc">
+        S 的報關行憑 <strong>Invoice ①（A→S）</strong> 向泰國海關申報「<strong>保稅區進口</strong>」。稅率：VAT 0%。<br>
+        S 持海關核發的<strong>進口報單（Import Entry Form）</strong>——報單上債權人為台灣 A——至泰國銀行申請外匯結匯，以 <strong>USD 匯款至台灣 A 公司</strong>，符合泰國外匯管制規定。
+      </div>
+      <div class="step-note green">✅ 進口報單是 S 合法匯款給台灣 A 的法律依據，泰國銀行據此放行結匯。</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-content">
+      <div class="step-title">A 支付製造服務費給 B</div>
+      <div class="step-desc">
+        A 收到 S 的貨款後，依 <strong>Invoice ②</strong> 支付製造服務費給 B 廠的外幣帳戶（FCD）。<br>
+        A 的利潤 = Invoice ① 金額 − Invoice ② 金額；B 的利潤 = Invoice ② 金額 − 生產成本。雙方各自計算，互不干涉。
+      </div>
+      <div class="step-note blue">💡 建議 B 廠在泰國銀行開立美元 FCD 外幣帳戶，直接承接 A 匯入的美金，免除強制換匯損失。</div>
+    </div>
+  </div>
+
+</div>
+</div>
+</div>
+
+<!-- ─── 五、報關文件清單 ─── -->
+<div class="section-title">五、報關文件需求（供報關行參考）</div>
+<div class="card">
+<div class="card-body">
+  <table class="customs-table">
+    <thead>
+      <tr>
+        <th>文件</th>
+        <th>由誰提供</th>
+        <th>用途</th>
+        <th>報關端</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Invoice ①（A→S 銷售發票）</td>
+        <td>鴻騰台灣（A）開立</td>
+        <td>S 端進口報關依據；S 銀行結匯依據</td>
+        <td><span class="badge badge-yellow">S 端（進口）</span></td>
+      </tr>
+      <tr>
+        <td>Invoice ②（B→A 製造服務費發票）</td>
+        <td>鴻騰泰國廠（B）開立</td>
+        <td>B 端出口報關依據</td>
+        <td><span class="badge badge-green">B 端（出口）</span></td>
+      </tr>
+      <tr>
+        <td>Packing List</td>
+        <td>B 廠提供</td>
+        <td>貨物明細，兩端報關均需</td>
+        <td><span class="badge badge-green">B 端</span> <span class="badge badge-yellow" style="margin-left:4px">S 端</span></td>
+      </tr>
+      <tr>
+        <td>BOI／IEAT 保稅區許可文件</td>
+        <td>B 廠提供（IEAT 核發）</td>
+        <td>確認 B 廠保稅區資格，適用 0% VAT</td>
+        <td><span class="badge badge-green">B 端（出口）</span></td>
+      </tr>
+      <tr>
+        <td>S 廠保稅區許可文件</td>
+        <td>S 廠提供（IEAT 核發）</td>
+        <td>確認 S 廠保稅區資格，適用 0% VAT</td>
+        <td><span class="badge badge-yellow">S 端（進口）</span></td>
+      </tr>
+      <tr>
+        <td>委外製造合約（A–B）</td>
+        <td>A、B 雙方簽訂</td>
+        <td>說明交易性質為委外製造關係，供查驗備用</td>
+        <td><span class="badge badge-blue">備查文件</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+
+<div class="disclaimer">
+  ⚠️ 本文件為內部運行架構說明，供會計師、法務顧問及報關行作業參考之用。正式執行前，請就各自專業範疇進行確認，包括但不限於：泰國公司法及外資規定、BOI 申請類別與條件、IEAT 保稅區進出口報關程序，以及台泰雙邊稅務處理。
+</div>
+
+</div>
+</body>
+</html>
