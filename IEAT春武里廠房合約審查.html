@@ -14,12 +14,11 @@
   }
   .page-header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
   .page-header .sub { font-size: 13px; opacity: 0.8; }
-  .page-header .meta { margin-top: 14px; display: flex; gap: 24px; font-size: 12px; opacity: 0.85; }
+  .page-header .meta { margin-top: 14px; display: flex; gap: 24px; font-size: 12px; opacity: 0.85; flex-wrap: wrap; }
   .page-header .meta span { background: rgba(255,255,255,0.15); padding: 3px 10px; border-radius: 20px; }
 
-  .container { max-width: 1000px; margin: 0 auto; padding: 28px 20px 60px; }
+  .container { max-width: 1060px; margin: 0 auto; padding: 28px 20px 60px; }
 
-  /* ===== SECTION TITLES ===== */
   .section-title {
     font-size: 16px; font-weight: 700; color: #1a3a5c;
     border-left: 4px solid #2d6a9f; padding-left: 12px;
@@ -27,7 +26,7 @@
   }
   .section-title.red { border-color: #c0392b; color: #c0392b; }
 
-  /* ===== SUMMARY BOX ===== */
+  /* ===== SUMMARY ===== */
   .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 8px; }
   .summary-card {
     background: white; border-radius: 8px; padding: 18px 20px;
@@ -36,7 +35,6 @@
   .summary-card h3 {
     font-size: 13px; font-weight: 700; color: #2d6a9f;
     border-bottom: 1px solid #e8ecf0; padding-bottom: 8px; margin-bottom: 12px;
-    letter-spacing: 0.5px;
   }
   .kv { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
   .kv .k { color: #5d6d7e; font-size: 12.5px; }
@@ -50,10 +48,7 @@
     box-shadow: 0 1px 4px rgba(0,0,0,0.06); overflow: hidden; margin-bottom: 8px;
   }
   .cost-box table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .cost-box th {
-    background: #f0f4f8; color: #1a3a5c; font-weight: 700;
-    padding: 9px 14px; text-align: left; font-size: 12px; letter-spacing: 0.5px;
-  }
+  .cost-box th { background: #f0f4f8; color: #1a3a5c; font-weight: 700; padding: 9px 14px; text-align: left; font-size: 12px; }
   .cost-box td { padding: 8px 14px; border-bottom: 1px solid #f0f2f5; }
   .cost-box tr:last-child td { border-bottom: none; }
   .cost-box tr.subtotal td { background: #f8f9fa; font-weight: 600; }
@@ -61,52 +56,72 @@
   .cost-box td.num { text-align: right; font-family: monospace; font-size: 13px; }
   .cost-box td.note { font-size: 11.5px; color: #7f8c8d; }
   .cost-box .warn { color: #e67e22; font-weight: 600; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
   /* ===== CLAUSE CARDS ===== */
-  .clause-group { margin-bottom: 6px; }
   .clause-card {
     background: white; border-radius: 8px; border: 1px solid #e1e4e8;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 10px; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 14px; overflow: hidden;
   }
   .clause-card .cc-head {
     display: flex; align-items: center; gap: 10px;
     padding: 11px 16px; background: #f8f9fa; border-bottom: 1px solid #eaecef;
+    flex-wrap: wrap;
   }
-  .clause-num { font-size: 11px; background: #2d6a9f; color: white; border-radius: 4px; padding: 2px 7px; font-weight: 700; }
+  .clause-num { font-size: 11px; background: #2d6a9f; color: white; border-radius: 4px; padding: 2px 7px; font-weight: 700; white-space: nowrap; }
   .clause-num.svc { background: #6c757d; }
   .clause-title { font-size: 13px; font-weight: 700; color: #1a3a5c; flex: 1; }
-  .badge {
-    font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px;
-    letter-spacing: 0.3px;
-  }
+  .badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px; white-space: nowrap; }
   .badge.high { background: #fdecea; color: #c0392b; }
   .badge.med { background: #fef9e7; color: #d68910; }
   .badge.low { background: #eafaf1; color: #27ae60; }
-  .badge.info { background: #eaf4fb; color: #2980b9; }
 
   .clause-body { padding: 13px 16px; }
+
+  /* Chinese explanation boxes */
   .clause-body .current {
     font-size: 12.5px; color: #555;
     background: #f9fafb; border-left: 3px solid #bdc3c7;
     padding: 8px 10px; border-radius: 0 4px 4px 0; margin-bottom: 8px;
-    line-height: 1.6;
   }
   .clause-body .current .label { font-size: 11px; color: #999; display: block; margin-bottom: 2px; }
   .clause-body .issue {
     font-size: 12.5px; color: #7b3f00;
     background: #fff8f0; border-left: 3px solid #e67e22;
     padding: 7px 10px; border-radius: 0 4px 4px 0; margin-bottom: 8px;
-    line-height: 1.6;
   }
   .clause-body .suggest {
     font-size: 12.5px; color: #1a5276;
     background: #eaf4fb; border-left: 3px solid #2980b9;
-    padding: 7px 10px; border-radius: 0 4px 4px 0;
-    line-height: 1.6;
+    padding: 7px 10px; border-radius: 0 4px 4px 0; margin-bottom: 12px;
   }
   .tag { font-size: 10.5px; font-weight: 700; margin-right: 4px; }
   .tag.prob { color: #e74c3c; }
   .tag.fix { color: #2980b9; }
+
+  /* ===== ORIGINAL vs REVISED COMPARE ===== */
+  .compare-label {
+    font-size: 11.5px; font-weight: 700; color: #555;
+    margin-bottom: 6px; padding-top: 4px;
+    border-top: 1px dashed #dde1e6;
+    padding-top: 10px;
+  }
+  .compare-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px;
+  }
+  .compare-box { border-radius: 6px; overflow: hidden; border: 1px solid #e1e4e8; }
+  .compare-box .cb-head { padding: 6px 12px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.4px; }
+  .compare-box.orig .cb-head { background: #fdecea; color: #922b21; }
+  .compare-box.new  .cb-head { background: #eaf4fb; color: #1a5276; }
+  .compare-box .cb-body {
+    padding: 10px 12px; font-size: 12px; line-height: 1.65;
+    background: white; min-height: 80px;
+  }
+  .compare-box.orig .cb-body { border-left: 3px solid #e74c3c; }
+  .compare-box.new  .cb-body { border-left: 3px solid #2980b9; }
+  .cb-body .clause-ref { font-size: 10.5px; color: #999; display: block; margin-bottom: 3px; }
+  .del { background: #fdecea; border-radius: 2px; padding: 0 2px; text-decoration: line-through; color: #c0392b; }
+  .add { background: #eafaf1; border-radius: 2px; padding: 0 2px; color: #1e8449; font-weight: 600; }
 
   /* ===== BLANK FIELDS ===== */
   .blank-table { background: white; border-radius: 8px; border: 1px solid #e1e4e8; overflow: hidden; }
@@ -117,11 +132,8 @@
   .blank-table .contract { font-size: 11.5px; color: #888; }
   .blank-table td.status { font-size: 12px; font-weight: 700; color: #c0392b; }
 
-  /* ===== PRIORITY SUMMARY ===== */
-  .priority-box {
-    background: white; border-radius: 8px; border: 1px solid #e1e4e8;
-    overflow: hidden; margin-bottom: 8px;
-  }
+  /* ===== PRIORITY TABLE ===== */
+  .priority-box { background: white; border-radius: 8px; border: 1px solid #e1e4e8; overflow: hidden; margin-bottom: 8px; }
   .priority-box table { width: 100%; border-collapse: collapse; font-size: 13px; }
   .priority-box th { padding: 9px 14px; text-align: left; font-size: 12px; font-weight: 700; }
   .priority-box th.h { background: #fdecea; color: #c0392b; }
@@ -131,16 +143,12 @@
   .priority-box tr:last-child td { border-bottom: none; }
   .priority-box .num { font-weight: 700; color: #2d6a9f; width: 24px; }
 
-  /* ===== ALERT BOX ===== */
-  .alert {
-    border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px;
-  }
-  .alert.danger { background: #fdecea; border: 1px solid #f5a9a3; color: #922b21; }
+  .alert { border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px; }
+  .alert.danger  { background: #fdecea; border: 1px solid #f5a9a3; color: #922b21; }
   .alert.warning { background: #fef9e7; border: 1px solid #f9e79f; color: #7d6608; }
-  .alert.info { background: #eaf4fb; border: 1px solid #aed6f1; color: #1a5276; }
+  .alert.info    { background: #eaf4fb; border: 1px solid #aed6f1; color: #1a5276; }
 
   .divider { border: none; border-top: 2px solid #e1e4e8; margin: 8px 0 24px; }
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .footer { font-size: 11px; color: #aaa; text-align: center; margin-top: 40px; padding-top: 16px; border-top: 1px solid #e8eaed; }
 </style>
 </head>
@@ -159,9 +167,8 @@
 
 <div class="container">
 
-  <!-- ============ PART 1: KEY TERMS ============ -->
+  <!-- ===== PART 1: SUMMARY ===== -->
   <div class="section-title">一、合約基本條件摘要</div>
-
   <div class="summary-grid">
     <div class="summary-card">
       <h3>📋 租賃合約 (Lease Agreement) 重點</h3>
@@ -171,14 +178,13 @@
       <div class="kv"><span class="k">押金</span><span class="v em">5個月 = 426,937.50 Baht（無息）</span></div>
       <div class="kv"><span class="k">押金返還</span><span class="v">終止後2個月內退還</span></div>
       <div class="kv"><span class="k">續租選擇</span><span class="v">可續租3年，須提前90天書面通知</span></div>
-      <div class="kv"><span class="k">續租租金漲幅</span><span class="v em">5%/年（雙方再協議最終金額）</span></div>
+      <div class="kv"><span class="k">續租租金漲幅</span><span class="v em">5%/年</span></div>
       <div class="kv"><span class="k">房屋稅/地方稅</span><span class="v em">全由租方負擔（估 90,000 Baht/年）</span></div>
-      <div class="kv"><span class="k">保險費</span><span class="v em">全由租方負擔，但受益人是出租方</span></div>
+      <div class="kv"><span class="k">保險費</span><span class="v em">全由租方負擔，受益人為出租方</span></div>
       <div class="kv"><span class="k">結構修繕</span><span class="v em">租方負責（含結構性損壞）</span></div>
       <div class="kv"><span class="k">永久裝修歸屬</span><span class="v em">到期後歸出租方，租方無補償</span></div>
       <div class="kv"><span class="k">提前終止</span><span class="v em">押金全數沒收，無互相終止條款</span></div>
       <div class="kv"><span class="k">違約罰息</span><span class="v">逾期7天起計 2%/月</span></div>
-      <div class="kv"><span class="k">出租方轉讓</span><span class="v">無限制，租方默示同意</span></div>
     </div>
     <div class="summary-card">
       <h3>🔧 服務合約 (Service Agreement) 重點</h3>
@@ -188,17 +194,13 @@
       <div class="kv"><span class="k">VAT 說明</span><span class="v em">⚠ 合約條文自相矛盾（見下）</span></div>
       <div class="kv"><span class="k">押金</span><span class="v em">5個月 = 373,764.40 Baht（無息）</span></div>
       <div class="kv"><span class="k">空置仍須付費</span><span class="v em">即使未進駐，服務費仍須全額繳付</span></div>
-      <div class="kv"><span class="k">服務暫停</span><span class="v">維修期間暫停服務，租方不得拒付</span></div>
       <div class="kv"><span class="k">押金沒收</span><span class="v em">違約或提前終止，押金全數不退</span></div>
       <div class="kv"><span class="k">交叉違約</span><span class="v em">⚠ 服務合約違約 = 租賃合約同時終止</span></div>
       <div class="kv"><span class="k">WH Tax</span><span class="v green">服務費可扣繳代扣稅（合規）</span></div>
-      <div class="kv"><span class="k">印花稅</span><span class="v">由租方負擔</span></div>
-      <div class="kv"><span class="k">轉讓</span><span class="v">須出租方書面同意</span></div>
     </div>
   </div>
 
   <div class="section-title">二、費用明細（依報價單）</div>
-
   <div class="two-col">
     <div class="cost-box">
       <table>
@@ -218,23 +220,22 @@
         <tr><td>訂金（轉入第1個月租）</td><td class="num">155,250.00</td><td class="note">Baht</td></tr>
         <tr><td>押金（租賃合約×5月）</td><td class="num warn">426,937.50</td><td class="note">Baht，無息</td></tr>
         <tr><td>押金（服務合約×5月）</td><td class="num warn">373,764.40</td><td class="note">Baht，無息</td></tr>
-        <tr><td>印花稅（Revenue Stamp）</td><td class="num">3,078.95</td><td class="note">Baht</td></tr>
+        <tr><td>印花稅</td><td class="num">3,078.95</td><td class="note">Baht</td></tr>
         <tr><td>財產保險（估算）</td><td class="num warn">35,000.00</td><td class="note">Baht，受益人為出租方</td></tr>
         <tr><td>房屋稅（估算年繳）</td><td class="num warn">90,000.00</td><td class="note">Baht</td></tr>
         <tr class="total"><td>一次性合計</td><td class="num">1,084,030.83</td><td>Baht</td></tr>
       </table>
     </div>
   </div>
-
   <div class="alert warning" style="margin-top:10px;">
-    ⚠ <strong>押金合計 800,701.90 Baht（約 68萬台幣）無息鎖定3年</strong>，為最大現金流壓力，應優先爭取降低至3個月。
+    ⚠ <strong>押金合計 800,701.90 Baht 無息鎖定3年</strong>，為最大現金流壓力，應優先爭取降低至3個月。
   </div>
 
-  <!-- ============ PART 2: ISSUES ============ -->
+  <!-- ===== PART 3: LEASE ISSUES ===== -->
   <hr class="divider">
   <div class="section-title red">三、需調整條款 — 租賃合約 (Lease Agreement)</div>
 
-  <!-- Issue 1 -->
+  <!-- ISSUE 1 -->
   <div class="clause-card">
     <div class="cc-head">
       <span class="clause-num">第 3 條</span>
@@ -245,10 +246,31 @@
       <div class="current"><span class="label">現行條款</span>押金為5個月租金（426,937.50 Baht），無利息，終止後2個月內退還。服務合約另有5個月服務費押金（373,764.40 Baht）。合計 800,701.90 Baht。</div>
       <div class="issue"><span class="tag prob">問題</span>超過80萬Baht長期凍結，IEAT工業區租約常見水準為3個月押金；無息代表出租方每年免費使用這筆資金。</div>
       <div class="suggest"><span class="tag fix">建議調整</span>兩份合約押金均從5個月降至<strong>3個月</strong>（可節省約 320,280 Baht）；或要求押金計息（至少按定期存款利率）；押金退還期限從2個月縮短為30天。</div>
+      <div class="compare-label">📄 原條文 vs ✏️ 建議修改條文</div>
+      <div class="compare-grid">
+        <div class="compare-box orig">
+          <div class="cb-head">📄 原條文 (Clause 3.1 / 3.4)</div>
+          <div class="cb-body">
+            <span class="clause-ref">Clause 3.1</span>
+            …a security deposit at the amount of Baht <span class="del">426,937.50</span> equivalent to <span class="del">Five (5)</span> months of Rental Fee…<br><br>
+            <span class="clause-ref">Clause 3.4</span>
+            …returned to the Lessee, <span class="del">without any interest</span>, within <span class="del">two (2) months</span> after the termination…
+          </div>
+        </div>
+        <div class="compare-box new">
+          <div class="cb-head">✏️ 建議修改</div>
+          <div class="cb-body">
+            <span class="clause-ref">Clause 3.1 修改</span>
+            …a security deposit at the amount of Baht <span class="add">255,562.50</span> equivalent to <span class="add">Three (3)</span> months of Rental Fee…<br><br>
+            <span class="clause-ref">Clause 3.4 修改</span>
+            …returned to the Lessee, <span class="add">with interest at the prevailing fixed deposit rate of Bangkok Bank,</span> within <span class="add">thirty (30) days</span> after the termination…
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Issue 2 -->
+  <!-- ISSUE 2 -->
   <div class="clause-card">
     <div class="cc-head">
       <span class="clause-num">第 3.5 條</span>
@@ -258,11 +280,28 @@
     <div class="clause-body">
       <div class="current"><span class="label">現行條款</span>租方提前終止（或因違約被終止），出租方有權沒收全部押金，且不影響其他法律求償權利。合約無任何允許租方提前退出的條款。</div>
       <div class="issue"><span class="tag prob">問題</span>鴻騰泰國是全新設立公司，業務初期存在不確定性。一旦業務未達預期需提前離場，將損失超過80萬Baht押金且仍可能面臨追訴。</div>
-      <div class="suggest"><span class="tag fix">建議調整</span>新增「提前終止條款」：租方提前合理通知（建議6個月書面通知），得提前終止合約，沒收押金金額以剩餘租期比例計算（而非全數），或改為固定違約金上限。</div>
+      <div class="suggest"><span class="tag fix">建議調整</span>新增「提前終止條款」：租方提前6個月書面通知，得提前終止合約，沒收押金以剩餘租期比例計算（而非全數），並以此作為出租方唯一救濟途徑。</div>
+      <div class="compare-label">📄 原條文 vs ✏️ 建議修改條文</div>
+      <div class="compare-grid">
+        <div class="compare-box orig">
+          <div class="cb-head">📄 原條文 (Clause 3.5)</div>
+          <div class="cb-body">
+            In the event the Lessee <span class="del">terminates this Agreement prior to the expiration of the lease term</span>…the Lessor shall have the right to <span class="del">forfeit the Security Deposit without prejudice to any right of the Lessor</span> in respect of any prior breach hereof.
+            <br><br><em style="font-size:11.5px;color:#888;">[無任何租方主動終止機制]</em>
+          </div>
+        </div>
+        <div class="compare-box new">
+          <div class="cb-head">✏️ 建議新增 Clause 3.6</div>
+          <div class="cb-body">
+            <span class="add">Clause 3.6 (新增) Early Termination by Lessee:<br>
+            The Lessee may terminate this Agreement by giving the Lessor not less than six (6) months' prior written notice. Upon such early termination, the Lessor shall forfeit the Security Deposit on a pro-rata basis: (Remaining months ÷ Total lease months) × Security Deposit amount. The refund balance shall be returned within 30 days. This shall be the Lessor's sole and exclusive remedy for early termination.</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Issue 3 -->
+  <!-- ISSUE 3 -->
   <div class="clause-card">
     <div class="cc-head">
       <span class="clause-num">第 4.14 條</span>
@@ -270,27 +309,60 @@
       <span class="badge high">🔴 高優先</span>
     </div>
     <div class="clause-body">
-      <div class="current"><span class="label">現行條款</span>租方在廠房內安裝的「永久性裝修、固定設施（modifications, fixtures and fittings）」，合約到期後自動成為出租方財產；租方不得拆除、不得求償，除非事先取得出租方書面同意。</div>
-      <div class="issue"><span class="tag prob">問題</span>鴻騰泰國將投入大量製造設備、生產線裝修（沖壓機底座、接地系統、輸送線固定架等）。若這些設施被視為「永久性」，合約到期後可能全部歸出租方，損失難以估計。</div>
-      <div class="suggest"><span class="tag fix">建議調整</span>①明確界定「永久性裝修」範圍，排除「製造設備及其安裝基礎」；②加入條款：租方可在到期前選擇拆除設施並修復原狀，或選擇留下並獲得合理補償；③若設施留下，應有評估與補償機制。</div>
+      <div class="current"><span class="label">現行條款</span>租方在廠房內安裝的「永久性裝修、固定設施」，合約到期後自動成為出租方財產；租方不得拆除、不得求償，除非事先取得出租方書面同意。</div>
+      <div class="issue"><span class="tag prob">問題</span>鴻騰泰國將投入大量製造設備、生產線裝修（沖壓機底座、接地系統、輸送線固定架等）。「永久性」定義模糊，合約到期後可能全部歸出租方，損失難以估計。</div>
+      <div class="suggest"><span class="tag fix">建議調整</span>明確界定「永久性裝修」排除「製造設備及安裝基礎」；加入條款允許租方到期前選擇拆除並修復原狀，或留下並獲合理補償（按折舊後殘值評估）。</div>
+      <div class="compare-label">📄 原條文 vs ✏️ 建議修改條文</div>
+      <div class="compare-grid">
+        <div class="compare-box orig">
+          <div class="cb-head">📄 原條文 (Clause 4.14)</div>
+          <div class="cb-body">
+            …the Lessee agrees that any <span class="del">modifications, fixtures and fittings installed or erected in a permanent manner</span> in the Premises shall become <span class="del">the property of the Lessor on termination</span> of this Agreement, and the Lessee is <span class="del">not entitled to demolish or remove them nor claim any compensation for their loss</span>, unless prior consent has been granted by the Lessor…
+          </div>
+        </div>
+        <div class="compare-box new">
+          <div class="cb-head">✏️ 建議修改</div>
+          <div class="cb-body">
+            …any <span class="add">structural modifications to walls, floors, ceilings, and built-in utility systems</span> shall become the property of the Lessor on termination, provided that:<br>
+            <span class="add">(a) Manufacturing equipment, machinery, installation bases, and removable fixtures shall remain the Lessee's property and may be removed with proper restoration of the Premises;<br>
+            (b) For fixtures agreed to remain, the Lessor shall pay the Lessee fair compensation based on depreciated value, as jointly assessed.</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Issue 4 -->
+  <!-- ISSUE 4 -->
   <div class="clause-card">
     <div class="cc-head">
       <span class="clause-num">第 4.6 條</span>
-      <span class="clause-title">結構性修繕義務落在租方</span>
+      <span class="clause-title">結構性修繕義務不當落在租方</span>
       <span class="badge high">🔴 高優先</span>
     </div>
     <div class="clause-body">
       <div class="current"><span class="label">現行條款</span>租方須自費維持廠房內外良好狀態，包括「結構性或其他損壞（structural or otherwise）」之修繕與替換。</div>
-      <div class="issue"><span class="tag prob">問題</span>「結構性損壞」應屬出租方之範疇（參考第5.7條，出租方負責主結構、牆、地板、屋頂、排水），兩條條款相互矛盾且對租方不利。製造業用途很可能因設備震動造成地板、牆壁細小損壞，被出租方歸咎於租方。</div>
-      <div class="suggest"><span class="tag fix">建議調整</span>刪除「structural or otherwise」，改為「因租方使用不當造成之內部非結構性損壞」。同時在第5.7條明確：主結構（屋頂、外牆、地基、樑柱）之修繕由出租方負擔，與租方使用無關者不得轉嫁。</div>
+      <div class="issue"><span class="tag prob">問題</span>「結構性損壞」應屬出租方之範疇（第5.7條規定出租方負責主結構），兩條條款相互矛盾且對租方不利。製造業用途很可能因設備震動造成地板、牆壁輕微損壞，被出租方歸咎於租方。</div>
+      <div class="suggest"><span class="tag fix">建議調整</span>刪除「structural or otherwise」，改為「因租方使用不當造成之內部非結構性損壞」。並於第5.7條明確：主結構（屋頂、外牆、地基、樑柱）之修繕由出租方負擔。</div>
+      <div class="compare-label">📄 原條文 vs ✏️ 建議修改條文</div>
+      <div class="compare-grid">
+        <div class="compare-box orig">
+          <div class="cb-head">📄 原條文 (Clause 4.6)</div>
+          <div class="cb-body">
+            …maintain in a good and tenantable condition the <span class="del">exterior and interior</span> of the Premises…including repair and/or replacement of all damage, <span class="del">structural or otherwise</span>, and repair and/or replacement of closets, sinks, pipes, windows, doors, locks…arising out of the Lessee's use of the Premises…
+          </div>
+        </div>
+        <div class="compare-box new">
+          <div class="cb-head">✏️ 建議修改</div>
+          <div class="cb-body">
+            …maintain in a good and tenantable condition the <span class="add">interior</span> of the Premises…including repair and/or replacement of <span class="add">non-structural</span> damage to closets, sinks, pipes, windows, doors, locks…arising out of the Lessee's <span class="add">negligent or improper</span> use of the Premises.<br><br>
+            <span class="add">For the avoidance of doubt, structural repairs (main structure, roof, external walls, floor slabs, drainage) shall be the Lessor's responsibility per Clause 5.7.</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Issue 5 -->
+  <!-- ISSUE 5 -->
   <div class="clause-card">
     <div class="cc-head">
       <span class="clause-num">第 5.2 / 4.9 條</span>
@@ -299,26 +371,60 @@
     </div>
     <div class="clause-body">
       <div class="current"><span class="label">現行條款</span>出租方以「出租方名義」投保廠房火災及相關保險，出租方為唯一受益人，但全部保費由租方負擔。出租方亦可要求租方因業務性質付加保費。</div>
-      <div class="issue"><span class="tag prob">問題</span>租方承擔全部保費成本（估 35,000 Baht/年以上），但保險理賠金全歸出租方所有。若發生火災，廠房由保險修復，但租方的生產設備、成品、原材料損失則完全得不到保障。</div>
-      <div class="suggest"><span class="tag fix">建議調整</span>①要求被保險人應包含租方（co-insured），租方對其財產利益應為共同受益人；②保費應按保障比例分攤，或以明確金額上限約定；③加保費增加須事先通知並取得租方書面同意。</div>
+      <div class="issue"><span class="tag prob">問題</span>租方承擔全部保費（估35,000 Baht/年以上），但保險理賠金全歸出租方。若發生火災，廠房由保險修復，但租方設備、成品、原材料損失完全無保障。</div>
+      <div class="suggest"><span class="tag fix">建議調整</span>要求以「共同被保險人（co-insured）」形式納入租方；保費應按保障比例分攤或由出租方主要承擔；加保費須事先通知並取得租方書面同意。</div>
+      <div class="compare-label">📄 原條文 vs ✏️ 建議修改條文</div>
+      <div class="compare-grid">
+        <div class="compare-box orig">
+          <div class="cb-head">📄 原條文 (Clause 5.2 / 4.9)</div>
+          <div class="cb-body">
+            <span class="clause-ref">Clause 5.2</span>
+            The Premises shall be insured by the Lessor…provided that <span class="del">the Lessor shall be specified as the beneficiary</span>, and <span class="del">the Lessee shall be responsible for the payment of all insurance premiums</span>.<br><br>
+            <span class="clause-ref">Clause 4.9(a)</span>
+            to pay any <span class="del">increased or extra insurance premium or surcharge</span> levied by insurance providers attributed to the specific risks associated with the Lessee's business.
+          </div>
+        </div>
+        <div class="compare-box new">
+          <div class="cb-head">✏️ 建議修改</div>
+          <div class="cb-body">
+            <span class="clause-ref">Clause 5.2 修改</span>
+            The Premises shall be insured by the Lessor…provided that <span class="add">both the Lessor and the Lessee shall be named as co-insured and co-beneficiaries for their respective insurable interests</span>. <span class="add">The cost of insurance premiums shall be borne by the Lessor. Any additional premiums directly attributable to the Lessee's specific business activities shall be borne by the Lessee, subject to the Lessee's prior written approval.</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Issue 6 -->
+  <!-- ISSUE 6 -->
   <div class="clause-card">
     <div class="cc-head">
       <span class="clause-num">第 2.5 條</span>
-      <span class="clause-title">續租漲幅5%/年，計算方式模糊</span>
+      <span class="clause-title">續租漲幅5%/年，計算方式矛盾</span>
       <span class="badge med">🟡 中優先</span>
     </div>
     <div class="clause-body">
-      <div class="current"><span class="label">現行條款</span>續租時租金「以5%每年」的速度調漲（"increased at the rate of 5% percent per annum"），但同一條款又說「最終金額雙方協議決定」——兩者矛盾。</div>
-      <div class="issue"><span class="tag prob">問題</span>若按年複利5%計算，3年續租期租金將累計漲幅達15.76%；且「雙方再協議」等於沒有保障，若出租方要求更高漲幅，租方缺乏議價依據。</div>
-      <div class="suggest"><span class="tag fix">建議調整</span>①明確限定為每年單純增加3%（非複利），或與泰國CPI通膨指數連動，設定上限；②刪除「雙方協議最終金額」的模糊空間，或明確若協議不成則按約定比率計算；③若漲幅超過X%，保留租方終止合約的選項。</div>
+      <div class="current"><span class="label">現行條款</span>續租時租金「以5%每年」的速度調漲，但同一條款又說「最終金額雙方協議決定」——兩者矛盾。</div>
+      <div class="issue"><span class="tag prob">問題</span>若按年複利5%計算，3年續租期累計漲幅達15.76%；且「雙方再協議」等於沒有保障，若出租方要求更高漲幅，租方缺乏議價依據。</div>
+      <div class="suggest"><span class="tag fix">建議調整</span>明確限定為每年單純增加3%（非複利），或與泰國CPI通膨指數連動，設定上限；刪除「雙方協議最終金額」的模糊空間。</div>
+      <div class="compare-label">📄 原條文 vs ✏️ 建議修改條文</div>
+      <div class="compare-grid">
+        <div class="compare-box orig">
+          <div class="cb-head">📄 原條文 (Clause 2.5)</div>
+          <div class="cb-body">
+            …the rental fee for the said renewed Agreement shall be increased at the rate of <span class="del">(5%) percent per annum</span> of the Rental Fee specified in Clause 2.4 above. <span class="del">The final rental increment amount shall be mutually agreed upon.</span>
+          </div>
+        </div>
+        <div class="compare-box new">
+          <div class="cb-head">✏️ 建議修改</div>
+          <div class="cb-body">
+            …the rental fee for the renewed term shall be increased by <span class="add">not more than three percent (3%) per annum, simple (non-compounding)</span>, of the Rental Fee in effect at the end of the original term<span class="add">, or the increase in CPI as published by the Bank of Thailand for the preceding twelve (12) months, whichever is lower.</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Issue 7 -->
+  <!-- ISSUE 7 -->
   <div class="clause-card">
     <div class="cc-head">
       <span class="clause-num">第 2.4 條</span>
@@ -326,101 +432,218 @@
       <span class="badge med">🟡 中優先</span>
     </div>
     <div class="clause-body">
-      <div class="current"><span class="label">現行條款</span>房屋稅（house and land tax）、地方發展稅（local development tax）及未來新增稅費（包含未來增加金額），全部由租方負擔，需在收到帳單後30天內繳付。</div>
+      <div class="current"><span class="label">現行條款</span>房屋稅、地方發展稅及未來新增稅費（包含未來增加金額），全部由租方負擔，收到帳單後30天內繳付。</div>
       <div class="issue"><span class="tag prob">問題</span>報價估算90,000 Baht/年，但合約無上限約定。若政府調整工業區稅率，租方需承擔所有增加，增加了不確定的成本風險。</div>
-      <div class="suggest"><span class="tag fix">建議調整</span>①在合約中明訂租方負擔稅費的上限金額（如以報價90,000 Baht/年為基準，超過部分由出租方承擔）；②或明確約定屬於「建築物所有人法定稅負」的部分應由出租方自行負擔，僅將使用性質導致的附加稅轉嫁租方。</div>
+      <div class="suggest"><span class="tag fix">建議調整</span>在合約中明訂租方負擔稅費的上限金額（以90,000 Baht/年為基準，超出部分由出租方承擔）；或明確僅「使用性質導致的附加稅」才轉嫁，建築物法定稅負由出租方自行負擔。</div>
+      <div class="compare-label">📄 原條文 vs ✏️ 建議修改條文</div>
+      <div class="compare-grid">
+        <div class="compare-box orig">
+          <div class="cb-head">📄 原條文 (Clause 2.4)</div>
+          <div class="cb-body">
+            …the Lessee shall pay or reimburse the Lessor, the amounts assessed from time to time <span class="del">(including future increases)</span> in respect of house and land tax, local development tax and <span class="del">other taxes or charges which may come into force</span> with respect to the Premises after the date of this Agreement…
+          </div>
+        </div>
+        <div class="compare-box new">
+          <div class="cb-head">✏️ 建議修改</div>
+          <div class="cb-body">
+            …the Lessee shall pay or reimburse the Lessor in respect of house and land tax and local development tax, <span class="add">subject to a maximum aggregate amount of Baht 90,000 (Ninety Thousand Baht) per annum ("Tax Cap"). Any amount exceeding the Tax Cap shall be borne by the Lessor. The Tax Cap shall be reviewed and mutually agreed in writing at each renewal.</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Issue 8 -->
+  <!-- ISSUE 8 -->
   <div class="clause-card">
     <div class="cc-head">
       <span class="clause-num">第 2.3 條</span>
-      <span class="clause-title">續租通知期90天，未留彈性</span>
+      <span class="clause-title">續租通知期90天，錯過即喪失權利</span>
       <span class="badge med">🟡 中優先</span>
     </div>
     <div class="clause-body">
-      <div class="current"><span class="label">現行條款</span>租方須在到期前90天（即2029年5月2日前）發出書面通知，否則自動喪失續租權利。</div>
-      <div class="issue"><span class="tag prob">問題</span>3年後的時間點難以預測，若因海外行政作業延誤或忘記，單純錯過此截止日即喪失整個續租選擇權，對外資租方風險較高。</div>
-      <div class="suggest"><span class="tag fix">建議調整</span>①通知期從90天縮短至60天；或②若通知期屆滿租方未表示，不自動喪失權利，出租方須再給予15天寬限期並書面通知；③或改為：若未通知，合約自動按月續約（at monthly terms）直到一方終止。</div>
+      <div class="current"><span class="label">現行條款</span>租方須在到期前90天（即2029年5月2日前）發出書面通知，否則自動喪失續租權利，無寬限期規定。</div>
+      <div class="issue"><span class="tag prob">問題</span>3年後的時間點難以預測，若因海外行政作業延誤或疏漏，單純錯過截止日即喪失整個續租選擇權，對外資租方風險較高。</div>
+      <div class="suggest"><span class="tag fix">建議調整</span>通知期從90天縮短至60天；並加入：若租方未於期限內通知，出租方須再書面提醒，租方有15天寬限期。</div>
+      <div class="compare-label">📄 原條文 vs ✏️ 建議修改條文</div>
+      <div class="compare-grid">
+        <div class="compare-box orig">
+          <div class="cb-head">📄 原條文 (Clause 2.3)</div>
+          <div class="cb-body">
+            …the Lessee shall, no later than <span class="del">ninety (90) days</span> before the expiration of the original term, give written notice to the Lessor of its intent to renew this Agreement.<br><br>
+            <em style="font-size:11.5px;color:#888;">[無寬限期，無出租方提醒義務]</em>
+          </div>
+        </div>
+        <div class="compare-box new">
+          <div class="cb-head">✏️ 建議修改</div>
+          <div class="cb-body">
+            …the Lessee shall, no later than <span class="add">sixty (60) days</span> before the expiration of the original term, give written notice to the Lessor of its intent to renew this Agreement.<br><br>
+            <span class="add">If the Lessee fails to give such notice within the said period, the Lessor shall notify the Lessee in writing within seven (7) days. The Lessee shall then have an additional fifteen (15) days grace period to exercise its renewal right.</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Issue 9 -->
+  <!-- ISSUE 9 -->
   <div class="clause-card">
     <div class="cc-head">
       <span class="clause-num">第 4.5 條</span>
-      <span class="clause-title">公共事業費7天付款期，太緊</span>
+      <span class="clause-title">公共事業費7天付款期太緊</span>
       <span class="badge med">🟡 中優先</span>
     </div>
     <div class="clause-body">
       <div class="current"><span class="label">現行條款</span>若水電費帳單開在出租方名下，出租方向租方轉開發票，租方須在收到後7天內付款，否則計2%/月罰息。</div>
       <div class="issue"><span class="tag prob">問題</span>跨國付款作業流程（匯款、財務審核、銀行作業天數）通常需要7-14天，7天期限對海外管理的外資企業不現實。</div>
-      <div class="suggest"><span class="tag fix">建議調整</span>7天延長為<strong>21天</strong>；罰息觸發點從超期7天改為超期14天；且罰息由2%/月降至1%/月。</div>
+      <div class="suggest"><span class="tag fix">建議調整</span>付款期從7天延長為21天；罰息觸發點改為逾期14天；罰息率從2%/月降至1%/月。</div>
+      <div class="compare-label">📄 原條文 vs ✏️ 建議修改條文</div>
+      <div class="compare-grid">
+        <div class="compare-box orig">
+          <div class="cb-head">📄 原條文 (Clause 4.5)</div>
+          <div class="cb-body">
+            …such invoices from the Lessor shall be paid by the Lessee within <span class="del">seven (7) days</span> from the date of receipt of the Lessor's invoice, failing which the Lessee agrees to pay the Lessor a penalty at the rate of <span class="del">two percent (2%) per month</span> of the outstanding amount…
+          </div>
+        </div>
+        <div class="compare-box new">
+          <div class="cb-head">✏️ 建議修改</div>
+          <div class="cb-body">
+            …such invoices from the Lessor shall be paid by the Lessee within <span class="add">twenty-one (21) days</span> from the date of receipt of the Lessor's invoice, failing which the Lessee agrees to pay the Lessor a penalty at the rate of <span class="add">one percent (1%) per month</span> of the outstanding amount, <span class="add">provided that such penalty shall only apply after a further fourteen (14) days' written notice from the Lessor.</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Issue 10 -->
+  <!-- ISSUE 10 -->
   <div class="clause-card">
     <div class="cc-head">
       <span class="clause-num">第 8.4 條</span>
-      <span class="clause-title">租方放棄訴訟權條款</span>
+      <span class="clause-title">租方預先放棄一切訴訟權利</span>
       <span class="badge med">🟡 中優先</span>
     </div>
     <div class="clause-body">
-      <div class="current"><span class="label">現行條款</span>若租方逾期未交還廠房，出租方可強制進入、移除租方員工及財物，租方提前放棄對出租方提出侵入、損毀、侵害人身自由等一切民刑事訴訟的權利。</div>
+      <div class="current"><span class="label">現行條款</span>若租方逾期未交還廠房，出租方可強制進入、移除員工及財物，租方提前放棄對出租方提出侵入、損毀、侵害人身自由等一切民刑事訴訟的權利。</div>
       <div class="issue"><span class="tag prob">問題</span>此條款過度剝奪租方法律救濟權，若出租方行使不當（如誤入、暴力移除），租方完全無法主張任何法律保障。</div>
-      <div class="suggest"><span class="tag fix">建議調整</span>刪除「放棄一切民刑事訴訟權利」的寬泛措辭；改為：「如租方無故逾期未交還廠房超過X天，出租方可依法律程序收回」，保留「依法定程序」的前提限制。</div>
+      <div class="suggest"><span class="tag fix">建議調整</span>刪除「放棄一切民刑事訴訟權利」的寬泛措辭；改為：若租方無故逾期不交廠超過X天，出租方可依法律程序收回。</div>
+      <div class="compare-label">📄 原條文 vs ✏️ 建議修改條文</div>
+      <div class="compare-grid">
+        <div class="compare-box orig">
+          <div class="cb-head">📄 原條文 (Clause 8.4)</div>
+          <div class="cb-body">
+            …<span class="del">The Lessee hereby waives its right to file suit, plead, arraign or charge the Lessor with trespass, mischief, offenses against liberty and any other civil or criminal case.</span> The Lessee shall pay Baht ___ per month as property usage fee from the date that the Lessee is in default…
+          </div>
+        </div>
+        <div class="compare-box new">
+          <div class="cb-head">✏️ 建議修改</div>
+          <div class="cb-body">
+            刪除以下句子：<br>
+            <span style="text-decoration:line-through;color:#c0392b;font-size:11.5px;">"The Lessee hereby waives its right to file suit, plead, arraign or charge the Lessor with trespass, mischief, offenses against liberty and any other civil or criminal case."</span><br><br>
+            替換為：<span class="add">"The Lessor may re-enter the Premises in accordance with applicable Thai law and legal procedures after giving the Lessee seven (7) days prior written notice of default."</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Issue 11 -->
+  <!-- ISSUE 11 -->
   <div class="clause-card">
     <div class="cc-head">
-      <span class="clause-num">第 9.2 / 9.3 條</span>
-      <span class="clause-title">出租方轉讓無條件限制</span>
+      <span class="clause-num">第 9.3 條</span>
+      <span class="clause-title">出租方可無限制轉讓，租方無退出選項</span>
       <span class="badge low">🟢 低優先</span>
     </div>
     <div class="clause-body">
-      <div class="current"><span class="label">現行條款</span>出租方可自由將合約轉讓給任何自然人或法人，租方同意新出租方自動取得相同權利義務，無需租方同意。出租方僅需事前書面通知（第5.3條）。</div>
+      <div class="current"><span class="label">現行條款</span>出租方可自由將合約轉讓給任何自然人或法人，租方同意新出租方自動取得相同權利義務，無需租方同意。出租方僅需事前書面通知。</div>
       <div class="issue"><span class="tag prob">問題</span>REIT可能被併購或資產出售，若新出租方管理風格截然不同，租方權益可能受影響，且租方毫無退出選項。</div>
-      <div class="suggest"><span class="tag fix">建議調整</span>若出租方發生所有權變更，租方應有權在30天內選擇是否繼續履行合約，若選擇終止，押金無損失全額退還。</div>
+      <div class="suggest"><span class="tag fix">建議調整</span>若出租方發生所有權重大變更（>50%），租方應有權在30天內選擇是否繼續，若選擇終止則押金無損失全額退還。</div>
+      <div class="compare-label">📄 原條文 vs ✏️ 建議修改條文</div>
+      <div class="compare-grid">
+        <div class="compare-box orig">
+          <div class="cb-head">📄 原條文 (Clause 9.3)</div>
+          <div class="cb-body">
+            <span class="del">The Lessee consents that the Lessor shall have right to transfer the right, grant a lease or change the lessor</span>, and the new lessor, whether a natural person or legal entity, will have the same rights and obligations as the Lessor.
+          </div>
+        </div>
+        <div class="compare-box new">
+          <div class="cb-head">✏️ 建議修改</div>
+          <div class="cb-body">
+            The Lessor shall have the right to transfer this Agreement, provided that:<br>
+            <span class="add">(a) The Lessor gives the Lessee not less than thirty (30) days prior written notice; and<br>
+            (b) In the event of a change of ownership or beneficial interest exceeding 50%, the Lessee shall have the right, exercisable within 30 days of such notice, to terminate this Agreement with full refund of the Security Deposit without any penalty.</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- ============ PART 3: SERVICE AGREEMENT ISSUES ============ -->
+  <!-- ===== SERVICE AGREEMENT ISSUES ===== -->
   <hr class="divider">
   <div class="section-title red">四、需調整條款 — 服務合約 (Service Agreement)</div>
 
-  <!-- SA Issue 1 -->
+  <!-- SA ISSUE 1 -->
   <div class="clause-card">
     <div class="cc-head">
-      <span class="clause-num svc">服務 第3.1條</span>
-      <span class="clause-title">服務費金額是否含VAT — 合約自相矛盾</span>
-      <span class="badge high">🔴 高優先（須簽約前釐清）</span>
+      <span class="clause-num svc">服務 第3.1 vs 3.5條</span>
+      <span class="clause-title">服務費含VAT與否 — 合約自相矛盾</span>
+      <span class="badge high">🔴 高優先（簽約前必須確認）</span>
     </div>
     <div class="clause-body">
-      <div class="current"><span class="label">現行條款</span>服務合約第3.1條載明月服務費為 <strong>74,752.88 Baht</strong>；第3.5條卻說「服務費不含VAT（exclusive of VAT），租方另須繳付7%增值稅」。</div>
-      <div class="issue"><span class="tag prob">問題</span>74,752.88 Baht = 69,862.50 × 1.07（含7% VAT），即報價單上的金額已含VAT。若按合約第3.5條「不含VAT」解讀，則月服務費實際為 74,752.88 + 7% = <strong>79,985.58 Baht</strong>，比報價單高出 5,232.70 Baht/月，3年多付 ~188,000 Baht。</div>
-      <div class="suggest"><span class="tag fix">建議調整</span>簽約前務必與出租方確認：74,752.88 Baht 是「含7% VAT之稅後金額」，並要求修改第3.5條刪除「exclusive of VAT」措辭，或明確標示稅前金額為 69,862.50 Baht＋VAT 4,890.38 Baht = 74,752.88 Baht（含稅）。</div>
+      <div class="current"><span class="label">現行條款</span>服務合約第3.1條載明月服務費為 74,752.88 Baht；第3.5條卻說「服務費不含VAT，租方須另繳7%增值稅」。</div>
+      <div class="issue"><span class="tag prob">問題</span>74,752.88 = 69,862.50 × 1.07（含7% VAT）。若按第3.5條「不含VAT」解讀，月服務費實際為 74,752.88 × 1.07 = 79,985 Baht，3年多付約 18.8萬 Baht。</div>
+      <div class="suggest"><span class="tag fix">建議調整</span>簽約前要求出租方確認：74,752.88 Baht 為含稅金額，並修改第3.5條刪除「exclusive of VAT」措辭，或明確標示稅前/稅後金額。</div>
+      <div class="compare-label">📄 原條文矛盾對照 vs ✏️ 建議修改條文</div>
+      <div class="compare-grid">
+        <div class="compare-box orig">
+          <div class="cb-head">📄 原條文（兩條矛盾）</div>
+          <div class="cb-body">
+            <span class="clause-ref">Clause 3.1（金額）</span>
+            Aug 1, 2026 – Jul 31, 2029 → <span class="del">74,752.88 Baht</span>/month<br><br>
+            <span class="clause-ref">Clause 3.5（VAT說明）</span>
+            The Service Fee…are <span class="del">exclusive of Value Added Tax ("VAT")</span> and the Lessee shall pay any VAT…<br><br>
+            <em style="font-size:11.5px;color:#c0392b;">→ 矛盾：74,752.88 已 = 69,862.50 × 1.07（含稅），但條文說不含稅</em>
+          </div>
+        </div>
+        <div class="compare-box new">
+          <div class="cb-head">✏️ 建議修改 Clause 3.5</div>
+          <div class="cb-body">
+            <span class="add">The Service Fee of Baht 74,752.88 per month as specified in Clause 3.1 is inclusive of Value Added Tax (VAT) at the rate of 7%. The VAT component amounts to Baht 4,890.38 per month (base fee before VAT: Baht 69,862.50 per month).</span><br><br>
+            <span style="font-size:11.5px;color:#666;">（刪除原 "exclusive of VAT" 措辭及後續「租方須另繳VAT」的要求）</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- SA Issue 2 -->
+  <!-- SA ISSUE 2 -->
   <div class="clause-card">
     <div class="cc-head">
       <span class="clause-num svc">服務 第9.2條</span>
-      <span class="clause-title">交叉違約條款 — 服務費逾期可致整個租約終止</span>
+      <span class="clause-title">交叉違約 — 服務費延誤可致整個租約即時終止</span>
       <span class="badge high">🔴 高優先</span>
     </div>
     <div class="clause-body">
-      <div class="current"><span class="label">現行條款</span>「任何服務合約違約視為租賃合約違約；任何租賃合約違約視為服務合約違約。任一合約終止，另一合約自動同步終止，無需另行通知。」</div>
-      <div class="issue"><span class="tag prob">問題</span>服務費僅約 74,752 Baht，若因銀行作業或帳務錯誤導致單月服務費逾期，理論上出租方可據此終止整個租賃合約（月租 85,387 Baht），影響遠大於違約原因本身。此為高度不對等的條款。</div>
-      <div class="suggest"><span class="tag fix">建議調整</span>①取消全面交叉違約機制；或②縮小適用範圍：僅在「重大且持續的違約（material breach not cured within 60 days）」才觸發交叉終止；③服務費之逾期不得單獨觸發租賃合約終止，反之亦然。</div>
+      <div class="current"><span class="label">現行條款</span>「任何服務合約違約視為租賃合約違約；任何租賃合約違約視為服務合約違約。任一合約終止，另一合約自動同步即時終止，無需另行通知。」</div>
+      <div class="issue"><span class="tag prob">問題</span>服務費僅約74,752 Baht，若因銀行作業或帳務錯誤導致單月服務費逾期，理論上出租方可據此終止整個租賃合約，影響遠大於違約原因本身。</div>
+      <div class="suggest"><span class="tag fix">建議調整</span>取消全面交叉違約機制；或縮小至「重大且持續超過60天的違約」才觸發交叉終止；服務費逾期不得單獨觸發租賃合約終止。</div>
+      <div class="compare-label">📄 原條文 vs ✏️ 建議修改條文</div>
+      <div class="compare-grid">
+        <div class="compare-box orig">
+          <div class="cb-head">📄 原條文 (Service Clause 9.2)</div>
+          <div class="cb-body">
+            Both parties agree that <span class="del">any breach of this Agreement shall be regarded as a breach of the Lease Agreement and any breach of the Lease Agreement shall be regarded as a breach of this Agreement. Further, if this Agreement is terminated for whatever reason, the Lease Agreement shall be concurrently terminated forthwith without notice</span>, and if the Lease Agreement is terminated for whatever reason, this Agreement shall be concurrently terminated forthwith without notice.
+          </div>
+        </div>
+        <div class="compare-box new">
+          <div class="cb-head">✏️ 建議修改</div>
+          <div class="cb-body">
+            <span class="add">A breach of this Agreement shall only constitute a breach of the Lease Agreement, and vice versa, where such breach is material and remains uncured for a period of sixty (60) days following written notice from the non-breaching party.<br><br>
+            For the avoidance of doubt, a payment default of the Service Fee of less than thirty (30) days shall not constitute a material breach sufficient to trigger termination of the Lease Agreement. Concurrent termination shall require a separate written notice specifying the grounds for termination of each agreement.</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- SA Issue 3 -->
+  <!-- SA ISSUE 3 -->
   <div class="clause-card">
     <div class="cc-head">
       <span class="clause-num svc">服務 第3.1條</span>
@@ -430,178 +653,105 @@
     <div class="clause-body">
       <div class="current"><span class="label">現行條款</span>「無論租方是否進駐，服務費均須按時全額支付（whether the Lessee is in occupation or not）。」</div>
       <div class="issue"><span class="tag prob">問題</span>鴻騰泰國設廠初期（取得BOI、公司設立、設備進口）可能有2-6個月空置期。空置期間每月仍須付74,752 Baht服務費，增加初期資金壓力。</div>
-      <div class="suggest"><span class="tag fix">建議調整</span>要求加入「空置寬限期」條款：自合約生效起前3個月，若廠房尚未開始生產作業，服務費減收50%；或要求將合約生效日順延至實際進駐日。</div>
+      <div class="suggest"><span class="tag fix">建議調整</span>要求加入「裝修寬限期（Fit-Out Period）」：自合約生效起前3個月，若廠房尚未開始生產作業，服務費減收50%。</div>
+      <div class="compare-label">📄 原條文 vs ✏️ 建議修改條文</div>
+      <div class="compare-grid">
+        <div class="compare-box orig">
+          <div class="cb-head">📄 原條文 (Service Clause 3.1 末段)</div>
+          <div class="cb-body">
+            The Lessee shall pay the Service Fee, whether formally demanded or not, throughout the entire term of the Lease Agreement, <span class="del">whether the Lessee is in occupation or not</span>.
+          </div>
+        </div>
+        <div class="compare-box new">
+          <div class="cb-head">✏️ 建議修改</div>
+          <div class="cb-body">
+            The Lessee shall pay the Service Fee throughout the entire term of the Lease Agreement.<br><br>
+            <span class="add">Notwithstanding the foregoing, for the first three (3) months from the commencement date ("Fit-Out Period"), the Service Fee shall be reduced by fifty percent (50%) provided the Lessee has not yet commenced commercial operations. The Lessee shall notify the Lessor in writing upon commencement of commercial operations.</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- SA Issue 4 -->
+  <!-- SA ISSUE 4 -->
   <div class="clause-card">
     <div class="cc-head">
       <span class="clause-num svc">服務 第3.3條</span>
-      <span class="clause-title">服務合約押金沒收條件更嚴格</span>
+      <span class="clause-title">服務押金沒收條件絕對，無比例計算</span>
       <span class="badge med">🟡 中優先</span>
     </div>
     <div class="clause-body">
-      <div class="current"><span class="label">現行條款</span>「若租方違約或在服務期滿前終止合約，押金不予退還。」（相比租賃合約第3.4條：出租方「可選擇」沒收，這裡是「一定沒收」。）</div>
-      <div class="issue"><span class="tag prob">問題</span>服務合約押金沒收條件比租賃合約更絕對，毫無彈性空間，且與租賃合約的提前終止結合，實際損失是兩份押金同時沒收。</div>
-      <div class="suggest"><span class="tag fix">建議調整</span>與租賃合約押金條款統一：提前終止時按比例計算沒收金額（如剩餘月數/總月數×押金），而非全數沒收；或兩份押金合并計算，設定總沒收上限。</div>
+      <div class="current"><span class="label">現行條款</span>「若租方違約或在服務期滿前終止合約，押金不予退還（shall not be refunded）」——相比租賃合約「可選擇沒收」，這裡是「一定沒收」，更加絕對。</div>
+      <div class="issue"><span class="tag prob">問題</span>提前終止時服務押金（373,764 Baht）必然全數沒收，與租賃押金合計超過80萬，損失過重且無任何緩衝機制。</div>
+      <div class="suggest"><span class="tag fix">建議調整</span>與租賃合約押金條款統一：提前終止時按剩餘月數比例計算沒收金額，而非全數沒收。</div>
+      <div class="compare-label">📄 原條文 vs ✏️ 建議修改條文</div>
+      <div class="compare-grid">
+        <div class="compare-box orig">
+          <div class="cb-head">📄 原條文 (Service Clause 3.3)</div>
+          <div class="cb-body">
+            <span class="del">The Security Deposit shall not be refunded if the Lessee is in breach of this Agreement or terminates this Agreement before the end of the service term.</span> At the expiration of this Agreement, the Security Deposit shall be refunded to the Lessee, without any interest after deduction of any outstanding amount…
+          </div>
+        </div>
+        <div class="compare-box new">
+          <div class="cb-head">✏️ 建議修改</div>
+          <div class="cb-body">
+            <span class="add">In the event of early termination by the Lessee in accordance with Clause 3.6 of the Lease Agreement, the Security Deposit under this Agreement shall be forfeited on the same pro-rata basis as the Lease Agreement Security Deposit.<br><br>
+            In the event of termination due to Lessee's material breach, the Lessor may forfeit the Security Deposit.</span> At the expiration of this Agreement, the Security Deposit shall be refunded to the Lessee <span class="add">within thirty (30) days</span>, without any interest after deduction of any outstanding amount…
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- ============ BLANK FIELDS ============ -->
+  <!-- ===== BLANK FIELDS ===== -->
   <hr class="divider">
   <div class="section-title red">五、合約空白欄位 — 簽約前必須填入</div>
-
-  <div class="alert danger">
-    ⚠ 以下欄位目前為空白（____）。正式簽約前必須全部填寫完整，否則合約條款不具體，發生爭議時難以主張。
-  </div>
-
+  <div class="alert danger">⚠ 以下欄位目前為空白（____），正式簽約前必須全部填寫完整，否則發生爭議時難以主張。</div>
   <div class="blank-table">
     <table>
-      <tr>
-        <th>條款位置</th>
-        <th>空白內容</th>
-        <th>重要性</th>
-        <th>備註</th>
-      </tr>
-      <tr>
-        <td><div class="contract">租賃合約</div>第1條</td>
-        <td>廠房類型（Factory type __）</td>
-        <td class="status">必填</td>
-        <td>應填入廠房類型編號（如Type A/B/C）</td>
-      </tr>
-      <tr>
-        <td><div class="contract">租賃合約</div>第1條</td>
-        <td>土地面積（__ rai __ sq.wah）</td>
-        <td class="status">必填</td>
-        <td>實際土地面積，與可用面積675 sq.m.可能不同</td>
-      </tr>
-      <tr>
-        <td><div class="contract">租賃合約</div>第8.4條</td>
-        <td>逾期占用費金額（Baht __/月）</td>
-        <td class="status">必填</td>
-        <td>未定金額，若租方逾期不交廠，應有明確收費基準</td>
-      </tr>
-      <tr>
-        <td><div class="contract">租賃合約</div>第9.2條</td>
-        <td>轉讓/分租費用（Baht __）</td>
-        <td class="status">必填</td>
-        <td>轉讓給非子公司時應付的手續費金額</td>
-      </tr>
-      <tr>
-        <td><div class="contract">租賃合約</div>封面</td>
-        <td>鴻騰電子公司地址</td>
-        <td class="status">必填</td>
-        <td>泰國法定地址（公司設立後填入）</td>
-      </tr>
-      <tr>
-        <td><div class="contract">服務合約</div>封面</td>
-        <td>鴻騰電子公司地址</td>
-        <td class="status">必填</td>
-        <td>同上</td>
-      </tr>
-      <tr>
-        <td><div class="contract">服務合約</div>簽名頁</td>
-        <td>Lessee 簽字人姓名</td>
-        <td class="status">必填</td>
-        <td>授權簽署人（公司董事）</td>
-      </tr>
+      <tr><th>條款位置</th><th>空白內容</th><th>重要性</th><th>備註</th></tr>
+      <tr><td><div class="contract">租賃合約</div>第1條</td><td>廠房類型（Factory type __）</td><td class="status">必填</td><td>廠房類型編號</td></tr>
+      <tr><td><div class="contract">租賃合約</div>第1條</td><td>土地面積（__ rai __ sq.wah）</td><td class="status">必填</td><td>實際土地面積</td></tr>
+      <tr><td><div class="contract">租賃合約</div>第8.4條</td><td>逾期占用費（Baht __/月）</td><td class="status">必填</td><td>建議按月租×1.5-2倍計算</td></tr>
+      <tr><td><div class="contract">租賃合約</div>第9.2條</td><td>轉讓/分租手續費（Baht __）</td><td class="status">必填</td><td>非子公司轉讓時應付費用</td></tr>
+      <tr><td><div class="contract">租賃合約</div>封面</td><td>鴻騰電子公司地址</td><td class="status">必填</td><td>泰國法定地址（公司設立後填入）</td></tr>
+      <tr><td><div class="contract">服務合約</div>封面</td><td>鴻騰電子公司地址</td><td class="status">必填</td><td>同上</td></tr>
+      <tr><td><div class="contract">服務合約</div>簽名頁</td><td>Lessee 簽字人姓名</td><td class="status">必填</td><td>公司授權董事</td></tr>
     </table>
   </div>
 
-  <!-- ============ PRIORITY SUMMARY ============ -->
+  <!-- ===== PRIORITY SUMMARY ===== -->
   <hr class="divider">
   <div class="section-title">六、談判優先順序 — 總覽</div>
-
   <div class="priority-box">
     <table>
       <tr><th colspan="3" class="h">🔴 高優先 — 簽約前必須解決（影響財務或法律安全）</th></tr>
-      <tr>
-        <td class="num">1</td>
-        <td><strong>服務費VAT矛盾（服務合約第3.1 vs 3.5條）</strong></td>
-        <td>釐清金額是否已含VAT，避免重複課稅</td>
-      </tr>
-      <tr>
-        <td class="num">2</td>
-        <td><strong>押金從5個月降至3個月</strong>（兩份合約）</td>
-        <td>可節省約 320,280 Baht 初期資金壓力</td>
-      </tr>
-      <tr>
-        <td class="num">3</td>
-        <td><strong>新增提前終止條款</strong>（6個月通知，按比例扣押金）</td>
-        <td>新設公司必要的退場機制保障</td>
-      </tr>
-      <tr>
-        <td class="num">4</td>
-        <td><strong>永久裝修歸屬條款</strong>（第4.14條）</td>
-        <td>製造設備/裝修投資金額龐大，必須確保有移除或補償選項</td>
-      </tr>
-      <tr>
-        <td class="num">5</td>
-        <td><strong>服務合約交叉違約機制</strong>（第9.2條）</td>
-        <td>縮小至重大違約才觸發，防止小錯誤引發合約崩潰</td>
-      </tr>
+      <tr><td class="num">1</td><td><strong>服務費VAT矛盾</strong>（服務合約第3.1 vs 3.5條）</td><td>釐清是否含VAT，避免3年多付18.8萬Baht</td></tr>
+      <tr><td class="num">2</td><td><strong>押金從5個月降至3個月</strong>（兩份合約）</td><td>節省約 320,280 Baht 初期資金壓力</td></tr>
+      <tr><td class="num">3</td><td><strong>新增提前終止條款</strong>（6個月通知，按比例計違約金）</td><td>新設公司必要的退場保障</td></tr>
+      <tr><td class="num">4</td><td><strong>永久裝修歸屬條款</strong>（第4.14條）</td><td>製造設備應可移除或獲補償</td></tr>
+      <tr><td class="num">5</td><td><strong>服務合約交叉違約機制</strong>（服務合約第9.2條）</td><td>縮小至重大且持續違約才觸發</td></tr>
       <tr><th colspan="3" class="m">🟡 中優先 — 應爭取但可折衷</th></tr>
-      <tr>
-        <td class="num">6</td>
-        <td><strong>結構性修繕不應由租方負責</strong>（第4.6條）</td>
-        <td>製造業重設備，地板/牆面輕微損壞責任易被放大</td>
-      </tr>
-      <tr>
-        <td class="num">7</td>
-        <td><strong>保險受益人應涵蓋租方</strong>（第5.2/4.9條）</td>
-        <td>保費由租方付、理賠歸出租方不合理</td>
-      </tr>
-      <tr>
-        <td class="num">8</td>
-        <td><strong>房屋稅轉嫁設上限</strong>（第2.4條）</td>
-        <td>以報價90,000 Baht/年為基準設上限</td>
-      </tr>
-      <tr>
-        <td class="num">9</td>
-        <td><strong>空置期服務費優惠</strong>（服務合約第3.1條）</td>
-        <td>前3個月設廠期間服務費減半</td>
-      </tr>
-      <tr>
-        <td class="num">10</td>
-        <td><strong>續租漲幅機制明確化</strong>（第2.5條）</td>
-        <td>以3%/年取代5%/年，或與CPI連動</td>
-      </tr>
-      <tr><th colspan="3" class="l">🟢 低優先 — 可作為談判籌碼交換</th></tr>
-      <tr>
-        <td class="num">11</td>
-        <td>續租通知期90天縮短為60天</td>
-        <td>減少行政失誤風險</td>
-      </tr>
-      <tr>
-        <td class="num">12</td>
-        <td>公共事業費付款期從7天延長至21天</td>
-        <td>符合海外管理實務</td>
-      </tr>
-      <tr>
-        <td class="num">13</td>
-        <td>押金退還從2個月縮短至30天</td>
-        <td>加快資金回收</td>
-      </tr>
-      <tr>
-        <td class="num">14</td>
-        <td>刪除/限縮「放棄訴訟權」條款（第8.4條）</td>
-        <td>保留法律救濟基本權利</td>
-      </tr>
-      <tr>
-        <td class="num">15</td>
-        <td>出租方轉讓應給予租方終止選項（第9.3條）</td>
-        <td>REIT轉讓保護</td>
-      </tr>
+      <tr><td class="num">6</td><td><strong>結構性修繕責任</strong>（第4.6條）</td><td>刪除「structural or otherwise」</td></tr>
+      <tr><td class="num">7</td><td><strong>保險受益人應涵蓋租方</strong>（第5.2/4.9條）</td><td>加列 co-insured / co-beneficiary</td></tr>
+      <tr><td class="num">8</td><td><strong>房屋稅設上限</strong>（第2.4條）</td><td>以90,000 Baht/年為 Tax Cap</td></tr>
+      <tr><td class="num">9</td><td><strong>空置期服務費減半</strong>（服務合約第3.1條）</td><td>前3個月設廠期間50%優惠</td></tr>
+      <tr><td class="num">10</td><td><strong>續租漲幅3%/年或CPI連動</strong>（第2.5條）</td><td>取代目前5%/年</td></tr>
+      <tr><th colspan="3" class="l">🟢 低優先 — 作為談判籌碼交換</th></tr>
+      <tr><td class="num">11</td><td>續租通知期從90天縮短至60天（加15天寬限期）</td><td>第2.3條</td></tr>
+      <tr><td class="num">12</td><td>公共事業費付款期從7天延長至21天</td><td>第4.5條</td></tr>
+      <tr><td class="num">13</td><td>押金退還從2個月縮短至30天</td><td>第3.4條</td></tr>
+      <tr><td class="num">14</td><td>刪除「放棄訴訟權」條款</td><td>第8.4條</td></tr>
+      <tr><td class="num">15</td><td>出租方轉讓應給予租方終止選項</td><td>第9.3條</td></tr>
     </table>
   </div>
 
-  <div class="alert info" style="margin-top: 16px;">
-    💡 <strong>談判策略建議：</strong>此案未議價，建議先以高優先項目（1-5）為必要條件，中優先項目作為配套談判籌碼。服務費VAT問題（項目1）涉及金額差異，應在第一封回覆中即要求確認，避免後續爭議。
+  <div class="alert info" style="margin-top:16px;">
+    💡 <strong>談判策略建議：</strong>本案未議價，建議第一輪以高優先項目（1–5）為必要條件，中優先作為配套。服務費VAT矛盾（項目1）在第一封回覆中即應要求確認——屬文字錯誤，出租方通常不會拒絕更正。押金（項目2）與提前終止（項目3）是財務最重要的兩點。建議請李會計師同步審閱合約並提供泰國法律角度意見。
   </div>
 
   <div class="footer">
-    本報告依據 MFC Industrial Investment REIT 提供之合約草稿分析，僅供內部決策參考。正式簽約前請諮詢泰國法律顧問（李會計師）確認在地法規解釋。
+    本報告依據 MFC Industrial Investment REIT 提供之合約草稿分析，僅供內部決策參考。正式簽約前請諮詢泰國法律顧問確認在地法規解釋。
   </div>
 
 </div>
