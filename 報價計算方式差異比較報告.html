@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>報價計算方式差異比較報告</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#ffffff; --ink:#1f2933; --muted:#5b6b7b;
+    --line:#e2e8f0; --blue:#1d4e89; --blue-soft:#eaf1fb;
+    --amber:#b45309; --amber-soft:#fdf3e3; --green:#0f766e; --green-soft:#e6f4f1;
+    --red:#b42318; --red-soft:#fdecea;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Microsoft JhengHei","PingFang TC","Helvetica Neue",Arial,sans-serif;
+    line-height:1.7;font-size:15px;}
+  .wrap{max-width:980px;margin:0 auto;padding:32px 22px 64px;}
+  header.title{background:linear-gradient(135deg,#1d4e89,#2d6fb8);color:#fff;
+    border-radius:14px;padding:30px 30px 26px;box-shadow:0 6px 22px rgba(29,78,137,.18);}
+  header.title h1{margin:0 0 8px;font-size:25px;letter-spacing:.5px;}
+  header.title p{margin:2px 0;opacity:.95;font-size:14px;}
+  .meta{margin-top:14px;font-size:13px;opacity:.9;border-top:1px solid rgba(255,255,255,.25);padding-top:12px;}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:24px 26px;margin-top:22px;box-shadow:0 2px 8px rgba(15,23,42,.04);}
+  h2{font-size:19px;margin:0 0 14px;color:var(--blue);display:flex;align-items:center;gap:10px;}
+  h2 .num{background:var(--blue);color:#fff;width:28px;height:28px;border-radius:8px;
+    display:inline-flex;align-items:center;justify-content:center;font-size:15px;flex:none;}
+  h3{font-size:16px;margin:22px 0 10px;color:var(--ink);}
+  p{margin:10px 0;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:#f0f4f9;font-weight:700;color:#33475b;}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;}
+  .m1{color:var(--blue);} .m2{color:var(--amber);}
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:700;}
+  .tag-m1{background:var(--blue-soft);color:var(--blue);}
+  .tag-m2{background:var(--amber-soft);color:var(--amber);}
+  .tag-gm{background:var(--green-soft);color:var(--green);}
+  code{background:#eef2f7;padding:1px 6px;border-radius:5px;font-size:13px;
+    font-family:"Consolas","Courier New",monospace;color:#28406b;}
+  .callout{border-left:4px solid var(--blue);background:var(--blue-soft);
+    padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0;font-size:14px;}
+  .callout.warn{border-color:var(--amber);background:var(--amber-soft);}
+  .callout.key{border-color:var(--green);background:var(--green-soft);}
+  .callout.red{border-color:var(--red);background:var(--red-soft);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:720px){.grid2{grid-template-columns:1fr;}}
+  .box{border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+  .box.m1{border-top:4px solid var(--blue);}
+  .box.m2{border-top:4px solid var(--amber);}
+  .box h4{margin:0 0 8px;font-size:15px;}
+  .kpi{font-size:26px;font-weight:800;}
+  .kpi.blue{color:var(--blue);} .kpi.amber{color:var(--amber);} .kpi.green{color:var(--green);} .kpi.red{color:var(--red);}
+  .small{font-size:12.5px;color:var(--muted);}
+  ul.clean{margin:10px 0;padding-left:22px;} ul.clean li{margin:6px 0;}
+  .total-row td{background:#eef6f0;font-weight:700;}
+  .quote-row td{background:#eaf1fb;font-weight:700;}
+  .footer{margin-top:26px;font-size:12.5px;color:var(--muted);text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="title">
+  <h1>報價計算方式差異比較報告</h1>
+  <p>目前公司並存兩套報價／成本計算方式，計算邏輯與結果不一致。本報告整理兩者差異，供主管釐清後統一作法。</p>
+  <div class="meta">
+    提報人：Alice、Kevin　|　用途：向主管群提出、釐清後統一作法<br>
+    共同定義：<strong>製程成本 ＋ 加工費 ＝ 製造成本</strong>（以下簡稱「製造成本」）　|　試算基準：製造成本 = 100、目標利潤／毛利率 = 15%
+  </div>
+</header>
+
+<!-- 1 -->
+<section>
+  <h2><span class="num">1</span>兩套作法的核心差異（一句話）</h2>
+  <p>兩套作法不只是「公式不同」，連<strong>計算方向</strong>都不同，因此用同一張報價單會得到不同的成本分攤與利潤認列。</p>
+  <div class="grid2">
+    <div class="box m1">
+      <h4 class="m1">第 1 套 ｜ 目前業務作法</h4>
+      <p class="small" style="margin:0 0 6px"><span class="tag tag-m1">由成本往上加（前向報價）</span></p>
+      <p style="margin:6px 0">從製造成本出發，逐層往上加損耗、品包運、管銷、利潤，<strong>最後得出報價</strong>。</p>
+    </div>
+    <div class="box m2">
+      <h4 class="m2">第 2 套 ｜ 公司績效作法</h4>
+      <p class="small" style="margin:0 0 6px"><span class="tag tag-m2">由售價往下拆（反向分攤）</span></p>
+      <p style="margin:6px 0">品包運＝<strong>售價</strong>×3%，必須<strong>先有售價</strong>才能計算，是把既定售價往下拆解、評估業務績效用。</p>
+    </div>
+  </div>
+  <div class="callout warn">
+    <strong>關鍵衝突：</strong>第 1 套是「算出報價」的工具；第 2 套需要「先有售價」才能算。兩者目的不同。
+  </div>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2><span class="num">2</span>公式逐項對照</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:14%">項目</th>
+        <th>第 1 套（業務作法）</th>
+        <th>第 2 套（績效作法）</th>
+        <th style="width:24%">差異重點</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>損耗</strong></td>
+        <td><code>製造成本 × 105 × 0.05 / 100</code><br>＝ 製造成本 × <strong>5.25%</strong><br><span class="small">最先計算，基礎只含製造成本</span></td>
+        <td><code>(製造成本＋管銷＋品包運) × 5%</code><br><span class="small">最後計算，基礎含管銷與品包運</span></td>
+        <td>計算<strong>順序</strong>不同（第 1 套最先、第 2 套最後），且計算<strong>基礎</strong>不同。</td>
+      </tr>
+      <tr>
+        <td><strong>品包運</strong></td>
+        <td><code>(製造成本＋損耗) × 3%</code><br><span class="small">基礎 = 成本</span></td>
+        <td><code>售價 × 3%</code><br><span class="small">基礎 = 售價</span></td>
+        <td><strong>最大結構差異</strong>：一個以成本為基礎、一個以售價為基礎，金額必然不同。</td>
+      </tr>
+      <tr>
+        <td><strong>管銷</strong></td>
+        <td><code>(製造成本＋損耗＋品包運) × 7%</code><br><span class="small">基礎含損耗</span></td>
+        <td><code>(製造成本＋品包運) × 7%</code><br><span class="small">基礎不含損耗</span></td>
+        <td>管銷基礎<strong>是否含損耗</strong>不一致。</td>
+      </tr>
+      <tr>
+        <td><strong>利潤</strong></td>
+        <td><code>(製造成本＋損耗＋品包運) × 利潤率</code><br><span class="small">成本加成法；基礎<strong>未含管銷</strong></span></td>
+        <td>售價 − 上述成本合計<br><span class="small">＝ 反推出來的績效利潤</span></td>
+        <td>第 1 套用「成本加成」決定利潤；第 2 套用「售價扣成本」反推利潤。</td>
+      </tr>
+      <tr class="quote-row">
+        <td><strong>報價／售價</strong></td>
+        <td>製造成本＋損耗＋品包運＋管銷＋利潤 ＝ <strong>報價</strong></td>
+        <td>售價為<strong>已知輸入</strong>，往下拆出各項</td>
+        <td>方向相反。</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="callout">
+    <strong>待主管確認①：</strong>第 1 套利潤的計算基礎 <code>(製造成本＋損耗＋品包運)</code> <strong>未包含管銷</strong>。
+  </div>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2><span class="num">3</span>同一張單的逐項試算（製造成本 = 100）</h2>
+  <p class="small">為了同基礎對照，第 2 套以第 1 套算出的報價 <strong>132.26</strong> 當作售價往下拆。</p>
+  <table>
+    <thead>
+      <tr><th>項目</th><th class="num">第 1 套（業務作法）</th><th class="num">第 2 套（績效作法）</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>製造成本</td><td class="num">100.00</td><td class="num">100.00</td></tr>
+      <tr><td>損耗</td><td class="num">5.25 <span class="small">(×5.25%)</span></td><td class="num">5.56 <span class="small">(×5%)</span></td></tr>
+      <tr><td>品包運</td><td class="num">3.16 <span class="small">(成本基礎)</span></td><td class="num">3.97 <span class="small">(售價基礎)</span></td></tr>
+      <tr><td>管銷</td><td class="num">7.59 <span class="small">(基礎含損耗)</span></td><td class="num">7.28 <span class="small">(基礎不含損耗)</span></td></tr>
+      <tr class="total-row"><td>成本合計（不含利潤）</td><td class="num">116.00</td><td class="num">116.81</td></tr>
+      <tr><td>利潤</td><td class="num">16.26 <span class="small">(加成15%)</span></td><td class="num">15.45 <span class="small">(售價−成本)</span></td></tr>
+      <tr class="quote-row"><td>報價／售價</td><td class="num">132.26</td><td class="num">132.26 <span class="small">(已知)</span></td></tr>
+      <tr><td><strong>實際利潤佔售價</strong></td><td class="num"><strong>12.30%</strong></td><td class="num"><strong>11.68%</strong></td></tr>
+    </tbody>
+  </table>
+  <div class="callout red">
+    <strong>同一個售價 132.26，兩套認列的利潤竟差 0.81（16.26 vs 15.45）、利潤率差約 0.6 個百分點。</strong>業務以為賺 15%，公司績效卻只算到 11.68% —— 這就是兩套並存造成的對帳落差。
+  </div>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2><span class="num">4</span>為什麼建議改用「毛利率法」</h2>
+  <p>第 1 套用<strong>成本加成法</strong>：<code>報價 = 成本 × (1 ＋ 加成率)</code>。問題是——你「加上去的百分比」並不等於「最後賺到的毛利率」，因為分母從成本變成了較大的售價，毛利會被稀釋。</p>
+
+  <h3>最簡單的原理（成本 = 100）</h3>
+  <div class="grid2">
+    <div class="box m2">
+      <h4 class="m2">成本加成 15%</h4>
+      <p>售價 = 100 × 1.15 = <strong>115</strong></p>
+      <p>毛利 = 15</p>
+      <p>實際毛利率 = 15 / 115 = <span class="kpi amber">13.04%</span></p>
+      <p class="small">想加 15%，實際只有 13.04%</p>
+    </div>
+    <div class="box" style="border-top:4px solid var(--green)">
+      <h4 style="color:var(--green)">毛利率 15%</h4>
+      <p>售價 = 100 / (1 − 15%) = <strong>117.65</strong></p>
+      <p>毛利 = 17.65</p>
+      <p>實際毛利率 = 17.65 / 117.65 = <span class="kpi green">15.00%</span></p>
+      <p class="small">要真正賺 15%，加成率需 17.65%</p>
+    </div>
+  </div>
+
+  <h3>套回本案（製造成本 = 100、含管銷成本合計 = 116.00）</h3>
+  <table>
+    <thead>
+      <tr><th>方法</th><th class="num">售價</th><th class="num">毛利</th><th class="num">實際毛利率</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="tag tag-m1">成本加成 15%</span>（第 1 套現行）</td><td class="num">132.26</td><td class="num">16.26</td><td class="num">12.30%</td></tr>
+      <tr class="total-row"><td><span class="tag tag-gm">毛利率法 15%</span>（建議）<br><span class="small">售價 = 116.00 / (1 − 15%)</span></td><td class="num">136.47</td><td class="num">20.47</td><td class="num">15.00%</td></tr>
+    </tbody>
+  </table>
+  <div class="callout warn">
+    現行加成法的報價 132.26 只達到 <strong>12.30%</strong> 毛利率；要真正鎖定 15% 毛利，售價應為 <strong>136.47</strong>（高約 3.2%）。<strong>等於每張單少賺了約 4.2 元的毛利。</strong>
+  </div>
+</section>
+
+<!-- 5 -->
+<section>
+  <h2><span class="num">5</span>給主管的建議與待釐清事項</h2>
+  <h3>建議統一原則</h3>
+  <ul class="clean">
+    <li><strong>報價一律改採毛利率法</strong>，確保鎖定目標毛利，不再被加成法稀釋。</li>
+    <li><strong>各費用項目的「計算基礎」與「順序」全公司統一一套</strong>，並書面定義（特別是品包運以成本還是售價為基礎、管銷基礎是否含損耗、損耗最先或最後計算）。</li>
+    <li><strong>區分「報價工具」與「績效評估工具」</strong>：若績效作法要保留，需與報價作法在數字上可對帳，避免業務與財務各算各的。</li>
+  </ul>
+</section>
+
+</div>
+</body>
+</html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
