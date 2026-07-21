@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>奕東電子 (301123) — 大陸液冷供應商競爭者分析</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;
+    --page: #f9f9f7;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;
+    --series-1-track: #cde2fb;
+    --seq-250: #86b6ef;
+    --neg: #e34948;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --accent-wash: rgba(42,120,214,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-1-track: #0d366b;
+      --seq-250: #1c5cab;
+      --neg: #e66767;
+      --good-text: #0ca30c;
+      --accent-wash: rgba(57,135,229,0.12);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--page); color: var(--text-primary); line-height: 1.65; font-size: 15px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 64px; }
+  .report-tag { font-size:12px; letter-spacing:.12em; color:var(--text-muted); text-transform:uppercase; }
+  header.hero { padding: 8px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing:.01em; margin-top: 4px; }
+  h1 .code { font-weight: 400; font-size: 18px; color: var(--text-secondary); margin-left: 8px; }
+  .hero-sub { color: var(--text-secondary); margin-top: 6px; max-width: 72ch; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+  .badge { font-size:12.5px; padding:3px 10px; border-radius:99px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-secondary); }
+  .badge.threat { border-color: var(--critical); color: var(--critical); font-weight:600; }
+  .meta-line { margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+  section { margin-bottom: 36px; }
+  h2 { font-size: 20px; font-weight: 700; padding-bottom: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h2 .num { color: var(--series-1); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 18px 0 8px; }
+  p.body { color: var(--text-primary); margin-bottom: 10px; max-width: 80ch; }
+  .note { font-size: 12.5px; color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  @media (max-width: 760px){ .grid-2{grid-template-columns:1fr;} }
+  .tiles { display:grid; grid-template-columns: repeat(6,1fr); gap:12px; }
+  @media (max-width: 900px){ .tiles{grid-template-columns: repeat(3,1fr);} }
+  @media (max-width: 560px){ .tiles{grid-template-columns: repeat(2,1fr);} }
+  .tile { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:14px 14px 12px; }
+  .tile .label { font-size:12px; color:var(--text-muted); }
+  .tile .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .tile .value.neg { color: var(--critical); }
+  .tile .delta { font-size:12px; margin-top:2px; }
+  .delta.up { color: var(--good-text); }
+  .delta.down { color: var(--critical); }
+  .delta.flat { color: var(--text-muted); }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-weight:600; color:var(--text-secondary); font-size:12.5px; padding:8px 10px; border-bottom:1px solid var(--baseline); white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:top; }
+  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom:none; }
+  .timeline { list-style:none; position:relative; padding-left:20px; }
+  .timeline::before { content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--grid); border-radius:1px; }
+  .timeline li { position:relative; padding:0 0 14px 12px; }
+  .timeline li::before { content:""; position:absolute; left:-20px; top:7px; width:8px; height:8px; border-radius:50%; background:var(--series-1); box-shadow: 0 0 0 2px var(--surface-1); }
+  .timeline .yr { font-weight:700; font-variant-numeric: tabular-nums; margin-right:8px; }
+  .timeline .desc { color:var(--text-secondary); }
+  .chart { margin-top: 10px; }
+  .chart-title { font-size:13.5px; font-weight:600; }
+  .chart-sub { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .hbar-row { display:grid; grid-template-columns: 128px 1fr 128px; align-items:center; gap:10px; padding:5px 0; }
+  .hbar-row .cat { font-size:13px; color:var(--text-secondary); text-align:right; }
+  .hbar-track { position:relative; height:20px; }
+  .hbar-fill { position:absolute; left:0; top:0; height:20px; background:var(--series-1); border-radius:0 4px 4px 0; transition: opacity .15s; }
+  .hbar-row:hover .hbar-fill { opacity:.82; }
+  .hbar-row .val { font-size:13px; color:var(--text-primary); font-variant-numeric:tabular-nums; }
+  .hbar-row .val .pct { color:var(--text-muted); }
+  .axis-note { border-top:1px solid var(--baseline); margin-top:6px; padding-top:5px; font-size:11.5px; color:var(--text-muted); text-align:right; }
+  .cols { display:flex; align-items:flex-end; gap:26px; height:170px; padding:0 6px; border-bottom:1px solid var(--baseline); }
+  .col-g { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
+  .col-bar { width:100%; max-width:44px; background:var(--series-1); border-radius:4px 4px 0 0; transition: opacity .15s; }
+  .col-g:hover .col-bar { opacity:.82; }
+  .col-val { font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--text-primary); margin-bottom:4px; }
+  .col-x { display:flex; gap:26px; padding:6px 6px 0; }
+  .col-x div { flex:1; text-align:center; font-size:12px; color:var(--text-muted); }
+  /* 跨零軸柱狀圖（淨利含虧損年） */
+  .zchart { position:relative; height:170px; padding:0 6px; }
+  .zchart .zero { position:absolute; left:0; right:0; top:24%; border-top:1px solid var(--baseline); }
+  .zchart .zero-label { position:absolute; right:0; top:calc(24% - 18px); font-size:11px; color:var(--text-muted); }
+  .zcols { display:flex; gap:26px; height:100%; }
+  .zcol { flex:1; position:relative; }
+  .zbar { position:absolute; left:50%; transform:translateX(-50%); width:100%; max-width:44px; transition:opacity .15s; }
+  .zcol:hover .zbar { opacity:.82; }
+  .zbar.pos { background:var(--series-1); bottom:76%; border-radius:4px 4px 0 0; }
+  .zbar.negb { background:var(--neg); top:24%; border-radius:0 0 4px 4px; }
+  .zval { position:absolute; left:50%; transform:translateX(-50%); font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .swot { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .swot{grid-template-columns:1fr;} }
+  .swot .card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+  .swot .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .swot ul { padding-left:18px; }
+  .swot li { margin-bottom:8px; color:var(--text-primary); }
+  .callout { background: var(--accent-wash); border:1px solid var(--border); border-left:3px solid var(--series-1); border-radius:8px; padding:14px 16px; margin:14px 0; }
+  .callout.warn { border-left-color: var(--critical); background: rgba(208,59,59,0.06); }
+  .callout .t { font-weight:700; font-size:13.5px; margin-bottom:4px; }
+  .meter-row { display:grid; grid-template-columns: 170px 1fr 56px; gap:12px; align-items:center; padding:6px 0; }
+  .meter-row .m-label { font-size:13.5px; color:var(--text-secondary); text-align:right; }
+  .meter-track { height:10px; border-radius:5px; background:var(--series-1-track); position:relative; overflow:hidden; }
+  .meter-fill { position:absolute; left:0; top:0; bottom:0; background:var(--series-1); border-radius:5px; }
+  .meter-row .m-val { font-size:13px; font-variant-numeric:tabular-nums; color:var(--text-primary); }
+  footer { border-top:1px solid var(--border); padding-top:16px; font-size:12.5px; color:var(--text-muted); }
+  footer a { color: var(--series-1); text-decoration:none; word-break:break-all; }
+  footer li { margin-bottom:4px; }
+  sup.est { color: var(--text-muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ================= 頁首 ================= -->
+<header class="hero">
+  <div class="report-tag">大陸液冷供應商競爭者分析 · 02 / 05</div>
+  <h1>奕東電子<span class="code">深交所創業板 301123</span></h1>
+  <div class="hero-sub">奕東電子科技股份有限公司（總部東莞，江蘇常熟廠即一般所稱「蘇州廠」）——28 年精密模具／沖壓起家的 FPC 與連接器零組件廠，以「沖壓結構件＋併購深圳冠鼎（埋管冷板）」切入 AI 伺服器液冷板與 Manifold，<b>公開資料中的液冷客戶名單直接包含奇宏 AVC 與英維克</b>，2025 年液冷營收已約 1.2 億。</div>
+  <div class="badges">
+    <span class="badge threat">液冷板／Manifold 賽道威脅度：高（正面對位）</span>
+    <span class="badge">液冷營收 2025 約 ¥1.2 億，已放量初期</span>
+    <span class="badge">實控人：鄧玉泉／鄧可（父子）</span>
+    <span class="badge">2022 年上市</span>
+    <span class="badge">馬來西亞海外基地</span>
+  </div>
+  <div class="meta-line">報告日期 2026-07-21 · 財務數據截至 2025 年報與 2026Q1 · 幣別：人民幣 · 標註 <sup class="est">＊</sup> 者為估算或未經公司公告證實之值</div>
+</header>
+
+<!-- ================= 0. 關鍵數據 ================= -->
+<section>
+  <div class="tiles">
+    <div class="tile"><div class="label">2025 營收</div><div class="value">¥22.68億</div><div class="delta up">▲ +32.8%</div></div>
+    <div class="tile"><div class="label">2025 歸母淨利</div><div class="value neg">−¥0.67億</div><div class="delta down">虧損擴大</div></div>
+    <div class="tile"><div class="label">毛利率（2025）</div><div class="value">16.1%</div><div class="delta up">▲ +4.6pp</div></div>
+    <div class="tile"><div class="label">研發人員</div><div class="value">615</div><div class="delta up">▲ +19.9%（總員工數未披露）</div></div>
+    <div class="tile"><div class="label">總市值（2026 年中）</div><div class="value">≈¥224億</div><div class="delta flat">虧損公司高市值＝題材估值</div></div>
+    <div class="tile"><div class="label">研發費用率</div><div class="value">6.9%</div><div class="delta up">▲ 費用 +30.3%</div></div>
+  </div>
+</section>
+
+<!-- ================= 1. 公司概況 ================= -->
+<section>
+  <h2><span class="num">1</span>公司概況與沿革</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">基本資料</h3>
+      <table>
+        <tr><td style="width:110px;color:var(--text-muted)">全名</td><td>奕東電子科技股份有限公司</td></tr>
+        <tr><td style="color:var(--text-muted)">總部</td><td>廣東省東莞市（註冊與辦公地）；江蘇廠位於<b>常熟（蘇州代管縣級市）</b>，即業界慣稱之「蘇州奕東」</td></tr>
+        <tr><td style="color:var(--text-muted)">成立／上市</td><td>1997-05-14 成立（前身東莞市奕東電子）；2022-01-25 創業板上市</td></tr>
+        <tr><td style="color:var(--text-muted)">實控人</td><td>鄧玉泉（董事長，1959 年生，華中工學院）＋鄧可（總經理，1985 年生，倫敦帝國理工碩士）——家族企業、二代已接班經營</td></tr>
+        <tr><td style="color:var(--text-muted)">體系認證</td><td>IATF 16949（車規）等；自稱 28 年精密模具技術積累</td></tr>
+        <tr><td style="color:var(--text-muted)">生產基地</td><td>東莞、江蘇常熟、湖北、四川、江西、馬來西亞六大基地；另控股深圳冠鼎（液冷）</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">發展時間軸</h3>
+      <ul class="timeline">
+        <li><span class="yr">1997</span><span class="desc">東莞市奕東電子成立，以精密模具／沖壓為根，發展 FPC 與 LED 背光模組</span></li>
+        <li><span class="yr">2022</span><span class="desc">深交所創業板上市（301123）</span></li>
+        <li><span class="yr">2024</span><span class="desc">江西募投項目產能利用率不足計提減值，全年轉虧；連接器零組件（光模組 CAGE）開始上量</span></li>
+        <li><span class="yr">2025</span><span class="desc">連接器及零組件營收 +52.9%；224G 高速產品批量出貨；<b>液冷營收約 1.2 億</b>；以 6,120 萬控股深圳冠鼎 51% 加碼液冷；營收大增但仍虧損</span></li>
+        <li><span class="yr">2026</span><span class="desc">Q1 扭虧為盈（+949 萬）；馬來西亞廠獲首張海外 CAGE 訂單；「液冷＋CPO」題材推升市值至約 224 億</span></li>
+      </ul>
+    </div>
+  </div>
+  <p class="body" style="margin-top:14px">解讀：與胜蓝同為東莞模具／沖壓系出身，但打法更激進——<b>「以虧損換賽道」：帝國理工背景的二代主導，缺技術就直接併購（冠鼎），缺產能就六地擴廠</b>。它驗證了另一條入鏈捷徑：買下已在頭部液冷供應鏈內的結構件廠，立刻取得客戶與工藝。</p>
+</section>
+
+<!-- ================= 2. 業務結構 ================= -->
+<section>
+  <h2><span class="num">2</span>業務結構與產品線</h2>
+  <div class="grid-2">
+    <div class="card">
+      <div class="chart">
+        <div class="chart-title">2025 年營收構成（億元人民幣）</div>
+        <div class="chart-sub">合計 ¥22.68 億 · 直條長度依營收金額</div>
+        <div class="hbar-row" title="連接器及零組件：10.53億，+52.9%"><div class="cat">連接器及零組件</div><div class="hbar-track"><div class="hbar-fill" style="width:100%"></div></div><div class="val">10.53 <span class="pct">46.4% · +52.9%</span></div></div>
+        <div class="hbar-row" title="FPC：8.05億，+18.8%"><div class="cat">FPC 軟板</div><div class="hbar-track"><div class="hbar-fill" style="width:76.4%"></div></div><div class="val">8.05 <span class="pct">35.5% · +18.8%</span></div></div>
+        <div class="hbar-row" title="LED背光模組：1.76億，+13.1%"><div class="cat">LED 背光模組</div><div class="hbar-track"><div class="hbar-fill" style="width:16.7%"></div></div><div class="val">1.76 <span class="pct">7.8% · +13.1%</span></div></div>
+        <div class="hbar-row" title="其他（含液冷約1.2億）：約2.34億"><div class="cat">其他（含液冷）</div><div class="hbar-track"><div class="hbar-fill" style="width:22.2%"></div></div><div class="val">2.34<sup class="est">＊</sup> <span class="pct">10.3%</span></div></div>
+        <div class="axis-note">液冷約 1.2 億未單獨列示；境外營收 2.09 億（9.2%，+62.0%）</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">四大產品線與代表客戶</h3>
+      <table>
+        <tr><th>產品線</th><th>內容／客戶</th></tr>
+        <tr><td>FPC 軟板</td><td>動力電池 BMS 排線、儲能線束（寧德時代、欣旺達）；毛利率僅 8.2%</td></tr>
+        <tr><td>連接器及零組件</td><td>沖壓端子、光模組 CAGE（112G／224G 已批量出貨）；供泰科 TE、安費諾、立訊精密</td></tr>
+        <tr><td>LED 背光模組</td><td>車載、工控、消費電子螢幕（理想、比亞迪、上汽、小鵬等車系終端）</td></tr>
+        <tr><td style="background:var(--accent-wash)"><b>熱管理液冷</b></td><td style="background:var(--accent-wash)"><b>AI 伺服器液冷板（埋管冷板）、水冷散熱模組、液冷 Manifold</b>，面向 GPU 算力機櫃；公開梳理列出客戶<b>奇宏 AVC、英維克</b>；另稱配套 NVIDIA GB300 系列<sup class="est">＊</sup></td></tr>
+      </table>
+      <p class="note" style="margin-top:10px">＊「配套 GB300」出自財經自媒體梳理，未見公司正式公告，需人脈驗證。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3. 財務體質 ================= -->
+<section>
+  <h2><span class="num">3</span>財務體質與三年趨勢</h2>
+  <div class="grid-2">
+    <div class="card">
+      <div class="chart-title">營業收入（億元）</div>
+      <div class="chart-sub">2023–2025 年報披露值</div>
+      <div class="cols">
+        <div class="col-g" title="2023：14.70億"><div class="col-val">14.70</div><div class="col-bar" style="height:65%"></div></div>
+        <div class="col-g" title="2024：17.10億，+16.4%"><div class="col-val">17.10</div><div class="col-bar" style="height:75%"></div></div>
+        <div class="col-g" title="2025：22.68億，+32.8%"><div class="col-val">22.68</div><div class="col-bar" style="height:100%"></div></div>
+      </div>
+      <div class="col-x"><div>2023</div><div>2024</div><div>2025</div></div>
+      <p class="note" style="margin-top:8px">2026Q1 營收年增 +38.3%，成長仍在加速。</p>
+    </div>
+    <div class="card">
+      <div class="chart-title">歸母淨利潤（億元）</div>
+      <div class="chart-sub">2024 起連續虧損；紅色＝虧損</div>
+      <div class="zchart">
+        <div class="zero"></div><div class="zero-label">0</div>
+        <div class="zcols">
+          <div class="zcol" title="2023：+0.02億（微利）"><div class="zval" style="top:2%">+0.02</div><div class="zbar pos" style="height:3px"></div></div>
+          <div class="zcol" title="2024：−0.60億（重述後）"><div class="zbar negb" style="height:60%"></div><div class="zval" style="top:88%">−0.60</div></div>
+          <div class="zcol" title="2025：−0.67億"><div class="zbar negb" style="height:67%"></div><div class="zval" style="top:95%">−0.67</div></div>
+        </div>
+      </div>
+      <div class="col-x"><div>2023</div><div>2024</div><div>2025</div></div>
+      <p class="note" style="margin-top:8px">2026Q1 扭虧為盈：歸母淨利 949 萬（+254.7%）。</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3 style="margin-top:0">獲利品質檢視</h3>
+    <table>
+      <tr><th>指標</th><th class="num">數值</th><th>解讀</th></tr>
+      <tr><td>淨利率（2025）</td><td class="num">≈−2.9%</td><td>增收不增利：連接器放量但 FPC 毛利率僅 8.2%，江西項目減值 6,956 萬再度侵蝕</td></tr>
+      <tr><td>經營現金流（2025）</td><td class="num">¥310萬</td><td>年減 96.4%，接近枯竭——擴張全靠外部資金</td></tr>
+      <tr><td>應收帳款</td><td class="num">¥8.72億</td><td>+21.1%，占總資產 22.6%，議價力弱</td></tr>
+      <tr><td>短期借款</td><td class="num">¥2.86億</td><td>年增 398%，償債壓力急升</td></tr>
+      <tr><td>毛利率修復</td><td class="num">16.1%（+4.6pp）</td><td>銅／塑膠原料降價＋高毛利品占比提升，公司稱 2026 持續修復</td></tr>
+    </table>
+    <div class="callout warn" style="margin-bottom:0">
+      <div class="t">財務面弱點（其最大軟肋）</div>
+      連兩年虧損、現金流近枯竭、短債激增，市值約 224 億完全建立在液冷／CPO 題材之上。另 2024 年度虧損數字在不同披露版本間有出入（−4,001 萬 → −6,039 萬，2024 年報於 2026 年 6 月重新披露），財報品質與內控值得留意。財務脆弱既是我方可攻的點（客戶端訴求供應鏈穩定），也意味著它可能<b>以虧損定價搶單</b>，價格戰風險高。
+    </div>
+  </div>
+</section>
+
+<!-- ================= 4. 客戶與供應鏈 ================= -->
+<section>
+  <h2><span class="num">4</span>客戶結構與供應鏈地位</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">主要客戶</h3>
+      <table>
+        <tr><th>板塊</th><th>客戶</th></tr>
+        <tr><td>動力電池／儲能</td><td>寧德時代、欣旺達</td></tr>
+        <tr><td>車企終端</td><td>理想、比亞迪、上汽、小鵬</td></tr>
+        <tr><td>連接器大廠（二階供應）</td><td>泰科 TE、安費諾、立訊精密</td></tr>
+        <tr><td style="background:var(--accent-wash)">散熱／液冷</td><td style="background:var(--accent-wash)"><b>奇宏 AVC、英維克</b>（公開業務梳理具名；即奇鋐大陸據點所在陣營）</td></tr>
+      </table>
+      <p class="note" style="margin-top:10px">投資者調研中公司僅稱液冷「透過下游合作夥伴供應鏈進入相關應用領域」、頭部客戶名稱未正式披露——AVC 關係建議優先用產業人脈核實。</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">供應鏈角色解讀</h3>
+      <p class="body">奕東的本業角色是<b>國際連接器大廠（TE、安費諾）與電池廠的二階沖壓／FPC 零組件廠</b>。切入液冷的方式與胜蓝（自研快接頭）不同：<b>直接併購已服務液冷頭部客戶的結構件廠冠鼎，把自家沖壓／模具產能掛上現成客戶關係</b>，一年內做出約 1.2 億液冷營收。</p>
+      <p class="body" style="margin-bottom:0">這條「沖壓能力 → 液冷板／Manifold 結構件 → 服務台系散熱廠」的路徑，<b>與我方規劃的切入路徑完全同構——奕東是目前已知與我方最正面對位的競爭者。</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5. 液冷佈局 ================= -->
+<section>
+  <h2><span class="num">5</span>液冷業務佈局（核心觀察）</h2>
+  <div class="card">
+    <table>
+      <tr><th style="width:130px">面向</th><th>現況</th></tr>
+      <tr><td>產品</td><td><b>AI 伺服器液冷板（含埋管冷板）、水冷散熱模組、液冷 Manifold</b>，面向 GPU 算力機櫃；不做快接頭（與胜蓝互補、與我方重疊）</td></tr>
+      <tr><td>進度</td><td>2025 液冷營收<b>約 1.2 億</b>（投資者調研口徑）；已進入液冷散熱「頭部客戶」供應鏈；自媒體稱配套 NVIDIA GB300<sup class="est">＊</sup></td></tr>
+      <tr><td>關鍵一步</td><td>2025 年以 6,120 萬控股<b>深圳冠鼎</b> 51%：2012 年成立的液冷散熱結構件方案商（埋管冷板），已是液冷頭部客戶核心供應商，2025 年 1–8 月淨利 554 萬（剛轉盈）——用併購直接買到工藝＋客戶</td></tr>
+      <tr><td>產能與資金</td><td>六大基地＋馬來西亞（已接首張海外 CAGE 單，可承接非紅鏈需求）；但現金流緊絀，擴產依賴股權／債務融資</td></tr>
+      <tr><td>目標</td><td>市場梳理稱 2026 年液冷營收目標 10 億<sup class="est">＊</sup>（未見公司正式指引，達成難度高，列為觀察項）</td></tr>
+    </table>
+  </div>
+
+  <h3>液冷結構件競爭格局中的位置</h3>
+  <div class="card">
+    <table>
+      <tr><th>陣營</th><th>代表廠商</th><th>相對位置</th></tr>
+      <tr><td>國際流體／散熱大廠</td><td>Stäubli、Parker、Danfoss、CPC（快接頭側）；Boyd 等（冷板側）</td><td>規格與專利制定者</td></tr>
+      <tr><td>台系</td><td>奇鋐（AVC）、雙鴻、富世達、建準等自製冷板＋對外採購結構件</td><td>NVIDIA 鏈主力，同時是奕東的「客戶」——台系散熱廠向大陸採購結構件降本</td></tr>
+      <tr><td>陸系（奕東所在）</td><td>領益智造（收購立敏達獲 NVIDIA 雙認證）、碩貝德（GB200 認證）、強瑞技術（GB300 驗證）、中航光電、英維克、<b>胜蓝（本系列 01，快接頭側）</b></td><td>奕東屬<b>已實際出貨的液冷板／結構件玩家</b>，身位靠前但尚無公開的 NVIDIA 直接認證；策略是藏在 AVC／英維克身後做結構件</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= 6. SWOT ================= -->
+<section>
+  <h2><span class="num">6</span>強項與弱點（SWOT）</h2>
+  <div class="swot">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--good)"></span>優勢 Strengths</h3>
+      <ul>
+        <li><b>28 年精密模具＋沖壓垂直整合</b>——與我方能力圈直接重疊，且規模更大（六大基地）</li>
+        <li><b>液冷已有實際營收（約 1.2 億）並進入頭部供應鏈</b>，公開資料具名奇宏 AVC、英維克</li>
+        <li><b>併購冠鼎</b>補齊埋管冷板工藝與客戶，入鏈速度極快</li>
+        <li><b>馬來西亞基地</b>可承接「中國+1」與海外 CAGE／液冷訂單</li>
+        <li>光模組 CAGE（112G／224G）卡位 AI 伺服器高速件，與液冷形成同客戶交叉銷售</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--critical)"></span>劣勢 Weaknesses</h3>
+      <ul>
+        <li><b>連兩年虧損、經營現金流近枯竭</b>（310 萬）、短債年增 398%</li>
+        <li>FPC 本業毛利率僅 8.2%，拖累整體獲利</li>
+        <li>江西募投項目減值——<b>擴產失準前科</b>；2024 年報數字曾重述</li>
+        <li>液冷主力工藝來自併購（持股 51%），整合與人才留任有風險</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--series-1)"></span>機會 Opportunities</h3>
+      <ul>
+        <li>AI 液冷滲透率快速上升，冷板／Manifold 用量隨機櫃功率密度倍增</li>
+        <li>原料降價＋產品結構優化，毛利率修復中（2026Q1 已扭虧）</li>
+        <li>台系散熱廠積極找大陸二供降本，奕東是現成受益者</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--warning)"></span>威脅 Threats</h3>
+      <ul>
+        <li>液冷板賽道湧入者眾（領益、碩貝德、強瑞、諸多冠鼎同業），<b>結構件價格戰已在醞釀</b></li>
+        <li>美系終端「非紅供應鏈」要求趨嚴，天花板明顯</li>
+        <li>財務脆弱，景氣或題材退潮即衝擊融資與擴產</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 7. 對我方的意涵 ================= -->
+<section>
+  <h2><span class="num">7</span>對我方的意涵：威脅評估與切入建議</h2>
+
+  <div class="card">
+    <h3 style="margin-top:0">威脅度評估（1–5）</h3>
+    <div class="meter-row"><div class="m-label">液冷板／金屬結構件</div><div class="meter-track"><div class="meter-fill" style="width:90%"></div></div><div class="m-val">4.5</div></div>
+    <div class="meter-row"><div class="m-label">Manifold／流體管路</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="m-val">4.0</div></div>
+    <div class="meter-row"><div class="m-label">液冷快接頭（UQD）</div><div class="meter-track"><div class="meter-fill" style="width:30%"></div></div><div class="m-val">1.5</div></div>
+    <div class="meter-row"><div class="m-label">價格競爭壓力</div><div class="meter-track"><div class="meter-fill" style="width:90%"></div></div><div class="m-val">4.5</div></div>
+    <p class="note" style="margin-top:8px">評分邏輯：能力圈＝沖壓／模具／結構件，與我方目標品項幾乎完全重疊，且已有實際出貨與頭部客戶關係（4.5 為系列目前最高分）；虧損體質使其有動機以低價搶單。</p>
+  </div>
+
+  <div class="callout">
+    <div class="t">核心結論</div>
+    奕東是五家中<b>與我方最正面對位</b>的競爭者：同樣以沖壓／模具能力切入液冷板與 Manifold，且透過併購冠鼎＋AVC／英維克關係已先行入鏈、先有營收。正面比價我方不易贏；<b>要贏在它的軟肋——財務與品質穩定性、非紅供應鏈資格、在地 NPI 協同</b>。同時它示範了「併購入鏈」的速度優勢，值得我方評估仿效。
+  </div>
+
+  <h3>建議行動</h3>
+  <div class="card">
+    <table>
+      <tr><th style="width:150px">方向</th><th>建議</th></tr>
+      <tr><td>切入品項</td><td>正面重疊無法迴避——選它尚未站穩的細分：<b>高階大冷板（FSW 攪拌摩擦焊）、高氣密／高潔淨度伺服器級冷板、出口美系機種料號</b>；或以奇鋐／雙鴻「第二供應商／風險備援」定位切入，訴求分散對陸供應依賴</td></tr>
+      <tr><td>能力補強</td><td>真空釺焊／FSW、氦檢氣密、內腔潔淨度管理；對標冠鼎的埋管冷板工藝，把「沖壓件 → 液冷件」的三道門檻補齊</td></tr>
+      <tr><td>對標指標</td><td>它從併購到出貨約一年——<b>買技術比自研快</b>；我方可評估與台灣釺焊／散熱工藝廠合作或併購，縮短入鏈時間</td></tr>
+      <tr><td>差異化牌</td><td>①<b>財務與供應穩定性</b>（對比其現金流近枯竭、短債激增）②<b>非紅供應鏈</b>資格（美系終端料號）③ 在地信任與保密、與奇鋐雙鴻的 NPI 協同速度</td></tr>
+      <tr><td>監測項目</td><td>① 液冷收入是否單獨披露、2026「10 億目標」達成度 ② 是否公告 NVIDIA／GB300 直接認證 ③ 毛利率能否站上 20% ④ 馬來西亞基地是否量產液冷件 ⑤ 現金流／短債惡化（低價搶單的前兆）</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= 資料來源 ================= -->
+<footer>
+  <b>資料來源</b>（檢索日期 2026-07-21）：
+  <ul style="padding-left:18px; margin-top:6px">
+    <li><a href="https://finance.sina.com.cn/stock/aigc/stockfs/2026-04-29/doc-inhwcqxn6854138.shtml">新浪財經：2025 年報解讀</a>（分部營收、現金流、應收、短債、減值、研發）</li>
+    <li><a href="https://finance.sina.cn/2026-04-30/detail-inhwhkum4198535.d.html">新浪財經：奕東電子前世今生</a>（實控人鄧玉泉／鄧可、沿革、行業排名）</li>
+    <li><a href="https://finance.sina.com.cn/stock/aigc/stockfs/2025-04-24/doc-ineufnmc3739794.shtml">新浪財經：2024 年報解讀</a>（2023–2024 營收淨利、研發人員）</li>
+    <li><a href="https://caifuhao.eastmoney.com/news/20260604192940956213940">東方財富財富號：完整業務梳理</a>（四大產品、客戶含奇宏 AVC／英維克、GB300、六大基地）</li>
+    <li><a href="https://finance.sina.cn/2026-05-18/detail-inhyiewk0752248.d.html">新浪財經：投資者調研速遞</a>（液冷營收約 1.2 億、CAGE 訂單、馬來西亞首單、毛利率修復、2026Q1 扭虧）</li>
+    <li><a href="https://www.abnotebook.com/a/22721">艾邦筆電論壇：6120 萬控股深圳冠鼎</a>（冠鼎背景、埋管冷板、收購目的）</li>
+    <li><a href="https://stock.stockstar.com/KX2026042800064876.shtml">證券之星：2026 一季報快訊</a>（Q1 淨利 949 萬、+254.7%）</li>
+    <li><a href="https://www.nbd.com.cn/articles/2026-04-28/4370668.html">每經網：2025 年度淨利約 −6,685 萬</a></li>
+    <li><a href="https://301123.fupanwang.com/">股票復盤網：最新行情</a>（股價 95.4 元、總市值約 224 億）</li>
+    <li><a href="https://hrss.suzhou.gov.cn/szxyyc/mobile/companyinfo/show-6907.html">蘇州人社局校園引才平台：奕東電子（常熟）有限公司</a>（江蘇廠所在地佐證）</li>
+  </ul>
+  <p style="margin-top:10px">備註：<sup class="est">＊</sup>「配套 NVIDIA GB300」「2026 液冷 10 億目標」出自財經自媒體，未見公司正式公告；「其他」分部金額為總額減已披露分部之推算值；2024 年虧損採 2025 年報比較期（重述後）口徑。與奇宏 AVC 之具體合作深度，公司調研中未具名證實，建議以產業人脈驗證。本報告僅供內部策略參考。</p>
+</footer>
+
+</div>
+</body>
+</html>
