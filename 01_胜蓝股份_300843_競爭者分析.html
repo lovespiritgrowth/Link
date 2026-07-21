@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>胜蓝股份 (300843) — 大陸液冷供應商競爭者分析</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;      /* 卡片/圖表面 */
+    --page: #f9f9f7;           /* 頁面底 */
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;       /* 主色（藍） */
+    --series-1-track: #cde2fb; /* 藍 100，meter 未填軌 */
+    --seq-250: #86b6ef;
+    --seq-450: #2a78d6;
+    --seq-600: #184f95;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --accent-wash: rgba(42,120,214,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-1-track: #0d366b;
+      --seq-250: #1c5cab;
+      --seq-450: #3987e5;
+      --seq-600: #6da7ec;
+      --good-text: #0ca30c;
+      --accent-wash: rgba(57,135,229,0.12);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  /* ===== 頁首 ===== */
+  .report-tag { font-size:12px; letter-spacing:.12em; color:var(--text-muted); text-transform:uppercase; }
+  header.hero { padding: 8px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing:.01em; margin-top: 4px; }
+  h1 .code { font-weight: 400; font-size: 18px; color: var(--text-secondary); margin-left: 8px; }
+  .hero-sub { color: var(--text-secondary); margin-top: 6px; max-width: 72ch; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+  .badge { font-size:12.5px; padding:3px 10px; border-radius:99px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-secondary); }
+  .badge.threat { border-color: var(--critical); color: var(--critical); font-weight:600; }
+  .meta-line { margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+
+  /* ===== 區塊 ===== */
+  section { margin-bottom: 36px; }
+  h2 { font-size: 20px; font-weight: 700; padding-bottom: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h2 .num { color: var(--series-1); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 18px 0 8px; }
+  p.body { color: var(--text-primary); margin-bottom: 10px; max-width: 80ch; }
+  .note { font-size: 12.5px; color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .grid-3 { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+  @media (max-width: 760px){ .grid-2,.grid-3{grid-template-columns:1fr;} }
+
+  /* ===== 摘要統計磚 ===== */
+  .tiles { display:grid; grid-template-columns: repeat(6,1fr); gap:12px; }
+  @media (max-width: 900px){ .tiles{grid-template-columns: repeat(3,1fr);} }
+  @media (max-width: 560px){ .tiles{grid-template-columns: repeat(2,1fr);} }
+  .tile { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:14px 14px 12px; }
+  .tile .label { font-size:12px; color:var(--text-muted); }
+  .tile .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .tile .delta { font-size:12px; margin-top:2px; }
+  .delta.up { color: var(--good-text); }
+  .delta.down { color: var(--critical); }
+  .delta.flat { color: var(--text-muted); }
+
+  /* ===== 表格 ===== */
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-weight:600; color:var(--text-secondary); font-size:12.5px; padding:8px 10px; border-bottom:1px solid var(--baseline); white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:top; }
+  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom:none; }
+
+  /* ===== 時間軸 ===== */
+  .timeline { list-style:none; position:relative; padding-left:20px; }
+  .timeline::before { content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--grid); border-radius:1px; }
+  .timeline li { position:relative; padding:0 0 14px 12px; }
+  .timeline li::before { content:""; position:absolute; left:-20px; top:7px; width:8px; height:8px; border-radius:50%; background:var(--series-1); box-shadow: 0 0 0 2px var(--surface-1); }
+  .timeline .yr { font-weight:700; font-variant-numeric: tabular-nums; margin-right:8px; }
+  .timeline .desc { color:var(--text-secondary); }
+
+  /* ===== 圖表（純 HTML/CSS 橫條圖） ===== */
+  .chart { margin-top: 10px; }
+  .chart-title { font-size:13.5px; font-weight:600; }
+  .chart-sub { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .hbar-row { display:grid; grid-template-columns: 118px 1fr 120px; align-items:center; gap:10px; padding:5px 0; }
+  .hbar-row .cat { font-size:13px; color:var(--text-secondary); text-align:right; }
+  .hbar-track { position:relative; height:20px; }
+  .hbar-fill { position:absolute; left:0; top:0; height:20px; background:var(--series-1); border-radius:0 4px 4px 0; transition: opacity .15s; }
+  .hbar-row:hover .hbar-fill { opacity:.82; }
+  .hbar-row .val { font-size:13px; color:var(--text-primary); font-variant-numeric:tabular-nums; }
+  .hbar-row .val .pct { color:var(--text-muted); }
+  .axis-note { border-top:1px solid var(--baseline); margin-top:6px; padding-top:5px; font-size:11.5px; color:var(--text-muted); text-align:right; }
+
+  /* 縱向柱狀（年度趨勢，小倍數） */
+  .cols { display:flex; align-items:flex-end; gap:26px; height:170px; padding:0 6px; border-bottom:1px solid var(--baseline); }
+  .col-g { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
+  .col-bar { width:100%; max-width:44px; background:var(--series-1); border-radius:4px 4px 0 0; position:relative; transition: opacity .15s; }
+  .col-bar.est { background: var(--seq-250); }
+  .col-g:hover .col-bar { opacity:.82; }
+  .col-val { font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--text-primary); margin-bottom:4px; }
+  .col-x { display:flex; gap:26px; padding:6px 6px 0; }
+  .col-x div { flex:1; text-align:center; font-size:12px; color:var(--text-muted); }
+
+  /* ===== SWOT ===== */
+  .swot { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .swot{grid-template-columns:1fr;} }
+  .swot .card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+  .swot .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .swot ul { padding-left:18px; }
+  .swot li { margin-bottom:8px; color:var(--text-primary); }
+  .swot li b { font-weight:600; }
+
+  /* ===== 重點框 ===== */
+  .callout { background: var(--accent-wash); border:1px solid var(--border); border-left:3px solid var(--series-1); border-radius:8px; padding:14px 16px; margin:14px 0; }
+  .callout.warn { border-left-color: var(--critical); background: rgba(208,59,59,0.06); }
+  .callout .t { font-weight:700; font-size:13.5px; margin-bottom:4px; }
+
+  /* ===== 評分 meter ===== */
+  .meter-row { display:grid; grid-template-columns: 170px 1fr 56px; gap:12px; align-items:center; padding:6px 0; }
+  .meter-row .m-label { font-size:13.5px; color:var(--text-secondary); text-align:right; }
+  .meter-track { height:10px; border-radius:5px; background:var(--series-1-track); position:relative; overflow:hidden; }
+  .meter-fill { position:absolute; left:0; top:0; bottom:0; background:var(--series-1); border-radius:5px; }
+  .meter-row .m-val { font-size:13px; font-variant-numeric:tabular-nums; color:var(--text-primary); }
+
+  footer { border-top:1px solid var(--border); padding-top:16px; font-size:12.5px; color:var(--text-muted); }
+  footer a { color: var(--series-1); text-decoration:none; word-break:break-all; }
+  footer li { margin-bottom:4px; }
+  sup.est { color: var(--text-muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ================= 頁首 ================= -->
+<header class="hero">
+  <div class="report-tag">大陸液冷供應商競爭者分析 · 01 / 05</div>
+  <h1>胜蓝股份<span class="code">深交所創業板 300843</span></h1>
+  <div class="hero-sub">胜蓝科技股份有限公司（東莞長安）——以消費電子與新能源車連接器起家的精密零組件廠，正以「UQD 液冷快接頭 + 液冷板零組件」切入 AI 伺服器液冷供應鏈，並已打入台灣散熱大廠（奇鋐、雙鴻所在陣營）送樣與小批量供貨。</div>
+  <div class="badges">
+    <span class="badge threat">液冷快接頭賽道威脅度：高</span>
+    <span class="badge">液冷整體營收貢獻：目前極低（早期）</span>
+    <span class="badge">董事長／實控人：黃雪林</span>
+    <span class="badge">2020 年上市</span>
+    <span class="badge">泰國海外基地</span>
+  </div>
+  <div class="meta-line">報告日期 2026-07-20 · 財務數據截至 2025 年報與 2026Q1 · 幣別：人民幣 · 標註 <sup class="est">＊</sup> 者為由公開增速回推之估算值</div>
+</header>
+
+<!-- ================= 0. 關鍵數據 ================= -->
+<section>
+  <div class="tiles">
+    <div class="tile"><div class="label">2025 營收</div><div class="value">¥17.41億</div><div class="delta up">▲ +35.3%</div></div>
+    <div class="tile"><div class="label">2025 歸母淨利</div><div class="value">¥1.12億</div><div class="delta up">▲ +8.9%</div></div>
+    <div class="tile"><div class="label">毛利率（2025 前三季）</div><div class="value">24.2%</div><div class="delta down">▼ −2.3pp</div></div>
+    <div class="tile"><div class="label">員工人數</div><div class="value">3,647</div><div class="delta flat">研發 429 人（11.8%）</div></div>
+    <div class="tile"><div class="label">總市值（2026-07）</div><div class="value">≈¥248億</div><div class="delta flat">本益比逾 200 倍</div></div>
+    <div class="tile"><div class="label">研發費用率</div><div class="value">5.5%</div><div class="delta up">▲ 費用 +14.1%</div></div>
+  </div>
+</section>
+
+<!-- ================= 1. 公司概況 ================= -->
+<section>
+  <h2><span class="num">1</span>公司概況與沿革</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">基本資料</h3>
+      <table>
+        <tr><td style="width:110px;color:var(--text-muted)">全名</td><td>胜蓝科技股份有限公司</td></tr>
+        <tr><td style="color:var(--text-muted)">總部</td><td>廣東省東莞市長安鎮沙頭南區合興路 4 號</td></tr>
+        <tr><td style="color:var(--text-muted)">成立／上市</td><td>2007 年成立（前身東莞市胜蓝電子）；2020-07-02 創業板上市</td></tr>
+        <tr><td style="color:var(--text-muted)">董事長</td><td>黃雪林（1976 年生，模具技師出身，2016 年起任董事長）</td></tr>
+        <tr><td style="color:var(--text-muted)">控股結構</td><td>胜蓝投資控股約 52%；前十大股東合計約 66.6%，控制權集中</td></tr>
+        <tr><td style="color:var(--text-muted)">體系認證</td><td>IATF 16949（車規）、ISO 14001、QC 080000</td></tr>
+        <tr><td style="color:var(--text-muted)">生產基地</td><td>東莞長安總部、東莞東坑電子基地、韶關基地、泰國基地</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">發展時間軸</h3>
+      <ul class="timeline">
+        <li><span class="yr">2007</span><span class="desc">東莞市胜蓝電子有限公司成立，創辦人黃雪林為模具技師出身，以連接器精密模具起家</span></li>
+        <li><span class="yr">2016</span><span class="desc">股份制改造，更名胜蓝科技股份有限公司</span></li>
+        <li><span class="yr">2020</span><span class="desc">深交所創業板上市（300843）</span></li>
+        <li><span class="yr">2022</span><span class="desc">發行可轉債擴產；切入新能源車高壓連接器放量期</span></li>
+        <li><span class="yr">2025</span><span class="desc">再擬發 4.5 億可轉債（高壓連接器＋工控連接器）；UQD 液冷產品獲台灣散熱廠小批量訂單，液冷商業化起步；佈局泰國基地出海</span></li>
+        <li><span class="yr">2026</span><span class="desc">人形機器人連接器小批量出貨；「液冷＋機器人」雙題材推升股價創新高，市值一度約 250 億</span></li>
+      </ul>
+    </div>
+  </div>
+  <p class="body" style="margin-top:14px">解讀：這是一家<b>典型的「模具 → 連接器 → 沿客戶需求橫向擴品」</b>的東莞精密製造廠。老闆為技術出身、股權高度集中，決策快；成長路徑始終是「綁定大客戶、快速試樣、以量取勝」，液冷只是其最新一次的橫向複製。</p>
+</section>
+
+<!-- ================= 2. 業務結構 ================= -->
+<section>
+  <h2><span class="num">2</span>業務結構與產品線</h2>
+  <div class="grid-2">
+    <div class="card">
+      <div class="chart">
+        <div class="chart-title">2025 年營收構成（億元人民幣）</div>
+        <div class="chart-sub">合計 ¥17.41 億 · 直條長度依營收金額</div>
+        <div class="hbar-row" title="消費電子連接器：10.51億，+31.9%"><div class="cat">消費電子連接器</div><div class="hbar-track"><div class="hbar-fill" style="width:100%"></div></div><div class="val">10.51 <span class="pct">60.4% · +31.9%</span></div></div>
+        <div class="hbar-row" title="新能源車連接器：4.26億，+38.1%"><div class="cat">新能源車連接器</div><div class="hbar-track"><div class="hbar-fill" style="width:40.5%"></div></div><div class="val">4.26 <span class="pct">24.5% · +38.1%</span></div></div>
+        <div class="hbar-row" title="數據通訊連接器：1.19億，+119.6%"><div class="cat">數據通訊連接器</div><div class="hbar-track"><div class="hbar-fill" style="width:11.3%"></div></div><div class="val">1.19 <span class="pct">6.8% · +119.6%</span></div></div>
+        <div class="hbar-row" title="光學透鏡：0.87億，+8.2%"><div class="cat">光學透鏡</div><div class="hbar-track"><div class="hbar-fill" style="width:8.3%"></div></div><div class="val">0.87 <span class="pct">5.0% · +8.2%</span></div></div>
+        <div class="hbar-row" title="其他：約0.58億"><div class="cat">其他</div><div class="hbar-track"><div class="hbar-fill" style="width:5.5%"></div></div><div class="val">0.58<sup class="est">＊</sup> <span class="pct">3.3%</span></div></div>
+        <div class="axis-note">液冷產品目前歸入數據通訊／多元化創新，營收貢獻仍極小</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">五大產品應用領域</h3>
+      <table>
+        <tr><th>領域</th><th>代表產品</th></tr>
+        <tr><td>智能終端</td><td>USB、FPC/FFC、Micro 連接器（富士康、立訊、小米、TCL）</td></tr>
+        <tr><td>新能源汽車</td><td>電池連接器、大電流高壓連接器，支援 800V 平台（比亞迪、長城、廣汽）</td></tr>
+        <tr><td>數據通信</td><td>高速連接器：SlimSAS、MCIO、QSFP、SFP、Gen-Z（基地台、資料中心）</td></tr>
+        <tr><td>工業智造</td><td>圓形連接器、線對板連接器</td></tr>
+        <tr><td style="background:var(--accent-wash)">多元化創新</td><td style="background:var(--accent-wash)"><b>液冷連接器（UQD 快接頭）、液冷板零組件</b>、高速線纜、機器人連接器</td></tr>
+      </table>
+      <p class="note" style="margin-top:10px">境外營收 4.81 億（占 27.6%，+56.1%），成長快於國內（+28.7%）——出海（泰國基地）與外資客戶滲透同步推進。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3. 財務體質 ================= -->
+<section>
+  <h2><span class="num">3</span>財務體質與三年趨勢</h2>
+  <div class="grid-2">
+    <div class="card">
+      <div class="chart-title">營業收入（億元）</div>
+      <div class="chart-sub">2023 為依公告增速回推之估算值</div>
+      <div class="cols">
+        <div class="col-g" title="2023：約12.41億（回推）"><div class="col-val">12.41<sup class="est">＊</sup></div><div class="col-bar est" style="height:71%"></div></div>
+        <div class="col-g" title="2024：12.87億，+3.7%"><div class="col-val">12.87</div><div class="col-bar" style="height:74%"></div></div>
+        <div class="col-g" title="2025：17.41億，+35.3%"><div class="col-val">17.41</div><div class="col-bar" style="height:100%"></div></div>
+      </div>
+      <div class="col-x"><div>2023<sup class="est">＊</sup></div><div>2024</div><div>2025</div></div>
+      <p class="note" style="margin-top:8px">2026Q1 營收 4.92 億（+46.1%），成長仍在加速。</p>
+    </div>
+    <div class="card">
+      <div class="chart-title">歸母淨利潤（億元）</div>
+      <div class="chart-sub">2023 為依公告增速回推之估算值</div>
+      <div class="cols">
+        <div class="col-g" title="2023：約0.77億（回推）"><div class="col-val">0.77<sup class="est">＊</sup></div><div class="col-bar est" style="height:69%"></div></div>
+        <div class="col-g" title="2024：1.03億，+34.3%"><div class="col-val">1.03</div><div class="col-bar" style="height:92%"></div></div>
+        <div class="col-g" title="2025：1.12億，+8.9%"><div class="col-val">1.12</div><div class="col-bar" style="height:100%"></div></div>
+      </div>
+      <div class="col-x"><div>2023<sup class="est">＊</sup></div><div>2024</div><div>2025</div></div>
+      <p class="note" style="margin-top:8px">2026Q1 淨利 0.36 億（+19.6%）；增利明顯慢於增收。</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3 style="margin-top:0">獲利品質檢視</h3>
+    <table>
+      <tr><th>指標</th><th class="num">數值</th><th>解讀</th></tr>
+      <tr><td>淨利率（2025）</td><td class="num">≈6.4%</td><td>連接器業「以量換價」模式，獲利偏薄且被費用侵蝕（銷售費用 +53%）</td></tr>
+      <tr><td>2025Q3 單季淨利</td><td class="num">−45.5%</td><td>單季大幅衰退，顯示擴張期費用與價格壓力</td></tr>
+      <tr><td>應收帳款／利潤</td><td class="num">626%</td><td>應收 +38.7%，遠快於利潤成長——對大客戶議價力弱的證據</td></tr>
+      <tr><td>經營現金流（2025）</td><td class="num">¥1.43億</td><td>尚屬正常，但投資現金流 −5.16 億，重資本擴產中</td></tr>
+      <tr><td>研發費用（2025）</td><td class="num">¥0.96億</td><td>占營收 5.5%，研發人員一年增 26%，明顯往液冷／高速方向加碼</td></tr>
+    </table>
+    <div class="callout warn" style="margin-bottom:0">
+      <div class="t">財務面弱點</div>
+      公司自揭「管理能力與規模不匹配」風險；市值約 248 億對應淨利 1.12 億（PE&gt;200 倍），股價高度依賴液冷／機器人題材兌現，一旦訂單不如預期，融資與擴產節奏都可能受挫。
+    </div>
+  </div>
+</section>
+
+<!-- ================= 4. 客戶與供應鏈 ================= -->
+<section>
+  <h2><span class="num">4</span>客戶結構與供應鏈地位</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">主要客戶</h3>
+      <table>
+        <tr><th>板塊</th><th>客戶</th></tr>
+        <tr><td>消費電子</td><td>富士康、立訊精密、小米、TCL</td></tr>
+        <tr><td>新能源車</td><td>比亞迪、長城汽車、廣汽</td></tr>
+        <tr><td style="background:var(--accent-wash)">液冷／散熱</td><td style="background:var(--accent-wash)">台灣多家知名散熱廠（洽談＋個別小批量供貨中）</td></tr>
+      </table>
+      <p class="note" style="margin-top:10px">2025 前五大客戶占營收 33.7%（第一大 13.7%）——集中度中等，但應收帳款數據顯示對龍頭客戶帳期讓步明顯。</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">供應鏈角色解讀</h3>
+      <p class="body">胜蓝在既有業務是<b>富士康／立訊體系的二階零件廠</b>與<b>車廠一階連接器供應商</b>。切入液冷的路徑不是做整機或模組，而是「把連接器的精密模具＋沖壓＋注塑＋自動化組裝能力，平移到液冷快接頭與液冷板零組件」，再借台灣散熱廠（奇鋐、雙鴻等所在陣營）進入 AI 伺服器鏈——<b>與我方想走的路徑高度同構，是直接對位的競爭者。</b></p>
+      <p class="body" style="margin-bottom:0">交期能力是其招牌：宣稱 <b>72 小時內交付、15 天新品試樣</b>，這是台系散熱廠選擇大陸供應商的核心誘因之一。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5. 液冷佈局 ================= -->
+<section>
+  <h2><span class="num">5</span>液冷業務佈局（核心觀察）</h2>
+  <div class="card">
+    <table>
+      <tr><th style="width:130px">面向</th><th>現況</th></tr>
+      <tr><td>產品</td><td><b>UQD 液冷快接頭</b>：自研磁吸式快插結構，宣稱插拔壽命 &gt;10 萬次、漏液率 &lt;0.001%；<b>UQD 液冷板零組件</b>已出貨；規劃 OSFP、800G 光模組液冷散熱部件</td></tr>
+      <tr><td>進度</td><td>與中國台灣多家知名散熱產品廠洽談合作；<b>個別客戶已下小批量訂單並實現供貨</b>；液冷板仍在送樣測試階段；被業界列入「UQD 液冷快接頭 20 家核心供應商」盤點</td></tr>
+      <tr><td>收入貢獻</td><td>目前極小（歸入數據通訊／多元創新，尚未單獨披露），2026 上半年市場行情主要反映預期而非實績</td></tr>
+      <tr><td>產能與資金</td><td>擬發 4.5 億可轉債（名目為高壓＋工控連接器，同一產能平台可支援液冷件）；泰國基地可承接海外組裝需求</td></tr>
+      <tr><td>市場空間</td><td>券商引述：全球資料中心液冷市場 2028 年約 78 億美元，CAGR 24.4%——液冷快接頭是其中壁壘最高的耗材型零件之一</td></tr>
+    </table>
+  </div>
+
+  <h3>UQD 快接頭競爭格局中的位置</h3>
+  <div class="card">
+    <table>
+      <tr><th>陣營</th><th>代表廠商</th><th>相對位置</th></tr>
+      <tr><td>國際流體大廠</td><td>Stäubli、Parker、Danfoss、CPC、CEJN</td><td>規格制定者（OCP 標準），專利與密封 know-how 壁壘最深</td></tr>
+      <tr><td>台系</td><td>富世達（奇鋐系，獨供浮動接頭）、嘉澤、富士達（首家出貨並過 NVIDIA 認證）、雙鴻（自建液冷機櫃方案）、沅亨</td><td>已卡位 NVIDIA 供應鏈的先行者</td></tr>
+      <tr><td>陸系（胜蓝所在）</td><td>安費諾珠海、英維克、中航光電、強瑞技術（GB300 驗證）、碩貝德（GB200 認證）、溯聯、川環、領益、永貴、<b>奕東電子（本系列第 2 家）</b></td><td>以成本與交期追趕，多數仍在送樣→小批量階段；胜蓝屬中段身位，<b>尚未見 NVIDIA 直接認證</b>，主打借台系散熱廠間接入鏈</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= 6. SWOT ================= -->
+<section>
+  <h2><span class="num">6</span>強項與弱點（SWOT）</h2>
+  <div class="swot">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--good)"></span>優勢 Strengths</h3>
+      <ul>
+        <li><b>精密模具＋沖壓＋注塑＋自動化組裝垂直整合</b>：連接器級的公差與鍍層管理，可直接平移到快接頭精密件</li>
+        <li><b>極快響應</b>：72 小時交付／15 天試樣，對台系客戶 NPI 節奏有吸引力</li>
+        <li><b>車規＋消費雙體系認證</b>（IATF 16949 等）與富士康、立訊、比亞迪等一線客戶背書</li>
+        <li><b>上市資本平台</b>：可轉債連發、市值高企，擴產資金充沛</li>
+        <li><b>已實際打入台灣散熱廠供應鏈</b>（小批量），先行卡位</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--critical)"></span>劣勢 Weaknesses</h3>
+      <ul>
+        <li>液冷<b>收入占比極低</b>，液冷板仍在送樣；能力多為「宣稱值」，量產良率未經大規模驗證</li>
+        <li><b>獲利薄</b>（淨利率約 6–8%）、應收帳款高企，對大客戶議價力弱</li>
+        <li>快接頭的<b>密封件、流體設計專利</b>掌握在國際大廠；OCP/UQD 相容性認證仍是門檻</li>
+        <li>管理層自承<b>管理能力與規模擴張不匹配</b></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--series-1)"></span>機會 Opportunities</h3>
+      <ul>
+        <li>AI 伺服器液冷滲透率快速上升，快接頭屬<b>單機用量大、有耗材屬性</b>的高壁壘品類</li>
+        <li>台系散熱廠產能吃緊、積極尋找大陸二供以降本</li>
+        <li>泰國基地可搭上「中國+1」產能外移需求</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--warning)"></span>威脅 Threats</h3>
+      <ul>
+        <li>陸系同業（英維克、中航光電、強瑞、碩貝德等）擠入同一賽道，<b>價格戰幾乎必然</b></li>
+        <li>美系終端客戶「<b>非紅供應鏈</b>」要求趨嚴，大陸廠商入鏈天花板明顯</li>
+        <li>估值透支：題材退潮將衝擊融資能力與擴產節奏</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 7. 對我方的意涵 ================= -->
+<section>
+  <h2><span class="num">7</span>對我方的意涵：威脅評估與切入建議</h2>
+
+  <div class="card">
+    <h3 style="margin-top:0">威脅度評估（1–5）</h3>
+    <div class="meter-row"><div class="m-label">液冷快接頭（UQD）</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="m-val">4.0</div></div>
+    <div class="meter-row"><div class="m-label">液冷板／金屬結構件</div><div class="meter-track"><div class="meter-fill" style="width:50%"></div></div><div class="m-val">2.5</div></div>
+    <div class="meter-row"><div class="m-label">Manifold／流體管路</div><div class="meter-track"><div class="meter-fill" style="width:40%"></div></div><div class="m-val">2.0</div></div>
+    <div class="meter-row"><div class="m-label">價格競爭壓力</div><div class="meter-track"><div class="meter-fill" style="width:90%"></div></div><div class="m-val">4.5</div></div>
+    <p class="note" style="margin-top:8px">評分邏輯：其能力圈在「精密小件＋密封＋自動化組裝」，快接頭是主攻方向；大面積液冷板、Manifold 等重金屬加工品項並非其強項。</p>
+  </div>
+
+  <div class="callout">
+    <div class="t">核心結論</div>
+    胜蓝驗證了一條可複製的入鏈路徑：<b>「既有精密製造能力 → 對台灣散熱廠快速送樣 → 小批量 → 擴產」</b>。對我方（精密金屬加工／沖壓背景）而言，它在快接頭賽道是強對手，但在液冷板、Manifold、機構件等「重金屬加工」品項上並不構成正面競爭——這正是我方應選的錯位切入點。
+  </div>
+
+  <h3>建議行動</h3>
+  <div class="card">
+    <table>
+      <tr><th style="width:150px">方向</th><th>建議</th></tr>
+      <tr><td>切入品項</td><td><b>避開 UQD 快接頭正面戰場</b>（密封專利＋認證壁壘＋胜蓝等十餘家已擠入）；主攻液冷板結構件、Manifold、流道板、機殼托盤等吃沖壓／CNC 產能的品項</td></tr>
+      <tr><td>能力補強</td><td>液冷板關鍵工藝：真空釺焊／攪拌摩擦焊（FSW）、氣密檢測（氦檢）、內腔清潔度管理——這是從一般金屬件跨入液冷件的三道門檻</td></tr>
+      <tr><td>對標指標</td><td>以胜蓝的 <b>72 小時交付／15 天試樣</b>為 NPI 服務基準；台系散熱廠選供應商時把響應速度看得比單價更重</td></tr>
+      <tr><td>差異化牌</td><td>對奇鋐、雙鴻打「<b>非紅供應鏈</b>＋在地信任」牌：美系終端客戶對大陸供應商的限制，是台灣供應商對胜蓝們最結構性的優勢，特別是出口美系 AI 伺服器的料號</td></tr>
+      <tr><td>監測項目</td><td>① 胜蓝液冷收入是否單獨披露（代表放量）② 是否取得 NVIDIA／OCP 相關認證 ③ 可轉債資金投向是否明文加入液冷產線 ④ 泰國基地是否承接液冷件</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= 資料來源 ================= -->
+<footer>
+  <b>資料來源</b>（檢索日期 2026-07-20）：
+  <ul style="padding-left:18px; margin-top:6px">
+    <li>公司官網 <a href="https://jctc.com.cn/about.html">jctc.com.cn/about.html</a>（沿革、基地、產品線、認證）</li>
+    <li><a href="https://finance.sina.cn/2026-04-02/detail-inhtcfxz9450669.d.html">新浪財經：2025 年報解讀</a>（分部營收、費用、現金流、研發人員）</li>
+    <li><a href="https://finance.sina.com.cn/stock/aiassist/yjbg/2025-04-27/doc-ineuqyts9912191.shtml">新浪財經：2024 年報</a>（2024 營收 12.87 億、淨利 1.03 億）</li>
+    <li><a href="https://news.qq.com/rain/a/20251030A0198L00">騰訊財經：2025 三季報簡析</a>(毛利率、應收帳款、單季數據)</li>
+    <li><a href="https://reportify.cn/news/1158731927595913216">華鑫證券點評：連接器主業增長提速，液冷業務蓄勢待發</a>（液冷產品、台灣客戶、市場空間）</li>
+    <li><a href="https://finance.sina.com.cn/stock/aiassist/ggsp/2026-07-03/doc-inifpkau5586139.shtml">新浪財經：2026-07-03 行情</a>（市值、2026Q1、業務構成）</li>
+    <li><a href="https://www.abnotebook.com/a/22122">艾邦筆電論壇：UQD 液冷快接頭 20 家核心供應商盤點</a>（競爭格局）</li>
+    <li><a href="https://finance.sina.com.cn/roll/2026-05-25/doc-inhzawmh5794131.shtml">新浪財經：2026 液冷連接器行業上市公司對比</a></li>
+    <li><a href="https://baike.jfinfo.com/4046176.html">巨豐財經：公司資料</a>（董事長黃雪林、沿革、客戶）</li>
+    <li><a href="https://300843.fupanwang.com/dsk/2026-02-06.html">復盤網：2026-02-06 動態</a>（機器人連接器、液冷進展）</li>
+  </ul>
+  <p style="margin-top:10px">備註：<sup class="est">＊</sup>2023 年數據由 2024 年報公告之同比增速回推，非官方原始披露值。「與台灣散熱廠合作」公司公告未點名具體客戶，是否即為奇鋐／雙鴻供應鏈，建議以產業人脈進一步驗證。本報告僅供內部策略參考。</p>
+</footer>
+
+</div>
+</body>
+</html>
