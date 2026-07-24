@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卓暉金屬 — 大陸液冷供應商競爭者分析</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;
+    --page: #f9f9f7;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;
+    --series-1-track: #cde2fb;
+    --seq-250: #86b6ef;
+    --neg: #e34948;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --accent-wash: rgba(42,120,214,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-1-track: #0d366b;
+      --seq-250: #1c5cab;
+      --neg: #e66767;
+      --good-text: #0ca30c;
+      --accent-wash: rgba(57,135,229,0.12);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif; background: var(--page); color: var(--text-primary); line-height: 1.65; font-size: 15px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 64px; }
+  .report-tag { font-size:12px; letter-spacing:.12em; color:var(--text-muted); text-transform:uppercase; }
+  header.hero { padding: 8px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing:.01em; margin-top: 4px; }
+  h1 .code { font-weight: 400; font-size: 18px; color: var(--text-secondary); margin-left: 8px; }
+  .hero-sub { color: var(--text-secondary); margin-top: 6px; max-width: 72ch; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+  .badge { font-size:12.5px; padding:3px 10px; border-radius:99px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-secondary); }
+  .badge.threat { border-color: var(--critical); color: var(--critical); font-weight:600; }
+  .meta-line { margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+  section { margin-bottom: 36px; }
+  h2 { font-size: 20px; font-weight: 700; padding-bottom: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h2 .num { color: var(--series-1); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 18px 0 8px; }
+  p.body { color: var(--text-primary); margin-bottom: 10px; max-width: 80ch; }
+  .note { font-size: 12.5px; color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  @media (max-width: 760px){ .grid-2{grid-template-columns:1fr;} }
+  .tiles { display:grid; grid-template-columns: repeat(6,1fr); gap:12px; }
+  @media (max-width: 900px){ .tiles{grid-template-columns: repeat(3,1fr);} }
+  @media (max-width: 560px){ .tiles{grid-template-columns: repeat(2,1fr);} }
+  .tile { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:14px 14px 12px; }
+  .tile .label { font-size:12px; color:var(--text-muted); }
+  .tile .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .tile .delta { font-size:12px; margin-top:2px; }
+  .delta.up { color: var(--good-text); }
+  .delta.down { color: var(--critical); }
+  .delta.flat { color: var(--text-muted); }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-weight:600; color:var(--text-secondary); font-size:12.5px; padding:8px 10px; border-bottom:1px solid var(--baseline); white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:top; }
+  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom:none; }
+  .timeline { list-style:none; position:relative; padding-left:20px; }
+  .timeline::before { content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--grid); border-radius:1px; }
+  .timeline li { position:relative; padding:0 0 14px 12px; }
+  .timeline li::before { content:""; position:absolute; left:-20px; top:7px; width:8px; height:8px; border-radius:50%; background:var(--series-1); box-shadow: 0 0 0 2px var(--surface-1); }
+  .timeline .yr { font-weight:700; font-variant-numeric: tabular-nums; margin-right:8px; }
+  .timeline .desc { color:var(--text-secondary); }
+  .chart { margin-top: 10px; }
+  .chart-title { font-size:13.5px; font-weight:600; }
+  .chart-sub { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .cols { display:flex; align-items:flex-end; gap:26px; height:170px; padding:0 6px; border-bottom:1px solid var(--baseline); }
+  .col-g { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
+  .col-bar { width:100%; max-width:44px; background:var(--series-1); border-radius:4px 4px 0 0; transition: opacity .15s; }
+  .col-bar.est { background: var(--seq-250); }
+  .col-g:hover .col-bar { opacity:.82; }
+  .col-val { font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--text-primary); margin-bottom:4px; }
+  .col-x { display:flex; gap:26px; padding:6px 6px 0; }
+  .col-x div { flex:1; text-align:center; font-size:12px; color:var(--text-muted); }
+  .swot { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .swot{grid-template-columns:1fr;} }
+  .swot .card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+  .swot .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .swot ul { padding-left:18px; }
+  .swot li { margin-bottom:8px; color:var(--text-primary); }
+  .callout { background: var(--accent-wash); border:1px solid var(--border); border-left:3px solid var(--series-1); border-radius:8px; padding:14px 16px; margin:14px 0; }
+  .callout.warn { border-left-color: var(--critical); background: rgba(208,59,59,0.06); }
+  .callout .t { font-weight:700; font-size:13.5px; margin-bottom:4px; }
+  .meter-row { display:grid; grid-template-columns: 170px 1fr 56px; gap:12px; align-items:center; padding:6px 0; }
+  .meter-row .m-label { font-size:13.5px; color:var(--text-secondary); text-align:right; }
+  .meter-track { height:10px; border-radius:5px; background:var(--series-1-track); position:relative; overflow:hidden; }
+  .meter-fill { position:absolute; left:0; top:0; bottom:0; background:var(--series-1); border-radius:5px; }
+  .meter-row .m-val { font-size:13px; font-variant-numeric:tabular-nums; color:var(--text-primary); }
+  footer { border-top:1px solid var(--border); padding-top:16px; font-size:12.5px; color:var(--text-muted); }
+  footer a { color: var(--series-1); text-decoration:none; word-break:break-all; }
+  footer li { margin-bottom:4px; }
+  sup.est { color: var(--text-muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ================= 頁首 ================= -->
+<header class="hero">
+  <div class="report-tag">大陸液冷供應商競爭者分析 · 03 / 05</div>
+  <h1>卓暉金屬<span class="code">未上市 · 金富科技 (003018) 已控股 51%</span></h1>
+  <div class="hero-sub">佛山市卓暉金屬製品有限公司——液冷流道管路的隱形專業戶：銅／不鏽鋼／鋁液冷管路組件、波紋管組件。<b>收購公告直接具名主要客戶為奇宏電子（AVC）與寶德科技</b>；其姊妹公司聯益熱能（同批股東、被打包收購）客戶更直接列出<b>雙鴻電子</b>。2025 年營收暴增約 4 倍、淨利率高達 23%，2026 年被瓶蓋上市公司金富科技以 5.71 億現金收購兩標的各 51% 股權。<br><span style="color:var(--critical)">注意：註冊與廠房均在佛山（三水），非一般認知的東莞——建議內部更正。</span></div>
+  <div class="badges">
+    <span class="badge threat">液冷管路／Manifold 賽道威脅度：極高（已量產入鏈）</span>
+    <span class="badge">液冷營收占比：100%（純液冷標的）</span>
+    <span class="badge">實控人：莫振龍（交易前）→ 金富科技控股</span>
+    <span class="badge">未上市（併入 003018 體系）</span>
+    <span class="badge">廠址：佛山三水</span>
+  </div>
+  <div class="meta-line">報告日期 2026-07-24 · 財務數據截至 2025-10（收購公告審計口徑）· 幣別：人民幣 · 標註 <sup class="est">＊</sup> 者為估算或承諾值 · 非上市公司，資料等級低於上市公司年報</div>
+</header>
+
+<!-- ================= 0. 關鍵數據 ================= -->
+<section>
+  <div class="tiles">
+    <div class="tile"><div class="label">2025 前 10 月營收</div><div class="value">¥2.28億</div><div class="delta up">▲ 約為 2024 全年 3.9 倍</div></div>
+    <div class="tile"><div class="label">2025 前 10 月淨利</div><div class="value">¥0.53億</div><div class="delta up">▲ 2024 全年僅 682 萬</div></div>
+    <div class="tile"><div class="label">淨利率</div><div class="value">23.4%</div><div class="delta up">遠高於一般金屬件（毛利率未披露）</div></div>
+    <div class="tile"><div class="label">100% 股權估值</div><div class="value">¥8.01億</div><div class="delta down">增值率 990.9%</div></div>
+    <div class="tile"><div class="label">前五大客戶集中度</div><div class="value">&gt;80%</div><div class="delta flat">奇宏電子、寶德科技為主</div></div>
+    <div class="tile"><div class="label">註冊資本</div><div class="value">300萬</div><div class="delta flat">2015 年成立（員工數未披露）</div></div>
+  </div>
+</section>
+
+<!-- ================= 1. 公司概況 ================= -->
+<section>
+  <h2><span class="num">1</span>公司概況與沿革</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">基本資料</h3>
+      <table>
+        <tr><td style="width:110px;color:var(--text-muted)">全名</td><td>佛山市卓暉金屬製品有限公司</td></tr>
+        <tr><td style="color:var(--text-muted)">廠址</td><td>佛山市三水區樂平鎮樂源路 18 號建豐產業園 D1（<b>非東莞</b>）</td></tr>
+        <tr><td style="color:var(--text-muted)">成立</td><td>2015-02-12；註冊資本 300 萬元</td></tr>
+        <tr><td style="color:var(--text-muted)">股權（交易前）</td><td>莫振龍 50%（法定代表人、實控人）、周超 25%、楊珂 25%</td></tr>
+        <tr><td style="color:var(--text-muted)">現況</td><td>2026 年金富科技（003018，瓶蓋包裝上市公司）以 4.08 億現金收購 51%，構成關聯交易；原股東仍持 49% 並背負業績承諾</td></tr>
+        <tr><td style="color:var(--text-muted)">姊妹公司</td><td>佛山市聯益熱能科技（2022 成立，卓暉持 40%，同批股東）：水冷頭組件、不鏽鋼波紋管、銅水冷板、記憶體散熱模組、<b>Manifold 分集水器</b>；客戶含<b>寶德科技、雙鴻電子</b>；100% 估值 3.25 億（增值率 2083%），同案被收購 51%</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">發展時間軸</h3>
+      <ul class="timeline">
+        <li><span class="yr">2015</span><span class="desc">莫振龍等三人於佛山三水創立，做金屬管件製品起家</span></li>
+        <li><span class="yr">2022</span><span class="desc">同批股東另設聯益熱能（冷板／水冷頭／Manifold），形成「管路＋冷板」姊妹佈局</span></li>
+        <li><span class="yr">2024</span><span class="desc">營收 5,845 萬、淨利 682 萬——仍是小廠</span></li>
+        <li><span class="yr">2025</span><span class="desc">AI 液冷爆發：前 10 月營收 2.28 億（約 2024 全年 4 倍）、淨利 5,340 萬，淨利率 23.4%；綁定奇宏、寶德等頭部客戶</span></li>
+        <li><span class="yr">2026</span><span class="desc">金富科技公告以 5.71 億收購卓暉＋聯益各 51%（2026-02 公告、2026-04 落地）；業績承諾：2026 淨利 ≥1.1 億、2027–2028 累計 ≥2.8 億<sup class="est">＊</sup></span></li>
+      </ul>
+    </div>
+  </div>
+  <p class="body" style="margin-top:14px">解讀：這是<b>「小而精、單點突破」的典型液冷零件隱形冠軍</b>：不做整機、不做快接頭，專攻散熱廠不想自製的流道管路與波紋管，用三年時間把自己做成奇宏（AVC）體系的核心管路供應商，再把公司高價賣給急於轉型的上市公司套現＋留任。決策極快（民企三人股東）、現在再加上市公司資本，擴產彈藥充足。</p>
+</section>
+
+<!-- ================= 2. 業務結構 ================= -->
+<section>
+  <h2><span class="num">2</span>業務結構與產品線</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">產品線（100% 液冷相關）</h3>
+      <table>
+        <tr><th>類別</th><th>內容</th></tr>
+        <tr><td style="background:var(--accent-wash)"><b>液冷流道管路</b></td><td style="background:var(--accent-wash)">銅、不鏽鋼、鋁液冷管路組件及配件——伺服器機櫃內冷卻液輸送的「血管」</td></tr>
+        <tr><td style="background:var(--accent-wash)"><b>波紋管組件</b></td><td style="background:var(--accent-wash)">吸收熱脹冷縮與振動的撓性連接件，液冷機櫃剛需耗材</td></tr>
+        <tr><td>（聯益側）</td><td>水冷頭組件、銅水冷板、不鏽鋼分集水器 Manifold、記憶體條散熱模組——兩家合計覆蓋「管路＋冷板＋Manifold」全流道</td></tr>
+      </table>
+      <p class="note" style="margin-top:10px">未披露分部數據——本業即液冷，無多角化。這正是它可怕之處：<b>組織 100% 聚焦在我方想切入的品項上。</b></p>
+    </div>
+    <div class="card">
+      <div class="chart">
+        <div class="chart-title">營收走勢（億元）</div>
+        <div class="chart-sub">2025 為前 10 月審計數；2023 未披露</div>
+        <div class="cols">
+          <div class="col-g" title="2024 全年：0.58億"><div class="col-val">0.58</div><div class="col-bar" style="height:26%"></div></div>
+          <div class="col-g" title="2025 前10月：2.28億"><div class="col-val">2.28</div><div class="col-bar" style="height:100%"></div></div>
+        </div>
+        <div class="col-x"><div>2024 全年</div><div>2025 前10月</div></div>
+        <p class="note" style="margin-top:8px">一年放大近 4 倍——直接反映 AI 液冷機櫃出貨對管路件的拉動。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3. 財務體質 ================= -->
+<section>
+  <h2><span class="num">3</span>財務體質</h2>
+  <div class="grid-2">
+    <div class="card">
+      <div class="chart-title">淨利潤（億元）</div>
+      <div class="chart-sub">2026 為收購案業績承諾值（含聯益合併口徑）<sup class="est">＊</sup></div>
+      <div class="cols">
+        <div class="col-g" title="2024 全年：0.068億"><div class="col-val">0.07</div><div class="col-bar" style="height:7%"></div></div>
+        <div class="col-g" title="2025 前10月：0.53億"><div class="col-val">0.53</div><div class="col-bar" style="height:48%"></div></div>
+        <div class="col-g" title="2026 業績承諾：≥1.1億"><div class="col-val">≥1.10<sup class="est">＊</sup></div><div class="col-bar est" style="height:100%"></div></div>
+      </div>
+      <div class="col-x"><div>2024</div><div>2025 前10月</div><div>2026 承諾<sup class="est">＊</sup></div></div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">獲利品質檢視</h3>
+      <table>
+        <tr><th>指標</th><th class="num">數值</th><th>解讀</th></tr>
+        <tr><td>淨利率（2025 前10月）</td><td class="num">23.4%</td><td>液冷管路件的定價力遠優於一般金屬加工——<b>證明此品類毛利空間可觀</b></td></tr>
+        <tr><td>客戶集中度</td><td class="num">&gt;80%</td><td>前五大占比逾八成，深度綁定奇宏、寶德；是強項也是單點依賴</td></tr>
+        <tr><td>收購增值率</td><td class="num">990.9%</td><td>8.01 億估值對 300 萬註冊資本的小廠——買方付的是「入鏈門票」溢價</td></tr>
+        <tr><td>業績承諾</td><td class="num">2026 ≥1.1億</td><td>三年對賭（2027–28 累計 ≥2.8 億），原股東有極強動機衝量保利潤</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="callout warn" style="margin-top:16px">
+    <div class="t">財務面觀察</div>
+    非上市公司，僅有收購公告的審計摘要，無現金流、應收、產能利用率等細節。高增值率＋三年高額對賭意味著：<b>未來三年卓暉會不惜一切守住奇宏／寶德訂單並積極搶新單</b>——對我方而言，正面搶它現有客戶份額的難度與火藥味都會最高；但對賭到期（2028 之後）與整合陣痛期是結構性變數。
+  </div>
+</section>
+
+<!-- ================= 4. 客戶與供應鏈 ================= -->
+<section>
+  <h2><span class="num">4</span>客戶結構與供應鏈地位</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">主要客戶（收購公告具名）</h3>
+      <table>
+        <tr><th>客戶</th><th>說明</th></tr>
+        <tr><td style="background:var(--accent-wash)"><b>奇宏電子（AVC）</b></td><td style="background:var(--accent-wash)">奇鋐科技大陸據點——<b>正是我方目標客戶</b>；卓暉為其液冷管路核心供應商</td></tr>
+        <tr><td>寶德科技</td><td>伺服器／算力設備廠（具體主體建議人脈確認）</td></tr>
+        <tr><td style="background:var(--accent-wash)"><b>雙鴻電子</b>（聯益側）</td><td style="background:var(--accent-wash)">雙鴻科技大陸據點——聯益供應其冷板／Manifold 類產品</td></tr>
+      </table>
+      <p class="note" style="margin-top:10px">公告稱兩標的「已進入服務北美科技大廠之頭部製造商供應鏈」——即透過奇宏／雙鴻間接進入 NVIDIA 等北美終端。</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">供應鏈角色解讀</h3>
+      <p class="body">卓暉（＋聯益）就是<b>「奇鋐、雙鴻大陸供應鏈現任者」的標準樣本</b>：台系散熱廠把冷板組裝與核心設計留在手上，將管路、波紋管、Manifold、水冷頭等金屬流道件外包給大陸專業廠。卓暉以「單一品類專注＋快速配合＋佛山低成本」卡住這個位置，五大客戶吃下八成營收。</p>
+      <p class="body" style="margin-bottom:0">對我方的直接意義：<b>它證明了我方想做的生意真實存在、量夠大（年化近 3 億）、毛利夠好（淨利率 23%）</b>——但位子上已經有人，而且剛拿到上市公司的資本。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5. 液冷佈局 ================= -->
+<section>
+  <h2><span class="num">5</span>液冷業務佈局（核心觀察）</h2>
+  <div class="card">
+    <table>
+      <tr><th style="width:130px">面向</th><th>現況</th></tr>
+      <tr><td>產品</td><td>液冷流道管路（銅／不鏽鋼／鋁）、波紋管組件；聯益補上水冷頭、銅水冷板、Manifold——兩家合計覆蓋機櫃內「除快接頭與 CDU 外」的大部分金屬流道件</td></tr>
+      <tr><td>進度</td><td><b>已量產、已入鏈</b>：奇宏（AVC）、寶德、雙鴻具名客戶，年化營收近 3 億、且以數倍速成長——系列五家中商業化最成熟的液冷純標的</td></tr>
+      <tr><td>資本</td><td>金富科技（市值約 126 億）現金收購後，具備上市公司資金支持擴產；原團隊留任＋49% 股權＋對賭綁定</td></tr>
+      <tr><td>認證</td><td>未見 NVIDIA 直接認證——走「藏在台系散熱廠身後」路線（與奕東同型）</td></tr>
+      <tr><td>市場空間</td><td>收購方引述：全球液冷市場 2032 年約 211.5 億美元，CAGR 33.2%</td></tr>
+    </table>
+  </div>
+
+  <h3>液冷管路／Manifold 競爭格局中的位置</h3>
+  <div class="card">
+    <table>
+      <tr><th>陣營</th><th>代表廠商</th><th>相對位置</th></tr>
+      <tr><td>國際</td><td>國際流體管件大廠（Swagelok、Parker 等體系）</td><td>高規格材料與認證，價格高，量產彈性低</td></tr>
+      <tr><td>台系</td><td>奇鋐／雙鴻自製部分流道件＋台灣管件廠</td><td>設計與組裝留在台系手上，金屬件大量外包大陸降本</td></tr>
+      <tr><td>陸系（卓暉所在）</td><td><b>卓暉＋聯益（佛山雙子星）</b>、溯聯股份、川環科技、宏馳流體等管路玩家；冷板側另有奕東（本系列 02）、領益、碩貝德</td><td>卓暉是「奇宏管路」現任核心供應商，身位最深；同業正循相同路徑擠入，價格戰將起</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= 6. SWOT ================= -->
+<section>
+  <h2><span class="num">6</span>強項與弱點（SWOT）</h2>
+  <div class="swot">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--good)"></span>優勢 Strengths</h3>
+      <ul>
+        <li><b>現任者地位</b>：奇宏（AVC）液冷管路核心供應商，已量產、年化近 3 億營收</li>
+        <li><b>100% 聚焦液冷流道件</b>，管路＋波紋管＋（聯益）冷板／Manifold 全覆蓋</li>
+        <li><b>獲利極佳</b>：淨利率 23.4%，證明其工藝與良率已過關</li>
+        <li><b>資本升級</b>：金富科技現金入主，擴產資金到位；原團隊對賭留任、戰意最高</li>
+        <li>佛山製造成本低、決策鏈短、配合度高</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--critical)"></span>劣勢 Weaknesses</h3>
+      <ul>
+        <li><b>客戶集中 &gt;80%</b>——奇宏／寶德抽單即重傷；台系客戶也因此有分散需求</li>
+        <li><b>規模與體系尚小</b>：300 萬註冊資本起家，管理、品質體系面對數倍擴產是硬考驗</li>
+        <li><b>被跨界瓶蓋公司收購</b>：整合、文化與治理風險；990%／2083% 增值率若業績跳票將反噬</li>
+        <li>無自有終端認證（無 NVIDIA 直接認證），議價依附台系客戶</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--series-1)"></span>機會 Opportunities</h3>
+      <ul>
+        <li>AI 機櫃功率密度上升，單櫃管路／Manifold 用量與規格持續加碼</li>
+        <li>借金富資本擴產能、擴品類（往 CDU 管路總成、快接頭配套延伸）</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--warning)"></span>威脅 Threats</h3>
+      <ul>
+        <li>溯聯、川環、宏馳等管路同業湧入，<b>品類壁壘不深、價格戰難免</b></li>
+        <li><b>非紅供應鏈</b>壓力：北美終端若要求去陸化，其台系客戶必須找非陸供應商——直接利多我方</li>
+        <li>對賭壓力下衝量，品質與交期風險上升</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 7. 對我方的意涵 ================= -->
+<section>
+  <h2><span class="num">7</span>對我方的意涵：威脅評估與切入建議</h2>
+
+  <div class="card">
+    <h3 style="margin-top:0">威脅度評估（1–5）</h3>
+    <div class="meter-row"><div class="m-label">Manifold／流體管路</div><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><div class="m-val">5.0</div></div>
+    <div class="meter-row"><div class="m-label">液冷板／金屬結構件</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="m-val">4.0</div></div>
+    <div class="meter-row"><div class="m-label">液冷快接頭（UQD）</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1.0</div></div>
+    <div class="meter-row"><div class="m-label">價格競爭壓力</div><div class="meter-track"><div class="meter-fill" style="width:90%"></div></div><div class="m-val">4.5</div></div>
+    <p class="note" style="margin-top:8px">評分邏輯：在我方目標品項（管路／Manifold）已量產且深度綁定我方目標客戶（奇宏、雙鴻體系）——系列首個 5.0 分；冷板側由聯益補位 4.0；快接頭非其領域。</p>
+  </div>
+
+  <div class="callout">
+    <div class="t">核心結論</div>
+    卓暉＋聯益就是<b>「我方想成為的角色」的現任者</b>——它們用事實證明：奇鋐、雙鴻確實把管路、波紋管、Manifold、水冷頭外包，量體年化近 3 億、淨利率 23%。正面翻搶其現有份額最難（對賭期戰意最高）；我方勝負手在<b>台系客戶「必須」分散的兩個理由：①單一供應商集中風險 ②北美終端的非紅供應鏈要求</b>。以「第二供應源＋非陸產地」定位切入，是繞開正面價格戰的唯一好路。
+  </div>
+
+  <h3>建議行動</h3>
+  <div class="card">
+    <table>
+      <tr><th style="width:150px">方向</th><th>建議</th></tr>
+      <tr><td>切入品項</td><td>對標卓暉品類清單（管路組件、波紋管、Manifold、水冷頭）逐項評估我方沖壓／加工可承接度；優先選<b>出口北美機種的料號</b>（非紅需求最剛性）與<b>不鏽鋼波紋管等高工藝門檻件</b></td></tr>
+      <tr><td>定位</td><td>不打「取代者」打「<b>第二供應源</b>」：向奇鋐／雙鴻訴求 80% 集中度的供應風險與地緣風險，爭取 dual-source 配額（哪怕先 10–20%）</td></tr>
+      <tr><td>能力補強</td><td>管路件核心工藝：彎管／端面成形、釺焊、氣密氦檢、內壁潔淨度（離子污染管控）；波紋管液壓成形是差異化門檻，值得優先建置或外部合作</td></tr>
+      <tr><td>對標指標</td><td>以其 23.4% 淨利率反推：此品類容得下台灣成本結構——報價不必殺到大陸價，用產地與穩定性支撐溢價</td></tr>
+      <tr><td>監測項目</td><td>① 金富整合後的擴產公告與新基地 ② 業績承諾達成度（2026 ≥1.1 億）——跳票＝其客戶關係鬆動的訊號 ③ 是否向快接頭／CDU 品類延伸 ④ 奇宏／雙鴻是否公開徵求二供（我方商機窗口）</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= 資料來源 ================= -->
+<footer>
+  <b>資料來源</b>（檢索日期 2026-07-24）：
+  <ul style="padding-left:18px; margin-top:6px">
+    <li><a href="http://static.cninfo.com.cn/finalpage/2026-03-14/1225009981.PDF">金富科技：購買資產暨關聯交易公告（巨潮資訊，2026-03-14）</a>（卓暉／聯益成立時間、股權、產品、2024 與 2025 前 10 月財務、估值與增值率、業績承諾、客戶奇宏電子／寶德科技／雙鴻電子、廠址）</li>
+    <li><a href="https://m.163.com/dy/article/KL1MSIAQ0512B07B.html">網易財經：金富科技擬收購卓暉金屬和聯益熱能各 51% 股權</a>（產品線、頭部客戶供應商定位）</li>
+    <li><a href="https://caifuhao.eastmoney.com/news/20260511005910057568670">東方財富財富號：5.7 億收購兩公司切入液冷賽道</a>（交易金額、對賭、北美終端供應鏈、金富市值）</li>
+    <li><a href="https://finance.cnr.cn/ycbd/20260410/t20260410_527580571.shtml">央廣財經：5.71 億戰略併購落地</a>（交易落地時間、液冷雙主業戰略、市場空間）</li>
+    <li><a href="https://www.sohu.com/a/984535975_100053070">搜狐財經：金富科技跨界收購液冷散熱企業</a>（實控人業績承諾兜底）</li>
+    <li><a href="https://finance.sina.com.cn/stock/aiassist/ydfx/2026-03-18/doc-inhrknau1621493.shtml">新浪財經：金富科技 2026-03-18 漲停分析</a>（市場反應）</li>
+  </ul>
+  <p style="margin-top:10px">備註：<sup class="est">＊</sup>2026 淨利為收購案業績承諾（兩標的合併口徑，非實績）；卓暉為非上市公司，無公開現金流／應收／員工數，資料等級低於上市公司；「寶德科技」具體主體（伺服器廠或其他）建議人脈確認；使用者原記錄之「東莞」與工商登記地「佛山三水」不符，請內部更正並確認是否另有東莞據點。本報告僅供內部策略參考。</p>
+</footer>
+
+</div>
+</body>
+</html>
