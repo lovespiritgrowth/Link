@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CETY (NASDAQ) — 潛在投資方盡職調查</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;
+    --page: #f9f9f7;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;
+    --series-1-track: #cde2fb;
+    --seq-250: #86b6ef;
+    --neg: #e34948;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --accent-wash: rgba(42,120,214,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-1-track: #0d366b;
+      --seq-250: #1c5cab;
+      --neg: #e66767;
+      --good-text: #0ca30c;
+      --accent-wash: rgba(57,135,229,0.12);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif; background: var(--page); color: var(--text-primary); line-height: 1.65; font-size: 15px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 64px; }
+  .report-tag { font-size:12px; letter-spacing:.12em; color:var(--text-muted); text-transform:uppercase; }
+  header.hero { padding: 8px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing:.01em; margin-top: 4px; }
+  h1 .code { font-weight: 400; font-size: 18px; color: var(--text-secondary); margin-left: 8px; }
+  .hero-sub { color: var(--text-secondary); margin-top: 6px; max-width: 72ch; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+  .badge { font-size:12.5px; padding:3px 10px; border-radius:99px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-secondary); }
+  .badge.threat { border-color: var(--critical); color: var(--critical); font-weight:600; }
+  .meta-line { margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+  section { margin-bottom: 36px; }
+  h2 { font-size: 20px; font-weight: 700; padding-bottom: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h2 .num { color: var(--series-1); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 18px 0 8px; }
+  p.body { color: var(--text-primary); margin-bottom: 10px; max-width: 80ch; }
+  .note { font-size: 12.5px; color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  @media (max-width: 760px){ .grid-2{grid-template-columns:1fr;} }
+  .tiles { display:grid; grid-template-columns: repeat(6,1fr); gap:12px; }
+  @media (max-width: 900px){ .tiles{grid-template-columns: repeat(3,1fr);} }
+  @media (max-width: 560px){ .tiles{grid-template-columns: repeat(2,1fr);} }
+  .tile { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:14px 14px 12px; }
+  .tile .label { font-size:12px; color:var(--text-muted); }
+  .tile .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .tile .value.neg { color: var(--critical); }
+  .tile .delta { font-size:12px; margin-top:2px; }
+  .delta.up { color: var(--good-text); }
+  .delta.down { color: var(--critical); }
+  .delta.flat { color: var(--text-muted); }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-weight:600; color:var(--text-secondary); font-size:12.5px; padding:8px 10px; border-bottom:1px solid var(--baseline); white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:top; }
+  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom:none; }
+  .timeline { list-style:none; position:relative; padding-left:20px; }
+  .timeline::before { content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--grid); border-radius:1px; }
+  .timeline li { position:relative; padding:0 0 14px 12px; }
+  .timeline li::before { content:""; position:absolute; left:-20px; top:7px; width:8px; height:8px; border-radius:50%; background:var(--series-1); box-shadow: 0 0 0 2px var(--surface-1); }
+  .timeline .yr { font-weight:700; font-variant-numeric: tabular-nums; margin-right:8px; }
+  .timeline .desc { color:var(--text-secondary); }
+  .chart { margin-top: 10px; }
+  .chart-title { font-size:13.5px; font-weight:600; }
+  .chart-sub { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .cols { display:flex; align-items:flex-end; gap:26px; height:150px; padding:0 6px; border-bottom:1px solid var(--baseline); }
+  .col-g { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
+  .col-bar { width:100%; max-width:44px; background:var(--series-1); border-radius:4px 4px 0 0; transition: opacity .15s; }
+  .col-g:hover .col-bar { opacity:.82; }
+  .col-val { font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--text-primary); margin-bottom:4px; }
+  .col-x { display:flex; gap:26px; padding:6px 6px 0; }
+  .col-x div { flex:1; text-align:center; font-size:12px; color:var(--text-muted); }
+  .zchart { position:relative; height:150px; padding:0 6px; }
+  .zchart .zero { position:absolute; left:0; right:0; top:8%; border-top:1px solid var(--baseline); }
+  .zchart .zero-label { position:absolute; right:0; top:calc(8% - 18px); font-size:11px; color:var(--text-muted); }
+  .zcols { display:flex; gap:26px; height:100%; }
+  .zcol { flex:1; position:relative; }
+  .zbar { position:absolute; left:50%; transform:translateX(-50%); width:100%; max-width:44px; transition:opacity .15s; }
+  .zcol:hover .zbar { opacity:.82; }
+  .zbar.negb { background:var(--neg); top:8%; border-radius:0 0 4px 4px; }
+  .zval { position:absolute; left:50%; transform:translateX(-50%); font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .swot { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .swot{grid-template-columns:1fr;} }
+  .swot .card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+  .swot .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .swot ul { padding-left:18px; }
+  .swot li { margin-bottom:8px; color:var(--text-primary); }
+  .callout { background: var(--accent-wash); border:1px solid var(--border); border-left:3px solid var(--series-1); border-radius:8px; padding:14px 16px; margin:14px 0; }
+  .callout.warn { border-left-color: var(--critical); background: rgba(208,59,59,0.06); }
+  .callout .t { font-weight:700; font-size:13.5px; margin-bottom:4px; }
+  .meter-row { display:grid; grid-template-columns: 190px 1fr 56px; gap:12px; align-items:center; padding:6px 0; }
+  .meter-row .m-label { font-size:13.5px; color:var(--text-secondary); text-align:right; }
+  .meter-track { height:10px; border-radius:5px; background:var(--series-1-track); position:relative; overflow:hidden; }
+  .meter-fill { position:absolute; left:0; top:0; bottom:0; background:var(--series-1); border-radius:5px; }
+  .meter-row .m-val { font-size:13px; font-variant-numeric:tabular-nums; color:var(--text-primary); }
+  footer { border-top:1px solid var(--border); padding-top:16px; font-size:12.5px; color:var(--text-muted); }
+  footer a { color: var(--series-1); text-decoration:none; word-break:break-all; }
+  footer li { margin-bottom:4px; }
+  sup.est { color: var(--text-muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ================= 頁首 ================= -->
+<header class="hero">
+  <div class="report-tag">特別篇 · 潛在投資方盡職調查（非競爭者系列）</div>
+  <h1>Clean Energy Technologies<span class="code">NASDAQ Capital Market: CETY</span></h1>
+  <div class="hero-sub">美國加州爾灣（Irvine）的微型股（microcap）清潔能源公司：餘熱回收 ORC 發電（源自 GE 的 Clean Cycle 技術）、廢棄物轉能源、及透過香港子公司在中國做天然氣／LNG 貿易。<b>本身沒有液冷或散熱產品</b>；其「AI」佈局是資料中心的<b>能源側</b>（微電網、餘熱回收）與對港股公司 AI 算力中心題材的小額投資。現金僅約 10 萬美元、持續經營疑慮（going concern）、連年虧損——<b>以「投資我方」而言，其自有資金能力接近於零，須先弄清楚錢從哪裡來、以及它真正想要什麼。</b></div>
+  <div class="badges">
+    <span class="badge threat">投資方資金實力：極弱（多項紅旗）</span>
+    <span class="badge">液冷背景：無</span>
+    <span class="badge">CEO：Kam Mahdi</span>
+    <span class="badge">市值約 US$950 萬（2026-06）</span>
+    <span class="badge">員工約 15 人</span>
+  </div>
+  <div class="meta-line">報告日期 2026-07-28 · 財務數據截至 FY2025 10-K 與 2026Q1 10-Q · 幣別：美元（本篇例外）· 標註 <sup class="est">＊</sup> 者為未經核實或推斷值</div>
+</header>
+
+<!-- ================= 0. 關鍵數據 ================= -->
+<section>
+  <div class="tiles">
+    <div class="tile"><div class="label">FY2025 營收</div><div class="value">$2.16M</div><div class="delta down">▼ −10.8%</div></div>
+    <div class="tile"><div class="label">FY2025 淨損</div><div class="value neg">−$6.81M</div><div class="delta down">虧損較前年 −$4.55M 擴大</div></div>
+    <div class="tile"><div class="label">現金（2026-03-31）</div><div class="value neg">$104,744</div><div class="delta down">約當一個月營運開銷等級</div></div>
+    <div class="tile"><div class="label">總市值（2026-06）</div><div class="value">≈$9.5M</div><div class="delta flat">股價 $0.78，52 週 $0.46–5.01</div></div>
+    <div class="tile"><div class="label">累計虧損</div><div class="value neg">$35.3M</div><div class="delta flat">股東權益僅 $6.2M、營運資金 $26 萬</div></div>
+    <div class="tile"><div class="label">員工</div><div class="value">15 人</div><div class="delta flat">在外流通股 1,217 萬股</div></div>
+  </div>
+</section>
+
+<!-- ================= 1. 公司概況 ================= -->
+<section>
+  <h2><span class="num">1</span>公司概況與沿革</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">基本資料</h3>
+      <table>
+        <tr><td style="width:110px;color:var(--text-muted)">全名</td><td>Clean Energy Technologies, Inc.（內華達州註冊）</td></tr>
+        <tr><td style="color:var(--text-muted)">總部</td><td>1340 Reynolds Ave #120, Irvine, California</td></tr>
+        <tr><td style="color:var(--text-muted)">掛牌</td><td>NASDAQ Capital Market，代號 CETY；1993 年創立（前身 Probe Manufacturing 電子代工）</td></tr>
+        <tr><td style="color:var(--text-muted)">CEO</td><td>Kam Mahdi</td></tr>
+        <tr><td style="color:var(--text-muted)">業務分部</td><td>① Heat Recovery Solutions＋CETY Europe（ORC 餘熱發電）② CETY Renewables（HTAP 熱裂解廢轉能）③ 工程與製造 ④ CETY HK（中國天然氣／LNG 貿易）</td></tr>
+        <tr><td style="color:var(--text-muted)">中國關聯</td><td>累計匯入中國子公司 $2.67M；與深圳燃氣合資案已擱置；受 HFCAA 審計與資本管制風險條款約束</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">發展時間軸</h3>
+      <ul class="timeline">
+        <li><span class="yr">1993</span><span class="desc">前身 Probe Manufacturing 創立（電子製造服務）</span></li>
+        <li><span class="yr">2015</span><span class="desc">向 GE 收購 Clean Cycle ORC 餘熱發電技術，轉型更名 Clean Energy Technologies<sup class="est">＊</sup></span></li>
+        <li><span class="yr">2018–</span><span class="desc">設 CETY HK 切入中國天然氣／LNG 貿易</span></li>
+        <li><span class="yr">2022</span><span class="desc">升板掛牌 NASDAQ Capital Market<sup class="est">＊</sup></span></li>
+        <li><span class="yr">2024</span><span class="desc">與 Metis Power 合作，把微電網方案（發電＋儲能＋餘熱回收＋EMS，20MW 級）推向 AI 資料中心與加密礦場；與礦企 True North 簽 MoU</span></li>
+        <li><span class="yr">2025</span><span class="desc">1:15 反向分割保住 $1 掛牌門檻；10-K 遲交收到 Nasdaq 缺失通知；財報重編（10-K/A）；更換審計師；FY2025 淨損擴大至 $6.8M，審計師出具持續經營疑慮</span></li>
+        <li><span class="yr">2026</span><span class="desc">2 月公告購入港股中國瑞風新能源（00527.HK）可轉債 $1.5M<sup class="est">＊</sup>——瑞風子公司宣布於河北張家口投資約 US$34 億建 AI 算力中心（非約束性框架協議，目標 2028 投運）</span></li>
+      </ul>
+    </div>
+  </div>
+  <p class="body" style="margin-top:14px">解讀：<b>「小殼多題材」的微型股</b>——30 年間從電子代工 → GE 餘熱技術 → 中國燃氣貿易 → 廢轉能 → AI 資料中心能源，每一波熱點都有對應的新聞稿，但營收始終停在 $2M 上下、且連年虧損。其「AI 佈局」以 MoU、非約束性框架與小額可轉債為主，<b>實質交付紀錄有限</b>。</p>
+</section>
+
+<!-- ================= 2. 業務與財務 ================= -->
+<section>
+  <h2><span class="num">2</span>業務結構與財務體質</h2>
+  <div class="grid-2">
+    <div class="card">
+      <div class="chart-title">營業收入（百萬美元）</div>
+      <div class="chart-sub">FY 截至 12 月</div>
+      <div class="cols">
+        <div class="col-g" title="FY2024：$2.42M"><div class="col-val">2.42</div><div class="col-bar" style="height:100%"></div></div>
+        <div class="col-g" title="FY2025：$2.16M，−10.8%"><div class="col-val">2.16</div><div class="col-bar" style="height:89%"></div></div>
+      </div>
+      <div class="col-x"><div>2024</div><div>2025</div></div>
+      <p class="note" style="margin-top:8px">分部：餘熱回收成長、天然氣持平、廢轉能因案件時程下滑；另有 VRG 廢轉能專案 $2.43M 應收款未收。</p>
+    </div>
+    <div class="card">
+      <div class="chart-title">淨損（百萬美元）</div>
+      <div class="chart-sub">紅色＝虧損</div>
+      <div class="zchart">
+        <div class="zero"></div><div class="zero-label">0</div>
+        <div class="zcols">
+          <div class="zcol" title="FY2024：−$4.55M"><div class="zbar negb" style="height:57%"></div><div class="zval" style="top:69%">−4.55</div></div>
+          <div class="zcol" title="FY2025：−$6.81M"><div class="zbar negb" style="height:85%"></div><div class="zval" style="top:96%">−6.81</div></div>
+        </div>
+      </div>
+      <div class="col-x"><div>2024</div><div>2025</div></div>
+      <p class="note" style="margin-top:8px">虧損是營收的 3 倍以上；EPS −$1.55。</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3 style="margin-top:0">紅旗清單（合規與誠信紀錄）</h3>
+    <table>
+      <tr><th>項目</th><th>事實</th><th>意涵</th></tr>
+      <tr><td>持續經營疑慮</td><td>審計師於 FY2025 10-K 出具 going concern 警語</td><td>官方認證的「自身難保」</td></tr>
+      <tr><td>現金水位</td><td>2026-03-31 帳上現金 $104,744</td><td><b>不具備對外投資的自有資金能力</b></td></tr>
+      <tr><td>財報重編</td><td>以 10-K/A 重編年報數字</td><td>財務內控可信度打折</td></tr>
+      <tr><td>更換審計師</td><td>2025–2026 間更換審計機構（8-K）</td><td>需查明更換原因與前任意見</td></tr>
+      <tr><td>掛牌危機</td><td>$1 面額不足 → 1:15 反向分割；10-K 遲交收 Nasdaq 缺失通知；下市將觸發可轉債違約條款</td><td>掛牌地位脆弱，且資本結構被可轉債綁住</td></tr>
+      <tr><td>股本稀釋</td><td>52 週股價 $0.46–5.01、劇烈波動；歷史上依賴增發與可轉債融資</td><td>若以「股票」作投資對價，價值極不穩定</td></tr>
+      <tr><td>中國資金流</td><td>$2.67M 匯入中國子公司、瑞風可轉債、深燃合資擱置</td><td>資金往來橫跨美中港，來源與去向需 KYC</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= 3. AI／液冷敘事檢視 ================= -->
+<section>
+  <h2><span class="num">3</span>「AI／液冷」敘事檢視（它到底有什麼）</h2>
+  <div class="card">
+    <table>
+      <tr><th style="width:170px">宣稱</th><th>實質</th></tr>
+      <tr><td>AI 資料中心佈局</td><td><b>能源側</b>而非散熱側：微電網（發電＋儲能＋EMS）＋ORC 餘熱回收；與 Metis Power 合作、與礦企 True North 簽 MoU——皆為合作意向，未見大型交付實績</td></tr>
+      <tr><td>張家口 US$34 億 AI 算力中心</td><td>是<b>港股瑞風新能源（00527.HK）子公司的非約束性框架協議</b>；CETY 僅購入瑞風 $1.5M 可轉債<sup class="est">＊</sup>，屬小額財務投資＋新聞稿連結，非 CETY 的專案</td></tr>
+      <tr><td>液冷／散熱能力</td><td><b>無</b>。無液冷產品、專利或客戶紀錄；與奇鋐、雙鴻供應鏈無任何可查關聯</td></tr>
+      <tr><td>可能的互補點</td><td>ORC 餘熱回收理論上可接資料中心廢熱再利用（液冷回水溫度較高、與 ORC 有技術契合的敘事空間）；北美市場人脈與 NASDAQ 掛牌地位</td></tr>
+    </table>
+  </div>
+  <div class="callout warn" style="margin-top:14px">
+    <div class="t">關鍵判讀</div>
+    CETY 找上門「投資我方」最合理的解釋<b>不是它有錢</b>（它沒有），而是：①想把「台灣液冷供應鏈」寫進它的股票故事，拉抬市值後再融資；②想以增發股票／可轉債作為對價入股我方；③想撮合第三方（美、港、中）資金，自己收中介或股權價差；④更積極的版本——探詢<b>反向併購（借殼上 NASDAQ）</b>的可能性，把我方裝進它的上市殼。四種情境對我方的價值與風險截然不同，第一步是逼清楚「資金來源與交易結構」。
+  </div>
+</section>
+
+<!-- ================= 4. SWOT（作為合作對象） ================= -->
+<section>
+  <h2><span class="num">4</span>作為合作／投資對象的 SWOT</h2>
+  <div class="swot">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--good)"></span>優勢 Strengths</h3>
+      <ul>
+        <li><b>NASDAQ 掛牌地位</b>——對想接觸美國資本市場的我方是唯一實質資產</li>
+        <li>GE 系 ORC 餘熱回收技術與 30 年製造背景，資料中心「廢熱再利用」敘事可與液冷互補</li>
+        <li>北美（加州）據點與政商人脈（曾接待拉脫維亞總統經貿團等）</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--critical)"></span>劣勢 Weaknesses</h3>
+      <ul>
+        <li><b>現金 $10 萬、going concern、累虧 $35M</b>——無自有投資能力</li>
+        <li>財報重編＋換審計師＋遲交 10-K——治理紀錄多重紅旗</li>
+        <li>營收 $2M 的 15 人公司，無液冷技術與客戶</li>
+        <li>掛牌地位脆弱（反向分割保殼），股票對價風險極高</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--series-1)"></span>機會 Opportunities（對我方）</h3>
+      <ul>
+        <li>若我方有美股規劃，其殼與掛牌經驗<b>理論上</b>有利用價值（需徹查或有負債與訴訟）</li>
+        <li>經其引介接觸北美資料中心能源側案源、或瑞風系港中資金<sup class="est">＊</sup></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--warning)"></span>威脅 Threats（對我方）</h3>
+      <ul>
+        <li><b>被當題材消費</b>：簽 MoU 後成為其拉抬股價的新聞稿素材，我方商譽被綁上投機股</li>
+        <li>股票對價 → 稀釋與跌價風險；可轉債違約條款連動下市風險</li>
+        <li>其美中港資金結構可能給我方帶來<b>非紅供應鏈敘事的反效果</b>（正在對奇鋐雙鴻打「非紅」牌的我方尤須避嫌）</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5. 盡調結論 ================= -->
+<section>
+  <h2><span class="num">5</span>盡調結論與建議</h2>
+
+  <div class="card">
+    <h3 style="margin-top:0">評估（1–5，愈高愈好；風險項愈高愈差）</h3>
+    <div class="meter-row"><div class="m-label">自有資金實力</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1.0</div></div>
+    <div class="meter-row"><div class="m-label">財報與治理可信度</div><div class="meter-track"><div class="meter-fill" style="width:30%"></div></div><div class="m-val">1.5</div></div>
+    <div class="meter-row"><div class="m-label">AI／液冷實質能力</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1.0</div></div>
+    <div class="meter-row"><div class="m-label">對我方潛在利用價值</div><div class="meter-track"><div class="meter-fill" style="width:50%"></div></div><div class="m-val">2.5</div></div>
+    <div class="meter-row"><div class="m-label">整體合作風險（愈高愈差）</div><div class="meter-track"><div class="meter-fill" style="width:90%"></div></div><div class="m-val">4.5</div></div>
+    <p class="note" style="margin-top:8px">評分邏輯：現金與獲利數據直接否定其「出資能力」；殼價值與北美人脈是僅存的可談項目。</p>
+  </div>
+
+  <div class="callout">
+    <div class="t">核心結論</div>
+    CETY <b>不是能給錢的投資人</b>——它更可能是想「借我方的實業，補它的故事」。若對方主動接觸，不必立即拒絕，但應把主導權反轉：<b>把它當作被盡調方而非投資方</b>。任何合作以「現金先行、不收其股票對價、不為其發新聞稿背書」為底線；若其真實意圖是撮合第三方資金或反向併購，則另案評估、並要求揭露資金最終來源（特別留意中資成分對我方「非紅供應鏈」定位的殺傷力）。
+  </div>
+
+  <h3>建議行動</h3>
+  <div class="card">
+    <table>
+      <tr><th style="width:150px">方向</th><th>建議</th></tr>
+      <tr><td>會前必問</td><td>①資金來源與規模的書面證明（bank statement／backer 名單）②擬議交易結構（現金？股票？可轉債？）③為何選中我方、想取得什麼權利（股權比例、董事席次、代理權、新聞稿權）</td></tr>
+      <tr><td>保護措施</td><td>NDA 加註<b>禁止單方發布新聞稿</b>條款（微型股最常見的消費方式）；任何 MoU 註明非約束性且不得公開</td></tr>
+      <tr><td>可談的合作</td><td>若限於業務層面：北美資料中心能源側案源互介、ORC 廢熱回收與液冷回水的技術對接研究——小額、無股權、可隨時退出</td></tr>
+      <tr><td>不可談的紅線</td><td>收 CETY 股票／可轉債作對價；為其市值管理站台；在其資金來源未 KYC 前簽任何排他條款</td></tr>
+      <tr><td>延伸查證</td><td>①SEC EDGAR 全套 8-K／訴訟與或有負債 ②可轉債持有人身分與違約條款 ③瑞風（00527.HK）與其中國資金網絡 ④Kam Mahdi 及董事會成員過往微型股紀錄</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= 資料來源 ================= -->
+<footer>
+  <b>資料來源</b>（檢索日期 2026-07-28）：
+  <ul style="padding-left:18px; margin-top:6px">
+    <li><a href="https://www.tradingview.com/news/tradingview:9a130077847e6:0-clean-energy-technologies-inc-fy-2025-revenue-2-16m-eps-1-55-10-k-summary/">TradingView：FY2025 10-K 摘要</a>（營收 $2.16M、EPS −$1.55、分部、VRG 應收）</li>
+    <li><a href="https://www.stocktitan.net/sec-filings/CETY/10-k-clean-energy-technologies-inc-files-annual-report-0b91a7aea5b5.html">StockTitan：FY2025 10-K（going concern）</a>（淨損 $6.8M、累虧 $35.3M、營運資金、Nasdaq 合規史、中國資金流、四大分部）</li>
+    <li><a href="https://www.stocktitan.net/sec-filings/CETY/10-k-a-clean-energy-technologies-inc-amends-annual-report-4844211021d5.html">StockTitan：10-K/A 重編與下市風險</a>；<a href="https://www.stocktitan.net/sec-filings/CETY/8-k-clean-energy-technologies-inc-reports-material-event-314dcb93b3a2.html">8-K 更換審計師</a>；<a href="https://www.stocktitan.net/sec-filings/CETY/8-k-clean-energy-technologies-inc-reports-material-event-4a2ae3878471.html">8-K Nasdaq 遲交 10-K 警告</a></li>
+    <li><a href="https://www.minichart.com.sg/2026/07/27/clean-energy-technologies-inc-cety-2026-q1-10-q-financial-statements-nasdaq-listing-and-company-overview/">2026Q1 10-Q 摘要</a>（現金 $104,744、總部 Irvine、五分部、流通股 1,217 萬）</li>
+    <li><a href="https://stockanalysis.com/stocks/cety/">StockAnalysis</a>（股價 $0.78、市值 $9.49M、52 週區間、員工 15、1993 年創立）</li>
+    <li><a href="https://cetyinc.com/news/press-release/clean-energy-technologies-inc-updates-on-investment-in-hong-kong-listed-company-announcing-launch-of-ai-infrastructure-project/">CETY 官網新聞稿：投資中國瑞風（00527.HK）與張家口 AI 算力中心</a>；<a href="https://www.stocktitan.net/news/CETY/cety-enters-agreement-to-purchase-portion-of-convertible-bond-of-84hopnneo470.html">StockTitan：$1.5M 可轉債購買協議</a></li>
+    <li><a href="https://www.datacenterdynamics.com/en/news/clean-energy-technologies-expands-microgrid-solution-into-crypto-and-ai-data-center-sectors/">DCD：微電網進軍加密／AI 資料中心</a>；<a href="https://www.globenewswire.com/fr/news-release/2024/11/21/2985231/0/en/Clean-Energy-Technologies-Inc-Announces-a-Strategic-Partnership-with-METIS-Power-to-Provide-Advanced-Microgrid-Solutions-for-AI-Data-Centers-and-Cryptocurrency-Miners.html">GlobeNewswire：Metis Power 合作</a></li>
+    <li><a href="https://cetyinc.com/investors/">CETY 官網投資人頁</a>（CEO Kam Mahdi、公司定位）</li>
+  </ul>
+  <p style="margin-top:10px">備註：<sup class="est">＊</sup>2015 年 GE 技術收購與 2022 年升板年份取自公開報導脈絡、未逐一核對原始文件；瑞風可轉債 $1.5M 為公告金額、實際執行狀況未查證；本報告非投資建議，僅供內部策略參考；正式洽談前建議由律師／會計師調閱 SEC EDGAR 原始文件完成正式盡調。</p>
+</footer>
+
+</div>
+</body>
+</html>
