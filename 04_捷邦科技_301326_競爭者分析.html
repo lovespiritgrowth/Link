@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>捷邦科技 (301326) — 大陸液冷供應商競爭者分析</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;
+    --page: #f9f9f7;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;
+    --series-1-track: #cde2fb;
+    --seq-250: #86b6ef;
+    --neg: #e34948;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --accent-wash: rgba(42,120,214,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-1-track: #0d366b;
+      --seq-250: #1c5cab;
+      --neg: #e66767;
+      --good-text: #0ca30c;
+      --accent-wash: rgba(57,135,229,0.12);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif; background: var(--page); color: var(--text-primary); line-height: 1.65; font-size: 15px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 64px; }
+  .report-tag { font-size:12px; letter-spacing:.12em; color:var(--text-muted); text-transform:uppercase; }
+  header.hero { padding: 8px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing:.01em; margin-top: 4px; }
+  h1 .code { font-weight: 400; font-size: 18px; color: var(--text-secondary); margin-left: 8px; }
+  .hero-sub { color: var(--text-secondary); margin-top: 6px; max-width: 72ch; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+  .badge { font-size:12.5px; padding:3px 10px; border-radius:99px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-secondary); }
+  .badge.threat { border-color: var(--warning); color: #9a6b00; font-weight:600; }
+  @media (prefers-color-scheme: dark) { .badge.threat { color: var(--warning); } }
+  .meta-line { margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+  section { margin-bottom: 36px; }
+  h2 { font-size: 20px; font-weight: 700; padding-bottom: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h2 .num { color: var(--series-1); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 18px 0 8px; }
+  p.body { color: var(--text-primary); margin-bottom: 10px; max-width: 80ch; }
+  .note { font-size: 12.5px; color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  @media (max-width: 760px){ .grid-2{grid-template-columns:1fr;} }
+  .tiles { display:grid; grid-template-columns: repeat(6,1fr); gap:12px; }
+  @media (max-width: 900px){ .tiles{grid-template-columns: repeat(3,1fr);} }
+  @media (max-width: 560px){ .tiles{grid-template-columns: repeat(2,1fr);} }
+  .tile { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:14px 14px 12px; }
+  .tile .label { font-size:12px; color:var(--text-muted); }
+  .tile .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .tile .value.neg { color: var(--critical); }
+  .tile .delta { font-size:12px; margin-top:2px; }
+  .delta.up { color: var(--good-text); }
+  .delta.down { color: var(--critical); }
+  .delta.flat { color: var(--text-muted); }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-weight:600; color:var(--text-secondary); font-size:12.5px; padding:8px 10px; border-bottom:1px solid var(--baseline); white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:top; }
+  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom:none; }
+  .timeline { list-style:none; position:relative; padding-left:20px; }
+  .timeline::before { content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--grid); border-radius:1px; }
+  .timeline li { position:relative; padding:0 0 14px 12px; }
+  .timeline li::before { content:""; position:absolute; left:-20px; top:7px; width:8px; height:8px; border-radius:50%; background:var(--series-1); box-shadow: 0 0 0 2px var(--surface-1); }
+  .timeline .yr { font-weight:700; font-variant-numeric: tabular-nums; margin-right:8px; }
+  .timeline .desc { color:var(--text-secondary); }
+  .chart { margin-top: 10px; }
+  .chart-title { font-size:13.5px; font-weight:600; }
+  .chart-sub { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .cols { display:flex; align-items:flex-end; gap:26px; height:170px; padding:0 6px; border-bottom:1px solid var(--baseline); }
+  .col-g { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
+  .col-bar { width:100%; max-width:44px; background:var(--series-1); border-radius:4px 4px 0 0; transition: opacity .15s; }
+  .col-g:hover .col-bar { opacity:.82; }
+  .col-val { font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--text-primary); margin-bottom:4px; }
+  .col-x { display:flex; gap:26px; padding:6px 6px 0; }
+  .col-x div { flex:1; text-align:center; font-size:12px; color:var(--text-muted); }
+  /* 跨零軸柱狀圖（淨利全虧損） */
+  .zchart { position:relative; height:170px; padding:0 6px; }
+  .zchart .zero { position:absolute; left:0; right:0; top:8%; border-top:1px solid var(--baseline); }
+  .zchart .zero-label { position:absolute; right:0; top:calc(8% - 18px); font-size:11px; color:var(--text-muted); }
+  .zcols { display:flex; gap:26px; height:100%; }
+  .zcol { flex:1; position:relative; }
+  .zbar { position:absolute; left:50%; transform:translateX(-50%); width:100%; max-width:44px; transition:opacity .15s; }
+  .zcol:hover .zbar { opacity:.82; }
+  .zbar.negb { background:var(--neg); top:8%; border-radius:0 0 4px 4px; }
+  .zval { position:absolute; left:50%; transform:translateX(-50%); font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .swot { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .swot{grid-template-columns:1fr;} }
+  .swot .card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+  .swot .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .swot ul { padding-left:18px; }
+  .swot li { margin-bottom:8px; color:var(--text-primary); }
+  .callout { background: var(--accent-wash); border:1px solid var(--border); border-left:3px solid var(--series-1); border-radius:8px; padding:14px 16px; margin:14px 0; }
+  .callout.warn { border-left-color: var(--critical); background: rgba(208,59,59,0.06); }
+  .callout .t { font-weight:700; font-size:13.5px; margin-bottom:4px; }
+  .meter-row { display:grid; grid-template-columns: 170px 1fr 56px; gap:12px; align-items:center; padding:6px 0; }
+  .meter-row .m-label { font-size:13.5px; color:var(--text-secondary); text-align:right; }
+  .meter-track { height:10px; border-radius:5px; background:var(--series-1-track); position:relative; overflow:hidden; }
+  .meter-fill { position:absolute; left:0; top:0; bottom:0; background:var(--series-1); border-radius:5px; }
+  .meter-row .m-val { font-size:13px; font-variant-numeric:tabular-nums; color:var(--text-primary); }
+  footer { border-top:1px solid var(--border); padding-top:16px; font-size:12.5px; color:var(--text-muted); }
+  footer a { color: var(--series-1); text-decoration:none; word-break:break-all; }
+  footer li { margin-bottom:4px; }
+  sup.est { color: var(--text-muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ================= 頁首 ================= -->
+<header class="hero">
+  <div class="report-tag">大陸液冷供應商競爭者分析 · 04 / 05</div>
+  <h1>捷邦科技<span class="code">深交所創業板 301326</span></h1>
+  <div class="hero-sub">捷邦精密科技股份有限公司（辦公地東莞松山湖）——蘋果鏈精密功能件廠，連虧三年後把翻身賭注押在熱管理：2024 年收購賽諾高德（VC 均熱板／蝕刻）、2026 年設 CDU 合資公司捷邦數能、並擬收購<b>東莞恒鉅電子 55% 股權——恒鉅已持有奇鋐科技（AVC）、泰碩電子等台系散熱廠的供應商代碼，泰碩更是恒鉅股東</b>。公司明言目標是「切入 AVC、泰碩等台系液冷供應鏈」，另獲北美大客戶液冷散熱模組送樣資格、並開發 NVIDIA GB300 MLCP 技術。</div>
+  <div class="badges">
+    <span class="badge threat">液冷結構件賽道威脅度：中高（成形中，靠併購拼圖）</span>
+    <span class="badge">液冷營收貢獻：尚未成規模（併購未全數交割）</span>
+    <span class="badge">實控人：辛云峰、楊巍（捷邦控股 55.01%）</span>
+    <span class="badge">2022 年上市</span>
+    <span class="badge">連虧三年</span>
+  </div>
+  <div class="meta-line">報告日期 2026-07-28 · 財務數據截至 2025 年報、併購動態至 2026-07-13 調研 · 幣別：人民幣 · 標註 <sup class="est">＊</sup> 者為估算或未定案事項</div>
+</header>
+
+<!-- ================= 0. 關鍵數據 ================= -->
+<section>
+  <div class="tiles">
+    <div class="tile"><div class="label">2025 營收</div><div class="value">¥13.03億</div><div class="delta up">▲ +64.4%</div></div>
+    <div class="tile"><div class="label">2025 歸母淨利</div><div class="value neg">−¥0.47億</div><div class="delta down">虧損擴大 141%</div></div>
+    <div class="tile"><div class="label">連續虧損</div><div class="value">3 年</div><div class="delta down">2023–2025 累虧約 1.2 億</div></div>
+    <div class="tile"><div class="label">總資產</div><div class="value">¥27.26億</div><div class="delta up">▲ +52.9%（併購驅動）</div></div>
+    <div class="tile"><div class="label">總市值（2026-07）</div><div class="value">≈¥93億</div><div class="delta flat">虧損公司高市值＝液冷題材</div></div>
+    <div class="tile"><div class="label">熱管理併購投入</div><div class="value">&gt;¥6億</div><div class="delta flat">賽諾高德 4.08億＋恒鉅≤3.5億估值×55%<sup class="est">＊</sup></div></div>
+  </div>
+</section>
+
+<!-- ================= 1. 公司概況 ================= -->
+<section>
+  <h2><span class="num">1</span>公司概況與沿革</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">基本資料</h3>
+      <table>
+        <tr><td style="width:110px;color:var(--text-muted)">全名</td><td>捷邦精密科技股份有限公司</td></tr>
+        <tr><td style="color:var(--text-muted)">辦公地</td><td>廣東省東莞市松山湖園區（控股股東為深圳捷邦控股，持股 55.01%）</td></tr>
+        <tr><td style="color:var(--text-muted)">上市</td><td>2022 年深交所創業板（301326）；官網版權標示自 2007 年起營運<sup class="est">＊</sup></td></tr>
+        <tr><td style="color:var(--text-muted)">實控人</td><td>辛云峰、楊巍</td></tr>
+        <tr><td style="color:var(--text-muted)">本業</td><td>柔性複合精密功能件、金屬精密功能結構件（蘋果、亞馬遜、SONOS、META、Google 等終端）；碳納米管導電漿料（寧德時代、比亞迪）</td></tr>
+        <tr><td style="color:var(--text-muted)">熱管理版圖</td><td>賽諾高德（東莞，51%，VC 均熱板＋蝕刻）＋捷邦數能（65%，CDU／Manifold）＋恒鉅電子（東莞，擬 55%，審計評估中）</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">發展時間軸</h3>
+      <ul class="timeline">
+        <li><span class="yr">2022</span><span class="desc">創業板上市；蘋果鏈功能件為主業</span></li>
+        <li><span class="yr">2023</span><span class="desc">轉虧（−5,580 萬）：消費電子壓價＋新業務投入</span></li>
+        <li><span class="yr">2024</span><span class="desc">4.08 億收購東莞賽諾高德 51%（VC 均熱板、金屬蝕刻）——熱管理第一塊拼圖</span></li>
+        <li><span class="yr">2025</span><span class="desc">營收 +64.4% 至 13.03 億但虧損擴大；9 月獲<b>北美大客戶</b>液冷散熱模組臨時供應商代碼＋送樣資格（客戶保密）；開發 NVIDIA GB300 MLCP 技術<sup class="est">＊</sup></span></li>
+        <li><span class="yr">2026</span><span class="desc">與專家冉啟坤合資設捷邦數能（持 65%）攻 CDU／Manifold／SFN，年底樣機、6–12 個月量產；5 月公告擬以 ≤3.5 億估值收購恒鉅電子 55%（7 月調研：審計評估中，尚未交割）</span></li>
+      </ul>
+    </div>
+  </div>
+  <p class="body" style="margin-top:14px">解讀：<b>「本業失血、資本買路」的轉型型玩家</b>。蘋果鏈的品質體系與北美客戶關係是老本，液冷量產能力幾乎全靠外購拼圖：均熱板買賽諾高德、CDU 找專家合資、液冷板／快接頭／台系客戶關係買恒鉅。公司公開目標直白——兩年內做到國內 CDU 頭部、切入 AVC 與泰碩供應鏈。速度快、但根基是拼裝的。</p>
+</section>
+
+<!-- ================= 2. 業務結構 ================= -->
+<section>
+  <h2><span class="num">2</span>業務結構與產品線</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">現有兩大板塊＋熱管理拼圖</h3>
+      <table>
+        <tr><th>板塊</th><th>內容／客戶</th></tr>
+        <tr><td>精密製造</td><td>精密功能件、結構件及 VC 均熱板部件——智能手機、筆電、平板（蘋果、亞馬遜、SONOS、META、Google）</td></tr>
+        <tr><td>新材料</td><td>碳納米管導電漿料、高比表炭黑——鋰電池（寧德時代、比亞迪）</td></tr>
+        <tr><td style="background:var(--accent-wash)"><b>熱管理／液冷（成形中）</b></td><td style="background:var(--accent-wash)">賽諾高德：VC 均熱板、蝕刻｜捷邦數能：機架式／集中式 CDU、Manifold、SFN｜恒鉅電子<sup class="est">＊</sup>：風冷模組＋<b>液冷板、分水管（Manifold）、液冷接頭</b>及組裝測試量產能力</td></tr>
+      </table>
+      <p class="note" style="margin-top:10px">2025 年報未單獨披露液冷分部營收——目前貢獻仍小，屬「布局期」。</p>
+    </div>
+    <div class="card">
+      <div class="chart">
+        <div class="chart-title">營業收入（億元）</div>
+        <div class="chart-sub">2023–2025 年報披露值</div>
+        <div class="cols">
+          <div class="col-g" title="2023:6.78億"><div class="col-val">6.78</div><div class="col-bar" style="height:52%"></div></div>
+          <div class="col-g" title="2024:7.92億，+16.8%"><div class="col-val">7.92</div><div class="col-bar" style="height:61%"></div></div>
+          <div class="col-g" title="2025:13.03億，+64.4%"><div class="col-val">13.03</div><div class="col-bar" style="height:100%"></div></div>
+        </div>
+        <div class="col-x"><div>2023</div><div>2024</div><div>2025</div></div>
+        <p class="note" style="margin-top:8px">高成長主要來自併表（賽諾高德）與本業回溫，非液冷放量。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3. 財務體質 ================= -->
+<section>
+  <h2><span class="num">3</span>財務體質</h2>
+  <div class="grid-2">
+    <div class="card">
+      <div class="chart-title">歸母淨利潤（億元）</div>
+      <div class="chart-sub">連續三年虧損；紅色＝虧損</div>
+      <div class="zchart">
+        <div class="zero"></div><div class="zero-label">0</div>
+        <div class="zcols">
+          <div class="zcol" title="2023：−0.56億"><div class="zbar negb" style="height:85%"></div><div class="zval" style="top:96%">−0.56</div></div>
+          <div class="zcol" title="2024：−0.19億"><div class="zbar negb" style="height:29%"></div><div class="zval" style="top:41%">−0.19</div></div>
+          <div class="zcol" title="2025：−0.47億"><div class="zbar negb" style="height:71%"></div><div class="zval" style="top:83%">−0.47</div></div>
+        </div>
+      </div>
+      <div class="col-x"><div>2023</div><div>2024</div><div>2025</div></div>
+      <p class="note" style="margin-top:8px">扣非淨利 2025 為 −0.54 億，虧損主因：新業務投入、資產減值、消費電子競爭加劇。</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">獲利品質檢視</h3>
+      <table>
+        <tr><th>指標</th><th class="num">數值</th><th>解讀</th></tr>
+        <tr><td>淨利率（2025）</td><td class="num">≈−3.6%</td><td>增收不增利，蘋果鏈壓價＋轉型費用雙重擠壓</td></tr>
+        <tr><td>總資產擴張</td><td class="num">+52.9%</td><td>併購驅動的資產膨脹，商譽與減值風險同步累積</td></tr>
+        <tr><td>市值／虧損</td><td class="num">93億／−0.47億</td><td>估值完全繫於液冷轉型敘事，融資能力依賴股價</td></tr>
+        <tr><td>恒鉅交易結構</td><td class="num">≤3.5億估值</td><td>意向協議階段：已付 3,000 萬意向金、4 個月排他期，<b>尚無業績承諾條款</b>——條款保護弱於金富收購卓暉案</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="callout warn" style="margin-top:16px">
+    <div class="t">財務面弱點</div>
+    連虧三年、累虧約 1.2 億，本業造血不足，液冷擴張高度依賴股權融資與併購槓桿；賽諾高德 4.08 億併購已墊高商譽，恒鉅若再以近千倍市淨溢價（430 萬註冊資本 vs 3.5 億估值）收購，任何整合失誤都會以減值形式回擊利潤表。轉型窗口期內，它「必須成功」的壓力比誰都大。
+  </div>
+</section>
+
+<!-- ================= 4. 客戶與供應鏈 ================= -->
+<section>
+  <h2><span class="num">4</span>客戶結構與供應鏈地位</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">主要客戶／目標客戶</h3>
+      <table>
+        <tr><th>板塊</th><th>客戶</th></tr>
+        <tr><td>本業（功能件）</td><td>蘋果、亞馬遜、SONOS、META、Google（終端品牌）</td></tr>
+        <tr><td>新材料</td><td>寧德時代、比亞迪</td></tr>
+        <tr><td style="background:var(--accent-wash)">液冷（自有進度）</td><td style="background:var(--accent-wash)">北美大客戶：液冷散熱模組<b>臨時供應商代碼＋送樣資格</b>（名稱保密；轉正量產尚不確定）</td></tr>
+        <tr><td style="background:var(--accent-wash)">液冷（恒鉅帶入<sup class="est">＊</sup>）</td><td style="background:var(--accent-wash)">已有供應商代碼：<b>泰碩電子、奇鋐科技（AVC）</b>、寶德華南、澤鴻電子、台達電子、佳承精工、邁萪科技、EKL AG；<b>泰碩並持有恒鉅 23.26% 股權</b></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">供應鏈角色解讀</h3>
+      <p class="body">捷邦本體是<b>蘋果鏈功能件廠</b>，在液冷供應鏈尚無現成位置；它的策略是<b>「買門票」</b>——恒鉅這家 430 萬註冊資本的東莞小廠之所以值 3.5 億，核心資產就是奇鋐、泰碩等台系散熱廠的供應商代碼與現成量產線，加上泰碩入股形成的客戶綁定。</p>
+      <p class="body" style="margin-bottom:0">對我方的鏡像意義：<b>台系散熱廠的供應商代碼本身就是被資本標價的稀缺資產</b>。我方手上「台灣在地＋可直接對接奇鋐雙鴻」的先天位置，價值正在上升，但大陸資本也正在掃貨這類標的——時間不站在猶豫者這邊。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5. 液冷佈局 ================= -->
+<section>
+  <h2><span class="num">5</span>液冷業務佈局（核心觀察）</h2>
+  <div class="card">
+    <table>
+      <tr><th style="width:130px">面向</th><th>現況</th></tr>
+      <tr><td>產品版圖</td><td>目標「冷板到 CDU 全棧」：VC 均熱板（賽諾高德，量產中）→ 液冷板／Manifold／液冷接頭＋組裝測試（恒鉅，待交割）→ 機架式／集中式 CDU、SFN（捷邦數能，樣機階段）；另稱開發 GB300 MLCP<sup class="est">＊</sup></td></tr>
+      <tr><td>進度</td><td>自有液冷量產能力<b>尚未落地</b>：北美客戶僅送樣、數能年底才有樣機、恒鉅仍在審計評估——「威脅成形中」而非「現在進行式」</td></tr>
+      <tr><td>模式</td><td>對台系客戶明言以<b>代工／OEM／ODM</b>模式服務——直接對標我方想做的生意</td></tr>
+      <tr><td>資本</td><td>上市平台＋93 億市值支撐融資；已投 &gt;6 億買熱管理資產</td></tr>
+      <tr><td>目標</td><td>公司自述：2 年內成為國內 CDU 系統頭部企業；切入 AVC、泰碩台系液冷供應鏈</td></tr>
+    </table>
+  </div>
+
+  <h3>競爭格局中的位置</h3>
+  <div class="card">
+    <table>
+      <tr><th>陣營</th><th>代表廠商</th><th>相對位置</th></tr>
+      <tr><td>國際</td><td>Boyd、nVent、Vertiv（CDU／系統側）</td><td>系統級標竿，價格高</td></tr>
+      <tr><td>台系</td><td>奇鋐、雙鴻、泰碩——既是目標客戶也是潛在競合</td><td>捷邦以恒鉅＋泰碩股權關係「借船出海」</td></tr>
+      <tr><td>陸系（捷邦所在）</td><td>CDU：英維克、中航光電｜冷板：奕東（02）、領益、碩貝德｜管路：卓暉（03）、溯聯</td><td>後進者，各單項都有更強的專業對手；優勢是「蘋果鏈品質體系＋全棧敘事＋資本速度」，無 NVIDIA 直接認證</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= 6. SWOT ================= -->
+<section>
+  <h2><span class="num">6</span>強項與弱點（SWOT）</h2>
+  <div class="swot">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--good)"></span>優勢 Strengths</h3>
+      <ul>
+        <li><b>蘋果鏈品質體系與北美品牌客戶關係</b>——已換到北美大客戶液冷模組送樣門票</li>
+        <li><b>併購速度快</b>：均熱板／蝕刻（賽諾高德）已並表，恒鉅將帶來現成台系供應商代碼與量產線</li>
+        <li><b>泰碩入股恒鉅</b>＝台系散熱廠背書＋訂單綁定的雙保險</li>
+        <li>上市資本平台，93 億市值支撐持續融資</li>
+        <li>蝕刻、VC 均熱板等高壁壘工藝有實際積累</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--critical)"></span>劣勢 Weaknesses</h3>
+      <ul>
+        <li><b>連虧三年</b>，本業造血不足，轉型全靠外部資金</li>
+        <li><b>液冷量產能力尚未真正在手</b>：恒鉅未交割、數能僅樣機、北美客戶僅送樣</li>
+        <li>恒鉅意向協議<b>無業績承諾</b>，高溢價收購保護條款弱</li>
+        <li>三個標的＋合資公司的多線整合，管理半徑被急速拉大</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--series-1)"></span>機會 Opportunities</h3>
+      <ul>
+        <li>台系散熱廠擴產缺產能，OEM／ODM 外包需求真實存在</li>
+        <li>CDU 國產化窗口期，頭部未定</li>
+        <li>GB300 MLCP 若開發成功將跳級進入 NVIDIA 生態<sup class="est">＊</sup></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--warning)"></span>威脅 Threats</h3>
+      <ul>
+        <li>恒鉅交易若告吹，液冷故事斷鏈、估值反噬</li>
+        <li>每個單項都面對更專業的現任者（英維克、奕東、卓暉…）</li>
+        <li><b>非紅供應鏈</b>限制其承接北美終端料號的天花板</li>
+        <li>高商譽＋連虧，減值一觸即發</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 7. 對我方的意涵 ================= -->
+<section>
+  <h2><span class="num">7</span>對我方的意涵：威脅評估與切入建議</h2>
+
+  <div class="card">
+    <h3 style="margin-top:0">威脅度評估（1–5）</h3>
+    <div class="meter-row"><div class="m-label">液冷板／金屬結構件</div><div class="meter-track"><div class="meter-fill" style="width:70%"></div></div><div class="m-val">3.5</div></div>
+    <div class="meter-row"><div class="m-label">Manifold／流體管路</div><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><div class="m-val">3.0</div></div>
+    <div class="meter-row"><div class="m-label">液冷快接頭（UQD）</div><div class="meter-track"><div class="meter-fill" style="width:50%"></div></div><div class="m-val">2.5</div></div>
+    <div class="meter-row"><div class="m-label">CDU／系統組裝</div><div class="meter-track"><div class="meter-fill" style="width:70%"></div></div><div class="m-val">3.5</div></div>
+    <div class="meter-row"><div class="m-label">價格競爭壓力</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="m-val">4.0</div></div>
+    <p class="note" style="margin-top:8px">評分邏輯：能力圈重疊（冷板／Manifold／接頭均在其恒鉅拼圖內）但量產未落地，故 3 分檔；<b>若恒鉅順利交割並整合，冷板與 Manifold 將升至 4.5</b>——這是一個需要按季追蹤的動態評分。</p>
+  </div>
+
+  <div class="callout">
+    <div class="t">核心結論</div>
+    捷邦與我方<b>目標客戶完全相同（奇鋐、泰碩等台系散熱廠）、目標模式完全相同（OEM／ODM 結構件）</b>，但它的能力是用資本現買的、尚未完成拼裝。這給我方一個明確的時間窗：<b>在恒鉅交割整合完成（估計 6–12 個月）之前，搶先用「現成加工能力＋台灣在地＋非紅產地」拿下奇鋐／雙鴻的送樣與二供資格</b>。同時它揭示了行業定價邏輯：台系供應商代碼值錢到讓 430 萬小廠喊價 3.5 億——我方位置的戰略價值被低估了。
+  </div>
+
+  <h3>建議行動</h3>
+  <div class="card">
+    <table>
+      <tr><th style="width:150px">方向</th><th>建議</th></tr>
+      <tr><td>時間窗</td><td><b>6–12 個月內</b>完成對奇鋐／雙鴻的送樣與供應商代碼取得——趕在捷邦恒鉅體系整合完成、產能釋放之前卡位</td></tr>
+      <tr><td>切入品項</td><td>優先做捷邦「還買不到」的：高精度沖壓冷板結構件、需在地快速配合的 NPI 試作件；避開它有積累的蝕刻／VC 均熱板正面戰</td></tr>
+      <tr><td>能力補強</td><td>若考慮加速，可效法其路徑在台灣併購／合資取得釺焊、氣密檢測能力——大陸資本已在掃貨「有台系代碼的小廠」，台灣同類標的也會漲價，宜早不宜遲</td></tr>
+      <tr><td>差異化牌</td><td>對奇鋐／雙鴻強調：捷邦體系連虧三年＋多線整合中，供應穩定性存疑；我方財務健康＋非紅產地＋同文同速的工程協同</td></tr>
+      <tr><td>監測項目</td><td>① 恒鉅是否完成交割、有無業績承諾 ② 捷邦數能 CDU 樣機→量產進度 ③ 北美大客戶送樣是否轉正（公告義務）④ GB300 MLCP 有無實質訂單 ⑤ 再融資動作（決定其擴張火力）</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= 資料來源 ================= -->
+<footer>
+  <b>資料來源</b>（檢索日期 2026-07-28）：
+  <ul style="padding-left:18px; margin-top:6px">
+    <li><a href="http://static.cninfo.com.cn/finalpage/2026-04-29/1225235872.PDF">2025 年年度報告摘要（巨潮資訊）</a>（營收、虧損、總資產、業務、客戶、股權結構）</li>
+    <li><a href="https://www.tmtpost.com/7989891.html">鈦媒體：連環併購押注液冷散熱</a>（2023–2025 財務、賽諾高德收購、風險分析）</li>
+    <li><a href="http://stock.10jqka.com.cn/20260713/c678138506.shtml">同花順：2026-07-13 機構調研</a>（恒鉅收購目的與進度、AVC／泰碩目標、捷邦數能 CDU、兩年頭部目標）</li>
+    <li><a href="https://www.nbd.com.cn/articles/2026-05-14/4393371.html">每經網：擬收購恒鉅電子</a>（恒鉅股權結構含泰碩持股 23.26%、供應商代碼清單含奇鋐科技、估值與意向金條款）</li>
+    <li><a href="https://finance.sina.com.cn/roll/2026-05-14/doc-inhxwraa8588695.shtml">新浪財經：擬收購恒鉅電子 55% 股權</a></li>
+    <li><a href="https://finance.sina.com.cn/stock/relnews/cn/2025-09-18/doc-infqxmri8798749.shtml">新浪財經：獲北美大客戶液冷散熱模組送樣資格</a>（臨時供應商代碼、GB300 MLCP、保密限制）</li>
+    <li><a href="https://finance.sina.cn/2026-05-18/detail-inhyimem8066228.d.html">新浪財經：調研速遞（液冷布局與恒鉅收購）</a></li>
+    <li><a href="https://301326.fupanwang.com/">股票復盤網：最新行情</a>（股價 127.7 元、市值約 93 億）</li>
+    <li><a href="https://www.jpond.com.cn/">公司官網</a>（辦公地東莞松山湖、產品線）</li>
+  </ul>
+  <p style="margin-top:10px">備註：<sup class="est">＊</sup>恒鉅收購仍在審計評估階段（截至 2026-07-13），交易條款與是否交割未定；「北美大客戶」與 GB300 MLCP 均受保密協議限制、未經證實；公司成立年份未經工商登記核實（官網版權標示 2007 起）；2026Q1 財務未及查證。「奇鋐科技供應商代碼」為恒鉅（收購標的）所持有，非捷邦本體。本報告僅供內部策略參考。</p>
+</footer>
+
+</div>
+</body>
+</html>
