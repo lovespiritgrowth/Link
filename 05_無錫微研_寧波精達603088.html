@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>無錫微研（寧波精達 603088） — 大陸液冷供應商競爭者分析</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;      /* 卡片/圖表面 */
+    --page: #f9f9f7;           /* 頁面底 */
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;       /* 主色（藍） */
+    --series-1-track: #cde2fb; /* 藍 100，meter 未填軌 */
+    --seq-250: #86b6ef;
+    --seq-450: #2a78d6;
+    --seq-600: #184f95;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --accent-wash: rgba(42,120,214,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-1-track: #0d366b;
+      --seq-250: #1c5cab;
+      --seq-450: #3987e5;
+      --seq-600: #6da7ec;
+      --good-text: #0ca30c;
+      --accent-wash: rgba(57,135,229,0.12);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  /* ===== 頁首 ===== */
+  .report-tag { font-size:12px; letter-spacing:.12em; color:var(--text-muted); text-transform:uppercase; }
+  header.hero { padding: 8px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing:.01em; margin-top: 4px; }
+  h1 .code { font-weight: 400; font-size: 18px; color: var(--text-secondary); margin-left: 8px; }
+  .hero-sub { color: var(--text-secondary); margin-top: 6px; max-width: 72ch; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+  .badge { font-size:12.5px; padding:3px 10px; border-radius:99px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-secondary); }
+  .badge.threat { border-color: var(--critical); color: var(--critical); font-weight:600; }
+  .meta-line { margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+
+  /* ===== 區塊 ===== */
+  section { margin-bottom: 36px; }
+  h2 { font-size: 20px; font-weight: 700; padding-bottom: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h2 .num { color: var(--series-1); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 18px 0 8px; }
+  p.body { color: var(--text-primary); margin-bottom: 10px; max-width: 80ch; }
+  .note { font-size: 12.5px; color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .grid-3 { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+  @media (max-width: 760px){ .grid-2,.grid-3{grid-template-columns:1fr;} }
+
+  /* ===== 摘要統計磚 ===== */
+  .tiles { display:grid; grid-template-columns: repeat(6,1fr); gap:12px; }
+  @media (max-width: 900px){ .tiles{grid-template-columns: repeat(3,1fr);} }
+  @media (max-width: 560px){ .tiles{grid-template-columns: repeat(2,1fr);} }
+  .tile { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:14px 14px 12px; }
+  .tile .label { font-size:12px; color:var(--text-muted); }
+  .tile .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .tile .delta { font-size:12px; margin-top:2px; }
+  .delta.up { color: var(--good-text); }
+  .delta.down { color: var(--critical); }
+  .delta.flat { color: var(--text-muted); }
+
+  /* ===== 表格 ===== */
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-weight:600; color:var(--text-secondary); font-size:12.5px; padding:8px 10px; border-bottom:1px solid var(--baseline); white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:top; }
+  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom:none; }
+
+  /* ===== 時間軸 ===== */
+  .timeline { list-style:none; position:relative; padding-left:20px; }
+  .timeline::before { content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--grid); border-radius:1px; }
+  .timeline li { position:relative; padding:0 0 14px 12px; }
+  .timeline li::before { content:""; position:absolute; left:-20px; top:7px; width:8px; height:8px; border-radius:50%; background:var(--series-1); box-shadow: 0 0 0 2px var(--surface-1); }
+  .timeline .yr { font-weight:700; font-variant-numeric: tabular-nums; margin-right:8px; }
+  .timeline .desc { color:var(--text-secondary); }
+
+  /* ===== 圖表（純 HTML/CSS 橫條圖） ===== */
+  .chart { margin-top: 10px; }
+  .chart-title { font-size:13.5px; font-weight:600; }
+  .chart-sub { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .hbar-row { display:grid; grid-template-columns: 118px 1fr 120px; align-items:center; gap:10px; padding:5px 0; }
+  .hbar-row .cat { font-size:13px; color:var(--text-secondary); text-align:right; }
+  .hbar-track { position:relative; height:20px; }
+  .hbar-fill { position:absolute; left:0; top:0; height:20px; background:var(--series-1); border-radius:0 4px 4px 0; transition: opacity .15s; }
+  .hbar-row:hover .hbar-fill { opacity:.82; }
+  .hbar-row .val { font-size:13px; color:var(--text-primary); font-variant-numeric:tabular-nums; }
+  .hbar-row .val .pct { color:var(--text-muted); }
+  .axis-note { border-top:1px solid var(--baseline); margin-top:6px; padding-top:5px; font-size:11.5px; color:var(--text-muted); text-align:right; }
+
+  /* 縱向柱狀（年度趨勢，小倍數） */
+  .cols { display:flex; align-items:flex-end; gap:26px; height:170px; padding:0 6px; border-bottom:1px solid var(--baseline); }
+  .col-g { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
+  .col-bar { width:100%; max-width:44px; background:var(--series-1); border-radius:4px 4px 0 0; position:relative; transition: opacity .15s; }
+  .col-bar.est { background: var(--seq-250); }
+  .col-g:hover .col-bar { opacity:.82; }
+  .col-val { font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--text-primary); margin-bottom:4px; }
+  .col-x { display:flex; gap:26px; padding:6px 6px 0; }
+  .col-x div { flex:1; text-align:center; font-size:12px; color:var(--text-muted); }
+
+  /* ===== SWOT ===== */
+  .swot { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .swot{grid-template-columns:1fr;} }
+  .swot .card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+  .swot .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .swot ul { padding-left:18px; }
+  .swot li { margin-bottom:8px; color:var(--text-primary); }
+  .swot li b { font-weight:600; }
+
+  /* ===== 重點框 ===== */
+  .callout { background: var(--accent-wash); border:1px solid var(--border); border-left:3px solid var(--series-1); border-radius:8px; padding:14px 16px; margin:14px 0; }
+  .callout.warn { border-left-color: var(--critical); background: rgba(208,59,59,0.06); }
+  .callout .t { font-weight:700; font-size:13.5px; margin-bottom:4px; }
+
+  /* ===== 評分 meter ===== */
+  .meter-row { display:grid; grid-template-columns: 170px 1fr 56px; gap:12px; align-items:center; padding:6px 0; }
+  .meter-row .m-label { font-size:13.5px; color:var(--text-secondary); text-align:right; }
+  .meter-track { height:10px; border-radius:5px; background:var(--series-1-track); position:relative; overflow:hidden; }
+  .meter-fill { position:absolute; left:0; top:0; bottom:0; background:var(--series-1); border-radius:5px; }
+  .meter-row .m-val { font-size:13px; font-variant-numeric:tabular-nums; color:var(--text-primary); }
+
+  footer { border-top:1px solid var(--border); padding-top:16px; font-size:12.5px; color:var(--text-muted); }
+  footer a { color: var(--series-1); text-decoration:none; word-break:break-all; }
+  footer li { margin-bottom:4px; }
+  sup.est { color: var(--text-muted); }
+  .badge.threat.mid { border-color: var(--warning); color:#9a6b00; font-weight:600; }
+  .badge.threat.low { border-color: var(--baseline); color: var(--text-secondary); font-weight:600; }
+  @media (prefers-color-scheme: dark) { .badge.threat.mid { color: var(--warning); } }
+  .meter-fill.mid { background: var(--warning); }
+  .callout.good { border-left-color: var(--good); background: rgba(12,163,12,0.06); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ================= 頁首 ================= -->
+<header class="hero">
+  <div class="report-tag">大陸液冷供應商競爭者分析 · 05 / 05</div>
+  <h1>無錫微研<span class="code">母公司：寧波精達 上交所主板 603088</span></h1>
+  <div class="hero-sub">無錫微研有限公司——以<b>空調換熱器翅片精密級進模具</b>起家的無錫模具龍頭，2025-05 被寧波國資控股的上市公司寧波精達 100% 收購。它切入液冷的路徑<b>不是做快接頭或冷板成品，而是「賣做散熱片的模具＋精密沖壓件」給機房空調／CDU 廠</b>，並已成為 NVIDIA AI 液冷直接供應商<b>維諦技術（Vertiv）北美唯一的非本土模具供應商</b>。與台系散熱廠（奇鋐、雙鴻）目前<b>查無公開的供應關係</b>。</div>
+  <div class="badges">
+    <span class="badge threat mid">對我方目標品項威脅度：中（錯位為主）</span>
+    <span class="badge threat low">液冷快接頭賽道威脅度：低</span>
+    <span class="badge">實控人：寧波市國資委（經寧波成形控股）</span>
+    <span class="badge">非上市子公司（母公司上市）</span>
+    <span class="badge">日本／美國／義大利子公司</span>
+  </div>
+  <div class="meta-line">報告日期 2026-07-31 · 財務數據截至母公司 2025 年報與 2026Q1、標的 2025 年度業績承諾鑑證 · 幣別：人民幣 · 標註 <sup class="est">＊</sup> 者為由公開數據回推之估算值</div>
+</header>
+
+<!-- ================= 0. 關鍵數據 ================= -->
+<section>
+  <div class="tiles">
+    <div class="tile"><div class="label">微研 2025 營收</div><div class="value">≈¥3.2億<sup class="est">＊</sup></div><div class="delta up">▲ 由併表 5–6 月回推</div></div>
+    <div class="tile"><div class="label">微研 2025 扣非淨利</div><div class="value">¥3,929萬</div><div class="delta up">▲ +7.8%（承諾 3,830 萬）</div></div>
+    <div class="tile"><div class="label">微研 毛利率（2024）</div><div class="value">35.2%</div><div class="delta up">▲ +0.3pp</div></div>
+    <div class="tile"><div class="label">微研 員工人數</div><div class="value">約 380</div><div class="delta flat">研發近 70 人（約 18%）</div></div>
+    <div class="tile"><div class="label">母公司市值（2026-07）</div><div class="value">≈¥46億</div><div class="delta flat">股價約 ¥9.19</div></div>
+    <div class="tile"><div class="label">集團研發費用率</div><div class="value">4.93%</div><div class="delta up">▲ 費用 +22.4%</div></div>
+  </div>
+</section>
+
+<!-- ================= 1. 公司概況 ================= -->
+<section>
+  <h2><span class="num">1</span>公司概況與沿革</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">基本資料</h3>
+      <table>
+        <tr><td style="width:110px;color:var(--text-muted)">全名</td><td>無錫微研有限公司（原無錫微研股份有限公司，交易後改制為有限公司）</td></tr>
+        <tr><td style="color:var(--text-muted)">總部</td><td>江蘇省無錫市胡埭工業園冬青路 19 號</td></tr>
+        <tr><td style="color:var(--text-muted)">成立／歸屬</td><td>1994-05-10 成立；2025-05 由寧波精達（603088）以發行股份＋現金 100% 收購，納入合併報表</td></tr>
+        <tr><td style="color:var(--text-muted)">法定代表人／總經理</td><td>蔡磊明（原持股 37.08%，交易後持有上市公司 4.76%，為第三大股東）</td></tr>
+        <tr><td style="color:var(--text-muted)">交易前股權</td><td>高昇投資 42.92%、蔡磊明 37.08%、微研和兴投資 10.00%、曹艷 4.99%、謝欣沅 4.01%、胡冠宇 1.00%</td></tr>
+        <tr><td style="color:var(--text-muted)">最終實控人</td><td><b>寧波市國資委</b>（經寧波成形控股持有上市公司 32.09%，國有法人）</td></tr>
+        <tr><td style="color:var(--text-muted)">資質榮譽</td><td>國家級專精特新「小巨人」、中國重點骨幹模具企業、高新技術企業、國家級技能大師工作室、博士後科研工作站、江蘇省認定企業技術中心；授權專利 140 餘項（發明 40 餘項）</td></tr>
+        <tr><td style="color:var(--text-muted)">境內外子公司</td><td>無錫微研精微機械技術（境內）；微研精密株式會社、微研技術開發株式會社（日本）；微研控股、美國微研（美國）；歐洲微研（義大利）</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">發展時間軸</h3>
+      <ul class="timeline">
+        <li><span class="yr">1994</span><span class="desc">無錫微研成立，以空調換熱器翅片精密級進模具起家，逐步擴至汽車座椅滑軌模具、油冷器模具</span></li>
+        <li><span class="yr">2016</span><span class="desc">關聯企業「無錫微研精密沖壓件股份有限公司」掛牌新三板（835972.OC，實控人談淵智）<sup class="est">＊</sup></span></li>
+        <li><span class="yr">2023</span><span class="desc">開始與維諦技術（Vertiv）接觸並展開合作；同年 6 月 *ST 御銀擬收購 51% 股權，因各方分歧告吹（首次闖 A 股失敗）</span></li>
+        <li><span class="yr">2024-11</span><span class="desc">寧波精達公告擬以 3.62 億元收購 100% 股權（評估增值率 91.56%），承諾 2024–2026 三年扣非淨利合計不低於 1.141 億元</span></li>
+        <li><span class="yr">2025-05</span><span class="desc">資產交割完成，正式納入寧波精達合併報表；5–6 月即貢獻收入 5,488 萬元、歸母淨利 1,128.62 萬元</span></li>
+        <li><span class="yr">2025-10</span><span class="desc"><b>公告與維諦技術深化合作</b>，成為其<b>北美唯一非本土模具供應商</b>，切入 AI 資料中心製冷；同期開發出 AI 資料中心用<b>鋁鎂合金翅片模具</b></span></li>
+        <li><span class="yr">2026-01</span><span class="desc">母公司陸續接獲加拿大客戶逾 1,000 萬美元訂單，下游應用於機房液冷；微研研發人員併入精達研究所聯合研發</span></li>
+        <li><span class="yr">2026-04</span><span class="desc">2025 年度業績承諾達成率 102.6%（扣非淨利 3,929.24 萬 vs 承諾 3,830 萬），無需補償</span></li>
+      </ul>
+    </div>
+  </div>
+  <p class="body" style="margin-top:14px">解讀：這是一家<b>「三十年老模具廠 → 被國資上市平台收編 → 借母公司資本與國際通路放大」</b>的技術型企業，性格與本系列前四家完全不同。它<b>不是靠題材炒作衝進液冷，而是本業（換熱器翅片模具）自然被 AI 資料中心的散熱需求拉進來</b>——換熱器的核心工序就是沖壓翅片，做翅片的模具是誰、精度多少，直接決定換熱效率。它的決策模式已從創辦人主導轉為<b>國資上市公司治理</b>：規範、穩健，但反應速度與激進度會低於東莞民企。</p>
+</section>
+
+<!-- ================= 2. 業務結構 ================= -->
+<section>
+  <h2><span class="num">2</span>業務結構與產品線</h2>
+  <div class="grid-2">
+    <div class="card">
+      <div class="chart">
+        <div class="chart-title">無錫微研 2024 年營收構成（萬元人民幣）</div>
+        <div class="chart-sub">合計 ¥2.69 億 · 直條長度依營收金額 · 資料來源：金證評估報告預測值</div>
+        <div class="hbar-row" title="精密模具：15,500萬（內銷5,800／外銷9,700）"><div class="cat">精密模具</div><div class="hbar-track"><div class="hbar-fill" style="width:100%"></div></div><div class="val">15,500 <span class="pct">57.6%</span></div></div>
+        <div class="hbar-row" title="精密沖壓件：8,328.66萬"><div class="cat">精密沖壓件</div><div class="hbar-track"><div class="hbar-fill" style="width:53.7%"></div></div><div class="val">8,329 <span class="pct">30.9%</span></div></div>
+        <div class="hbar-row" title="微孔電火花機床：1,805.69萬"><div class="cat">微孔電火花機床</div><div class="hbar-track"><div class="hbar-fill" style="width:11.6%"></div></div><div class="val">1,806 <span class="pct">6.7%</span></div></div>
+        <div class="hbar-row" title="光伏導輪加工：1,220.21萬"><div class="cat">光伏導輪加工</div><div class="hbar-track"><div class="hbar-fill" style="width:7.9%"></div></div><div class="val">1,220 <span class="pct">4.5%</span></div></div>
+        <div class="axis-note">精密模具中外銷 9,700 萬、內銷 5,800 萬——外銷占模具業務 62.6%</div>
+      </div>
+      <p class="note" style="margin-top:10px">2025 上半年模具新接訂單中<b>逾 50% 為出口訂單，出口訂單年增約 70%</b>；國內新訂單年增 30% 以上；北美市場上半年訂單已達去年全年水準。</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">產品應用領域</h3>
+      <table>
+        <tr><th>領域</th><th>代表產品</th></tr>
+        <tr style="background:var(--accent-wash)"><td><b>空調／換熱器</b></td><td><b>翅片精密級進模具</b>（銅管翅片、微通道翅片）、換熱器精密沖壓件——這是本業與液冷的交會點</td></tr>
+        <tr><td>汽車零部件</td><td>座椅滑軌模具與滑軌沖壓件、<b>油冷器模具</b>、新能源車關鍵零部件</td></tr>
+        <tr><td>特種加工設備</td><td>微孔電火花加工數控機床（自研自製，屬設備而非零件）</td></tr>
+        <tr><td>光伏</td><td>金剛線導輪加工</td></tr>
+        <tr style="background:var(--accent-wash)"><td><b>AI 資料中心（新）</b></td><td><b>鋁鎂合金翅片模具</b>等資料中心專用熱管理模具、機房空調／CDU 換熱器精密零部件</td></tr>
+      </table>
+      <p class="note" style="margin-top:10px">請注意：微研賣的主要是<b>「做散熱件的模具」與「用模具沖出來的零件」</b>，不是液冷板、快接頭或 Manifold 成品——這是判斷它與我方關係的關鍵。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3. 財務體質 ================= -->
+<section>
+  <h2><span class="num">3</span>財務體質與三年趨勢</h2>
+  <div class="grid-2">
+    <div class="card">
+      <div class="chart-title">無錫微研 營業收入（億元）</div>
+      <div class="chart-sub">2024 為評估報告預測值；2025 由併表 5–6 月收入年化回推</div>
+      <div class="cols">
+        <div class="col-g" title="2022：2.12億"><div class="col-val">2.12</div><div class="col-bar" style="height:66%"></div></div>
+        <div class="col-g" title="2023：2.59億，+21.9%"><div class="col-val">2.59</div><div class="col-bar" style="height:81%"></div></div>
+        <div class="col-g" title="2024：2.69億，+4.0%"><div class="col-val">2.69</div><div class="col-bar" style="height:84%"></div></div>
+        <div class="col-g" title="2025：約3.2億（估算）"><div class="col-val">3.2<sup class="est">＊</sup></div><div class="col-bar est" style="height:100%"></div></div>
+      </div>
+      <div class="col-x"><div>2022</div><div>2023</div><div>2024</div><div>2025<sup class="est">＊</sup></div></div>
+      <p class="note" style="margin-top:8px">併表首兩月（2025-05～06）收入 5,488 萬元，年化約 3.3 億——季節性使實際值可能略低。</p>
+    </div>
+    <div class="card">
+      <div class="chart-title">無錫微研 扣非歸母淨利（萬元）</div>
+      <div class="chart-sub">2024、2025 為業績承諾鑑證報告之審定數</div>
+      <div class="cols">
+        <div class="col-g" title="2022：1,830.92萬"><div class="col-val">1,831</div><div class="col-bar" style="height:47%"></div></div>
+        <div class="col-g" title="2023：3,506.24萬"><div class="col-val">3,506</div><div class="col-bar" style="height:89%"></div></div>
+        <div class="col-g" title="2024：3,644.21萬（承諾3,610萬）"><div class="col-val">3,644</div><div class="col-bar" style="height:93%"></div></div>
+        <div class="col-g" title="2025：3,929.24萬（承諾3,830萬）"><div class="col-val">3,929</div><div class="col-bar" style="height:100%"></div></div>
+      </div>
+      <div class="col-x"><div>2022</div><div>2023</div><div>2024</div><div>2025</div></div>
+      <p class="note" style="margin-top:8px">三年業績承諾累計 1.141 億元，2024、2025 均為<b>「剛好踩線過關」</b>（超額幅度僅 0.9% 與 2.6%）。</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3 style="margin-top:0">獲利品質檢視</h3>
+    <table>
+      <tr><th>指標</th><th class="num">數值</th><th>解讀</th></tr>
+      <tr><td>微研毛利率（2022→2024）</td><td class="num">29.5% → 35.2%</td><td>三年連續提升，<b>顯著高於一般沖壓件廠</b>——反映模具是設計密集、非純代工的業務</td></tr>
+      <tr><td>微研淨利率（2024）</td><td class="num">≈13.5%</td><td>本系列五家中最高（胜蓝 6.4%、奕東為負、捷邦為負），獲利品質是其最大優點</td></tr>
+      <tr><td>業績承諾達成幅度</td><td class="num">+0.9% / +2.6%</td><td><b>兩年都是低空飛過</b>，2026 年承諾 3,970 萬仍有壓力，也代表本業成長並不猛</td></tr>
+      <tr><td>母公司 2025 歸母淨利</td><td class="num">¥1.20億</td><td><b>年減 27.03%</b>，毛利率下滑 7.12pp；主業「精密壓力機」營收腰斬 −46.24%</td></tr>
+      <tr><td>母公司 2026Q1</td><td class="num">淨利 ¥802萬</td><td><b>年減 77.94%</b>，營收 ¥1.64 億（−11.4%）——液冷題材與實際獲利嚴重脫節</td></tr>
+      <tr><td>母公司應收帳款</td><td class="num">¥1.91億</td><td>年增 45.94%，遠快於營收（+7.75%），下游帳期壓力上升</td></tr>
+      <tr><td>母公司經營現金流</td><td class="num">¥2.08億</td><td>年增 76.69%，是全表最健康的一項——訂單預收與回款節奏改善</td></tr>
+    </table>
+    <div class="callout warn" style="margin-bottom:0">
+      <div class="t">財務面弱點</div>
+      集團的<b>基本盤正在惡化</b>：母公司精密壓力機營收腰斬、2026Q1 淨利年減近八成，全靠「換熱器自動化裝備 +22.8%」與新併入的微研撐住。也就是說，<b>微研是這家上市公司目前最健康的資產，卻只占集團營收約三分之一</b>；集團若要靠液冷翻身，勢必把資源與 KPI 都壓在微研與微通道業務上——這會加速微研在資料中心方向的擴張。
+    </div>
+  </div>
+</section>
+
+<!-- ================= 4. 客戶與供應鏈 ================= -->
+<section>
+  <h2><span class="num">4</span>客戶結構與供應鏈地位</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">主要客戶</h3>
+      <table>
+        <tr><th>板塊</th><th>客戶</th></tr>
+        <tr><td>家用／商用空調</td><td>美的、奧克斯、海信、TCL、大金（日）、日立（日）</td></tr>
+        <tr style="background:var(--accent-wash)"><td><b>資料中心製冷</b></td><td><b>維諦技術 Vertiv</b>（NVIDIA AI 計算液冷產品直接供應商）——微研為其<b>北美唯一非本土模具供應商</b></td></tr>
+        <tr style="background:var(--accent-wash)"><td><b>液冷／溫控（集團層級）</b></td><td>英維克（已合作並共同開發新產品）；加拿大客戶（逾 1,000 萬美元機房液冷相關訂單）</td></tr>
+        <tr><td>汽車</td><td>座椅系統與熱交換系統 Tier-1（未具名披露）</td></tr>
+        <tr><td style="color:var(--critical)">台系散熱廠</td><td style="color:var(--critical)"><b>公開資料查無奇鋐（AVC）、雙鴻或其他台系散熱模組廠的供應關係</b></td></tr>
+      </table>
+      <p class="note" style="margin-top:10px">日本、美國、義大利設有子公司，是本系列五家中<b>國際通路最成熟</b>的一家；模具外銷占其模具營收 62.6%。</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">供應鏈角色解讀</h3>
+      <p class="body">微研在液冷鏈中的位置與前四家<b>根本不同</b>：胜蓝、奕東、卓暉、捷邦都是想做「液冷零組件成品」賣給模組廠；<b>微研是更上游的「工具機／模具供應商」，賣的是讓客戶自己沖出翅片的那套模具</b>，再順帶供應部分沖壓件。</p>
+      <p class="body">它的入鏈路徑因此是<b>「換熱器路線」而非「冷板路線」</b>：從家用空調翅片模具 → 機房精密空調 → 資料中心 CDU／二次側換熱器。切入點是<b>維諦技術（Vertiv）</b>——全球機房溫控龍頭、NVIDIA 液冷直接供應商——而不是台系散熱模組廠。</p>
+      <p class="body" style="margin-bottom:0"><b>對我方的意義：它與我方不是競爭對手，而是「潛在的上游供應商／技術合作對象」。</b>若我方要做液冷板的翅片沖壓、微通道扁管或換熱器零件，微研正是那種可以買模具、也可能委外試模的廠家。同時要留意反向風險：<b>母公司寧波精達正在建「微通道模具—沖壓—釺焊一體化」能力，若做成，集團就會從賣模具變成賣冷板成品，屆時才會與我方正面相遇。</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5. 液冷佈局 ================= -->
+<section>
+  <h2><span class="num">5</span>液冷業務佈局（核心觀察）</h2>
+  <div class="card">
+    <table>
+      <tr><th style="width:130px">面向</th><th>現況</th></tr>
+      <tr><td>產品</td><td><b>微研</b>：AI 資料中心用<b>鋁鎂合金翅片模具</b>、高端換熱器模具及相關精密零部件。<br><b>母公司精達</b>：微通道換熱器裝備、微通道冷板（MLCP）相關設備、換熱器自動化裝備；整合英國飛馬遜、德國肖拉的焊接／插接技術</td></tr>
+      <tr><td>進度</td><td>微研<b>已進入維諦技術北美供應鏈</b>（2023 年起接觸，2025-10 公告深化合作），為其唯一非本土模具供應商；母公司已與<b>英維克</b>合作並共同開發新產品；2025-12～2026-01 接獲<b>加拿大客戶逾 1,000 萬美元</b>機房液冷相關訂單</td></tr>
+      <tr><td>收入貢獻</td><td>集團未單獨披露液冷收入。2025 年報分部中「微通道裝備及其他」¥9,475 萬（<b>年減 32.25%</b>，毛利率 48.25%），「模具產品」¥9,616 萬（毛利率 37.99%）——<b>液冷實績尚未反映在報表上</b></td></tr>
+      <tr><td>產能與資金</td><td>國資上市平台，資金無虞；2026 年擬以 8,200 萬～1.64 億元回購股份；微研研發人員已併入精達研究所聯合研發，計劃加大液冷研發投入並與客戶成立聯合研發小組</td></tr>
+      <tr><td>技術瓶頸自述</td><td>管理層公開表示：<b>「液冷板薄度要求極高，市場中能達到要求的廠家稀少」</b>——這句話同時是機會的證據，也說明他們自己還沒完全跨過那道門檻</td></tr>
+      <tr><td>市場空間</td><td>公司引述：中國資料中心微通道換熱器市場 2030 年接近 200 億元人民幣，CAGR 約 10.8%</td></tr>
+    </table>
+  </div>
+
+  <h3>換熱器／翅片模具賽道的競爭格局</h3>
+  <div class="card">
+    <table>
+      <tr><th>陣營</th><th>代表廠商</th><th>相對位置</th></tr>
+      <tr><td>國際</td><td>Burr Oak Tool（美，翅片設備）、日高精機 Hidaka Seiki（日，翅片模具）、歐系換熱器裝備廠</td><td>翅片模具與成型設備的規格制定者，精度與壽命標竿</td></tr>
+      <tr><td>台系</td><td>台系散熱模組廠（奇鋐、雙鴻、健策、建準）多為<b>自有模具部門＋外包精密模具廠</b>；台灣專業模具廠以汽車、連接器為主</td><td>台系在「翅片級進模」這一細分並非強項，多集中在熱管、VC、冷板組裝</td></tr>
+      <tr><td>陸系（微研所在）</td><td><b>無錫微研（大陸重點骨幹模具企業、細分龍頭）</b>、其他區域性模具廠</td><td><b>陸系翅片模具第一梯隊</b>；已藉維諦切入北美 AI 資料中心鏈，但<b>未見 NVIDIA 直接認證</b>（NVIDIA 認證在其客戶維諦手上，微研為二階）</td></tr>
+    </table>
+    <p class="note" style="margin-top:10px">對照本系列前四家所在的「UQD 快接頭／液冷板」賽道：<b>無錫微研基本不在該名單上</b>——艾邦等產業盤點的 UQD 供應商與 MLCP 企業名錄中均未見微研。這是判斷威脅度的最重要事實。</p>
+  </div>
+</section>
+
+<!-- ================= 6. SWOT ================= -->
+<section>
+  <h2><span class="num">6</span>強項與弱點（SWOT）</h2>
+  <div class="swot">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--good)"></span>優勢 Strengths</h3>
+      <ul>
+        <li><b>三十年翅片級進模具積累</b>：換熱效率取決於翅片幾何，模具精度是本業護城河，非新進者短期可追</li>
+        <li><b>獲利品質全系列最佳</b>：毛利率 35.2%、淨利率約 13.5%，遠優於本系列其他四家</li>
+        <li><b>已在維諦技術（Vertiv）北美供應鏈，且為唯一非本土模具供應商</b>——這是通往 NVIDIA 生態的二階入場券</li>
+        <li><b>國際通路完整</b>：日本、美國、義大利子公司，模具外銷占 62.6%，具備對歐美客戶直接服務的組織</li>
+        <li><b>國資上市平台背書</b>：資金穩定、治理規範，對歐美大客戶的合規審查較有利</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--critical)"></span>劣勢 Weaknesses</h3>
+      <ul>
+        <li><b>沒有液冷成品能力</b>：無快接頭、無冷板、無 Manifold；管理層自承液冷板薄度門檻高、能達標者稀少</li>
+        <li><b>體量小</b>：營收約 3 億、員工約 380 人，僅為胜蓝的六分之一、奕東的七分之一</li>
+        <li><b>業績承諾兩年低空飛過</b>（+0.9%、+2.6%），本業成長性有限；2026 年承諾仍待驗證</li>
+        <li><b>母公司基本盤惡化</b>：精密壓力機營收腰斬、2026Q1 淨利年減 78%，可能排擠對微研的資源投放節奏</li>
+        <li><b>國資身分是雙面刃</b>：對美系終端客戶的「非紅供應鏈」審查而言，國資背景比民企更敏感</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--series-1)"></span>機會 Opportunities</h3>
+      <ul>
+        <li>AI 資料中心從風冷轉液冷，<b>二次側換熱器、CDU、後門換熱器的翅片需求同步暴增</b>，直接拉動其模具本業</li>
+        <li>母公司整合英國飛馬遜、德國肖拉技術，<b>有機會由「賣模具」升級為「賣微通道冷板產線甚至成品」</b></li>
+        <li>維諦、英維克等溫控大廠正快速擴產，二階供應商跟著放量</li>
+        <li>北美／東南亞／印度新興市場訂單同步成長，出口動能明確</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--warning)"></span>威脅 Threats</h3>
+      <ul>
+        <li><b>客戶集中於維諦一家</b>的資料中心敞口，Vertiv 的訂單節奏即其節奏，議價力有限</li>
+        <li>模具是<b>一次性設備採購</b>而非耗材，收入不具連續性；客戶自建模具部門即斷單</li>
+        <li>美中科技管制若延伸至資料中心關鍵零件，<b>國資背景供應商首當其衝</b></li>
+        <li>國際模具大廠（日高精機等）在高階翅片模具仍具精度優勢</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 7. 對我方的意涵 ================= -->
+<section>
+  <h2><span class="num">7</span>對我方的意涵：威脅評估與切入建議</h2>
+
+  <div class="card">
+    <h3 style="margin-top:0">威脅度評估（1–5）</h3>
+    <div class="meter-row"><div class="m-label">液冷快接頭（UQD）</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1.0</div></div>
+    <div class="meter-row"><div class="m-label">液冷板／微通道冷板</div><div class="meter-track"><div class="meter-fill mid" style="width:50%"></div></div><div class="m-val">2.5</div></div>
+    <div class="meter-row"><div class="m-label">Manifold／流體管路</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1.0</div></div>
+    <div class="meter-row"><div class="m-label">換熱器翅片與精密沖壓件</div><div class="meter-track"><div class="meter-fill mid" style="width:80%"></div></div><div class="m-val">4.0</div></div>
+    <div class="meter-row"><div class="m-label">精密模具／治具（上游）</div><div class="meter-track"><div class="meter-fill mid" style="width:90%"></div></div><div class="m-val">4.5</div></div>
+    <div class="meter-row"><div class="m-label">價格競爭壓力</div><div class="meter-track"><div class="meter-fill" style="width:40%"></div></div><div class="m-val">2.0</div></div>
+    <p class="note" style="margin-top:8px">評分邏輯：微研在我方目標品項（快接頭、冷板、Manifold）<b>基本錯位</b>，故給 1.0–2.5；但在「翅片沖壓件」與「精密模具」兩項已是量產且進入國際大廠鏈，故給 4.0／4.5。冷板一項給 2.5 而非 1.0，是因為母公司正在建微通道一體化產線，屬<b>動態風險</b>。</p>
+  </div>
+
+  <div class="callout good">
+    <div class="t">核心結論</div>
+    <b>無錫微研不是我方的競爭對手，它與我方是錯位的——甚至可能是合作對象。</b>前四家（胜蓝、奕東、卓暉、捷邦）都是「做液冷零組件賣給散熱模組廠」的同構競爭者；微研是「做模具賣給換熱器與機房空調廠」的上游供應商，客戶是維諦、英維克、美的、大金，<b>公開資料中查不到它與奇鋐、雙鴻的供應關係</b>。它真正的價值有二：一是我方若要做翅片沖壓或微通道扁管，它是可採購模具的對象；二是它證明了<b>另一條被忽略的入鏈路徑——不走台系散熱模組廠，直接切機房溫控大廠（Vertiv／英維克）的二次側換熱器與 CDU 零件</b>。這條路徑的競爭者密度遠低於 UQD 賽道。
+  </div>
+
+  <div class="callout warn">
+    <div class="t">微研的結構性軟肋：國資背景——也是我方最該放大的差異化空間</div>
+    微研的最終實控人是<b>寧波市國資委</b>（經寧波成形控股持有上市公司 32.09%）。在美系終端客戶（NVIDIA 鏈、Vertiv 北美業務）的供應鏈審查與「非紅供應鏈」政策下，<b>這是比民營陸廠更不利的位置</b>：民企尚可透過海外設廠、股權架構淡化背景，<b>國資股東是無法切割的</b>。微研目前最值錢的資產——「Vertiv 北美唯一非本土模具供應商」的身分——恰恰建立在美系客戶最敏感的審查線上；一旦地緣管制延伸到資料中心製冷關鍵零件，這個位置就會變成<b>可被替換的空缺</b>。我方作為台灣廠商，向 Vertiv、英維克以外的歐美系溫控與伺服器客戶爭取二次側換熱器、CDU 精密沖壓零件時，「非紅＋台灣品質」這張牌對上微研，是<b>結構性優勢而非行銷話術</b>。
+  </div>
+
+  <h3>建議行動</h3>
+  <div class="card">
+    <table>
+      <tr><th style="width:150px">方向</th><th>建議</th></tr>
+      <tr><td>定位調整</td><td><b>把微研移出「競爭者」清單，改列「上游供應商／潛在合作方」</b>。真正要盯的競爭者是前四家；微研的價值在於它示範了另一條入鏈路徑</td></tr>
+      <tr><td>可借鏡的路徑</td><td><b>評估「機房溫控大廠直供」路線</b>：維諦（Vertiv）、英維克、台達等 CDU／機房空調廠同樣需要大量精密沖壓件與釺焊結構件，且這條路的大陸競爭者密度遠低於 UQD 賽道。台灣廠商對這些客戶反而可以打「非紅」牌</td></tr>
+      <tr><td>可能的採購／合作</td><td>若我方要做<b>翅片沖壓、微通道扁管、換熱器結構件</b>，微研（或同級大陸模具廠）是可詢價的模具來源；但需先評估國資背景模具是否影響我方對美系客戶的供應鏈聲明</td></tr>
+      <tr><td>能力補強</td><td>與前四家的結論一致：<b>真空釺焊／FSW、氦質譜氣密檢測、內腔清潔度管理</b>仍是三道門檻。針對換熱器路線再加一項——<b>薄壁翅片與扁管的成形穩定性</b>（微研管理層點名「液冷板薄度要求極高、能達標者稀少」，這正是缺口）</td></tr>
+      <tr><td>差異化牌</td><td>對歐美系溫控大廠打「<b>非紅供應鏈＋台灣品質</b>」牌，此處優勢比面對台系散熱廠時更明顯：微研的最終實控人是<b>寧波市國資委</b>，這在美系客戶的供應鏈審查中是結構性劣勢</td></tr>
+      <tr><td>監測項目</td><td>① 寧波精達的「微通道裝備及其他」分部是否由賣設備轉為賣<b>冷板成品</b>（轉為競爭者的訊號）② 微研是否出現台系散熱廠客戶 ③ 2026 年業績承諾（3,970 萬）是否達成 ④ 加拿大 1,000 萬美元訂單的後續放量與客戶身分</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= 資料來源 ================= -->
+<footer>
+  <b>資料來源</b>（檢索日期 2026-07-31）：
+  <ul style="padding-left:18px; margin-top:6px">
+    <li><a href="http://big5.sse.com.cn/disclosure/listedinfo/announcement/c/new/2026-04-03/603088_20260403_F43C.pdf">上交所：國聯民生證券關於寧波精達 2025 年度持續督導核查意見</a>（微研 2025 扣非淨利 3,929.24 萬、承諾 3,830 萬、業務範圍）</li>
+    <li><a href="https://static.cninfo.com.cn/finalpage/2025-06-28/1224013849.PDF">巨潮：關於無錫微研有限公司 2024 年度業績承諾實現情況的公告</a>（2024 扣非 3,644.21 萬、三年承諾 1.141 億）</li>
+    <li><a href="https://static.sse.com.cn/stock/disclosure/announcement/c/202502/603088_20250224_JULN.pdf">上交所：金證（上海）資產評估報告</a>（2022–2024 營收、毛利率、分產品營收、評估值 3.62 億／增值率 91.56%、資質榮譽）</li>
+    <li><a href="https://stockn.xueqiu.com/SH603088/20250305708693.pdf">寧波精達：發行股份及支付現金購買資產並募集配套資金暨關聯交易報告書（草案）</a>（交易前股權結構、境內外子公司名單、主營業務）</li>
+    <li><a href="https://file.finance.qq.com/finance/hs/pdf/2026/02/02/ae8556d7dfee4e85acbb9b7dcfed9154.PDF">寧波精達 2026 年 1 月投資者關係活動記錄表（編號 2026-002）</a>（<b>微研進入北美維諦供應鏈、唯一非本土模具供應商；加拿大客戶逾 1,000 萬美元機房液冷訂單；與英維克合作；液冷板薄度門檻</b>）</li>
+    <li><a href="https://stcn.com/article/detail/3427058.html">證券時報：無錫微研與液冷巨頭維諦技術深化合作</a>（2023 年起接觸、高端換熱器模具及精密零部件、資料中心製冷里程碑）</li>
+    <li><a href="https://finance.sina.com.cn/roll/2025-10-28/doc-infvmezv1409593.shtml">新浪財經：無錫微研與英偉達 AI 計算液冷產品直接供應商維諦技術深化合作</a></li>
+    <li><a href="https://stcn.com/article/detail/3337278.html">證券時報：寧波精達 蓄力新領域 聚焦資料中心液冷與機器人輕量化</a>（鋁鎂合金翅片模具、出口訂單 +70%、北美訂單）</li>
+    <li><a href="https://www.stcn.com/article/detail/3193887.html">證券時報：資本運作打開業務協同空間，微通道換熱器拓寬液冷新賽道</a>（2025-05 完成收購、微通道市場規模、德國肖拉）</li>
+    <li><a href="https://finance.sina.com.cn/stock/aigc/stockfs/2026-04-02/doc-inhtcfxz9450644.shtml">新浪財經：寧波精達 2025 年報解讀</a>（營收 8.81 億、淨利 −27.03%、分部營收、研發人員、海外占比、應收帳款）</li>
+    <li><a href="https://stockmc.xueqiu.com/202604/603088_20260429_NG3C.pdf">寧波精達 2026 年第一季度報告</a>（Q1 營收 1.64 億 −11.4%、淨利 802 萬 −77.94%、前十大股東）</li>
+    <li><a href="https://finance.sina.com.cn/roll/2024-11-25/doc-incxftfu8329050.shtml">新浪財經：寧波精達 3.6 億收購無錫微研 標的二闖 A 股</a>（2022–2024 前九月財務、2023 御銀股份收購告吹）</li>
+    <li><a href="https://www.stcn.com/article/detail/1543879.html">證券時報：擬發行股份收購無錫微研 實現技術互補</a>（<b>客戶：美的、奧克斯、海信、TCL、大金、日立</b>；蔡磊明留任）</li>
+    <li><a href="https://www.cnpp.cn/pinpai/1635617.html">CNPP：微研股份簡介</a>（1994-05-10 成立、註冊資本 1 億、員工約 380 人／研發近 70 人、專利 140 餘項、翅片模具／座椅滑軌模具／油冷器模具）</li>
+    <li><a href="https://pitchhub.36kr.com/project/2066641221648389">36 氪創投平台：微研股份</a>（註冊地址、法定代表人蔡磊明、資質認證）</li>
+    <li><a href="https://stock.qianzhan.com/neeq/gongsixinxi_835972.OC.html">前瞻眼：無錫微研精密沖壓件股份有限公司（835972.OC）</a>（<b>獨立主體</b>：2008 成立、2016 新三板掛牌、實控人談淵智、355 人、無錫濱湖區）</li>
+    <li><a href="https://finance.sina.com.cn/roll/2022-06-25/doc-imizmscu8652195.shtml">新浪財經：寧波精達控制權變更 寧波國資委成實控人</a>（2022 年國資入主）</li>
+    <li><a href="https://603088.fupanwang.com/">復盤網：寧波精達 603088 行情</a>（股價、市值、股東結構）</li>
+  </ul>
+  <p style="margin-top:10px">備註：<sup class="est">＊</sup> 2025 年微研營收為由併表期間（2025-05～06）收入 5,488 萬元年化回推之估算值，非官方披露；集團未單獨披露微研全年營收與液冷收入。「無錫微研精密沖壓件股份有限公司（835972.OC）」與本報告主體「無錫微研有限公司」為<b>兩個不同法人</b>，實控人分別為談淵智與（交易前）蔡磊明，其歷史關聯與是否同源建議另行核實。母公司市值與股價為 2026-07 檢索之近似值，請以即時行情為準。微研與奇鋐（AVC）、雙鴻之供應關係於公開資料中查無實證，本報告依其實際客戶結構將其定位為「上游模具供應商／潛在合作方」而非競爭者。本報告僅供內部策略參考。</p>
+</footer>
+
+</div>
+</body>
+</html>
