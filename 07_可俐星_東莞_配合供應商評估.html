@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>東莞市可俐星電子有限公司｜配合供應商評估（鑫鴻騰內部）</title>
+<style>
+
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;      /* 卡片/圖表面 */
+    --page: #f9f9f7;           /* 頁面底 */
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;       /* 主色（藍） */
+    --series-1-track: #cde2fb; /* 藍 100，meter 未填軌 */
+    --seq-250: #86b6ef;
+    --seq-450: #2a78d6;
+    --seq-600: #184f95;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --accent-wash: rgba(42,120,214,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-1-track: #0d366b;
+      --seq-250: #1c5cab;
+      --seq-450: #3987e5;
+      --seq-600: #6da7ec;
+      --good-text: #0ca30c;
+      --accent-wash: rgba(57,135,229,0.12);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  /* ===== 頁首 ===== */
+  .report-tag { font-size:12px; letter-spacing:.12em; color:var(--text-muted); text-transform:uppercase; }
+  header.hero { padding: 8px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing:.01em; margin-top: 4px; }
+  h1 .code { font-weight: 400; font-size: 18px; color: var(--text-secondary); margin-left: 8px; }
+  .hero-sub { color: var(--text-secondary); margin-top: 6px; max-width: 72ch; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+  .badge { font-size:12.5px; padding:3px 10px; border-radius:99px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-secondary); }
+  .badge.threat { border-color: var(--critical); color: var(--critical); font-weight:600; }
+  .meta-line { margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+
+  /* ===== 區塊 ===== */
+  section { margin-bottom: 36px; }
+  h2 { font-size: 20px; font-weight: 700; padding-bottom: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h2 .num { color: var(--series-1); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 18px 0 8px; }
+  p.body { color: var(--text-primary); margin-bottom: 10px; max-width: 80ch; }
+  .note { font-size: 12.5px; color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .grid-3 { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+  @media (max-width: 760px){ .grid-2,.grid-3{grid-template-columns:1fr;} }
+
+  /* ===== 摘要統計磚 ===== */
+  .tiles { display:grid; grid-template-columns: repeat(6,1fr); gap:12px; }
+  @media (max-width: 900px){ .tiles{grid-template-columns: repeat(3,1fr);} }
+  @media (max-width: 560px){ .tiles{grid-template-columns: repeat(2,1fr);} }
+  .tile { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:14px 14px 12px; }
+  .tile .label { font-size:12px; color:var(--text-muted); }
+  .tile .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .tile .delta { font-size:12px; margin-top:2px; }
+  .delta.up { color: var(--good-text); }
+  .delta.down { color: var(--critical); }
+  .delta.flat { color: var(--text-muted); }
+
+  /* ===== 表格 ===== */
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-weight:600; color:var(--text-secondary); font-size:12.5px; padding:8px 10px; border-bottom:1px solid var(--baseline); white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:top; }
+  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom:none; }
+
+  /* ===== 時間軸 ===== */
+  .timeline { list-style:none; position:relative; padding-left:20px; }
+  .timeline::before { content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--grid); border-radius:1px; }
+  .timeline li { position:relative; padding:0 0 14px 12px; }
+  .timeline li::before { content:""; position:absolute; left:-20px; top:7px; width:8px; height:8px; border-radius:50%; background:var(--series-1); box-shadow: 0 0 0 2px var(--surface-1); }
+  .timeline .yr { font-weight:700; font-variant-numeric: tabular-nums; margin-right:8px; }
+  .timeline .desc { color:var(--text-secondary); }
+
+  /* ===== 圖表（純 HTML/CSS 橫條圖） ===== */
+  .chart { margin-top: 10px; }
+  .chart-title { font-size:13.5px; font-weight:600; }
+  .chart-sub { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .hbar-row { display:grid; grid-template-columns: 118px 1fr 120px; align-items:center; gap:10px; padding:5px 0; }
+  .hbar-row .cat { font-size:13px; color:var(--text-secondary); text-align:right; }
+  .hbar-track { position:relative; height:20px; }
+  .hbar-fill { position:absolute; left:0; top:0; height:20px; background:var(--series-1); border-radius:0 4px 4px 0; transition: opacity .15s; }
+  .hbar-row:hover .hbar-fill { opacity:.82; }
+  .hbar-row .val { font-size:13px; color:var(--text-primary); font-variant-numeric:tabular-nums; }
+  .hbar-row .val .pct { color:var(--text-muted); }
+  .axis-note { border-top:1px solid var(--baseline); margin-top:6px; padding-top:5px; font-size:11.5px; color:var(--text-muted); text-align:right; }
+
+  /* 縱向柱狀（年度趨勢，小倍數） */
+  .cols { display:flex; align-items:flex-end; gap:26px; height:170px; padding:0 6px; border-bottom:1px solid var(--baseline); }
+  .col-g { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
+  .col-bar { width:100%; max-width:44px; background:var(--series-1); border-radius:4px 4px 0 0; position:relative; transition: opacity .15s; }
+  .col-bar.est { background: var(--seq-250); }
+  .col-g:hover .col-bar { opacity:.82; }
+  .col-val { font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--text-primary); margin-bottom:4px; }
+  .col-x { display:flex; gap:26px; padding:6px 6px 0; }
+  .col-x div { flex:1; text-align:center; font-size:12px; color:var(--text-muted); }
+
+  /* ===== SWOT ===== */
+  .swot { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .swot{grid-template-columns:1fr;} }
+  .swot .card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+  .swot .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .swot ul { padding-left:18px; }
+  .swot li { margin-bottom:8px; color:var(--text-primary); }
+  .swot li b { font-weight:600; }
+
+  /* ===== 重點框 ===== */
+  .callout { background: var(--accent-wash); border:1px solid var(--border); border-left:3px solid var(--series-1); border-radius:8px; padding:14px 16px; margin:14px 0; }
+  .callout.warn { border-left-color: var(--critical); background: rgba(208,59,59,0.06); }
+  .callout .t { font-weight:700; font-size:13.5px; margin-bottom:4px; }
+
+  /* ===== 評分 meter ===== */
+  .meter-row { display:grid; grid-template-columns: 170px 1fr 56px; gap:12px; align-items:center; padding:6px 0; }
+  .meter-row .m-label { font-size:13.5px; color:var(--text-secondary); text-align:right; }
+  .meter-track { height:10px; border-radius:5px; background:var(--series-1-track); position:relative; overflow:hidden; }
+  .meter-fill { position:absolute; left:0; top:0; bottom:0; background:var(--series-1); border-radius:5px; }
+  .meter-row .m-val { font-size:13px; font-variant-numeric:tabular-nums; color:var(--text-primary); }
+
+  footer { border-top:1px solid var(--border); padding-top:16px; font-size:12.5px; color:var(--text-muted); }
+  footer a { color: var(--series-1); text-decoration:none; word-break:break-all; }
+  footer li { margin-bottom:4px; }
+  sup.est { color: var(--text-muted); }
+
+  .badge.ok { border-color: var(--good); color: var(--good-text); font-weight:600; }
+  .badge.mid { border-color: var(--warning); color: var(--warning); font-weight:600; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .grid-2{grid-template-columns:1fr;} }
+  .card { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:16px; }
+  .tiles { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .tag-na { color:var(--text-muted); font-style:italic; }
+  .chain { display:flex; flex-direction:column; gap:6px; }
+  .chain .lvl { display:flex; align-items:center; gap:8px; }
+  .chain .box { border:1px solid var(--border); background:var(--surface-1); border-radius:8px; padding:6px 12px; font-size:13.5px; }
+  .chain .box.hi { border-color:var(--series-1); background:var(--accent-wash); font-weight:600; }
+  .chain .arrow { color:var(--text-muted); font-size:13px; padding-left:14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="report-tag">大陸配合供應商評估 · 02 / 02</div>
+  <h1>東莞市可俐星電子有限公司<span class="code">奕東電子 301123 控股孫公司</span></h1>
+  <div class="hero-sub">可俐星不是一家獨立的東莞小廠，而是<b>奕東電子（301123）集團旗下專責 AI 算力液冷散熱的業務主體</b>，由全資子公司東莞華珂電子持有。奕東正是本系列第 02 份報告判定「與我方最正面對位」的競爭者，其液冷客戶名單已直接包含<b>奇鋐 AVC 與泰碩</b>。本報告以配合供應商角度評估：它能補什麼、風險在哪、以及為什麼與它合作的最大風險不是品質而是被繞過。</div>
+  <div class="badges">
+    <span class="badge threat">配合適配度：低（競爭者集團的液冷主體）</span>
+    <span class="badge">主體定位：AI 算力液冷散熱</span>
+    <span class="badge">母集團：奕東電子 301123</span>
+    <span class="badge">2025 前 8 月營收 ¥5,686 萬</span>
+    <span class="badge">已在奇鋐供應鏈內（集團層級）</span>
+  </div>
+  <div class="meta-line">報告日期 2026-08-13 · 資料來源：奕東電子 2025-11-26 對外投資公告、2025 年度報告 · 幣別：人民幣</div>
+</header>
+
+<section>
+  <div class="tiles">
+    <div class="tile"><div class="label">統一社會信用代碼</div><div class="value" style="font-size:15px">91441900MA4UYD627B</div><div class="delta flat">成立 2016-11-14</div></div>
+    <div class="tile"><div class="label">註冊資本</div><div class="value">¥2,222.22萬</div><div class="delta up">▲ 由 2,000 萬增資而來</div></div>
+    <div class="tile"><div class="label">2025 年 1–8 月營收</div><div class="value">¥5,685.93萬</div><div class="delta flat">八個月數字，非全年</div></div>
+    <div class="tile"><div class="label">同期淨利</div><div class="value">¥553.51萬</div><div class="delta up">▲ 淨利率約 9.7%</div></div>
+    <div class="tile"><div class="label">淨資產</div><div class="value">¥1,706.09萬</div><div class="delta down">▼ 負債 6,394 萬／資產 8,100 萬</div></div>
+    <div class="tile"><div class="label">增資估值</div><div class="value">¥3.0億</div><div class="delta flat">3,000 萬換 10%（post-money）</div></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">1</span>公司主體與股權鏈</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">基本資料</h3>
+      <table>
+        <tr><td style="width:110px;color:var(--text-muted)">全名</td><td>東莞市可俐星電子有限公司</td></tr>
+        <tr><td style="color:var(--text-muted)">統一社會信用代碼</td><td>91441900MA4UYD627B</td></tr>
+        <tr><td style="color:var(--text-muted)">成立</td><td>2016-11-14</td></tr>
+        <tr><td style="color:var(--text-muted)">法定代表人</td><td><b>鄧可</b>——與奕東電子實控人之一同名（奕東實控人為鄧玉泉／鄧可父子）</td></tr>
+        <tr><td style="color:var(--text-muted)">註冊地址</td><td>廣東省東莞市東城街道雪花南路 1 號 1 棟 102 室</td></tr>
+        <tr><td style="color:var(--text-muted)">企業類型</td><td>其他有限責任公司</td></tr>
+        <tr><td style="color:var(--text-muted)">註冊資本</td><td>2,000 萬元 → <b>2,222.2222 萬元</b>（2026-04 完成工商變更）</td></tr>
+        <tr><td style="color:var(--text-muted)">經營範圍</td><td>電子產品銷售、電子元器件製造、五金製品、模具製造、人工智慧應用軟體開發等</td></tr>
+        <tr><td style="color:var(--text-muted)">關聯基地</td><td><b>湖北可俐星科技有限公司</b>——同為奕東集團孫公司，第二生產基地</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">股權鏈</h3>
+      <div class="chain">
+        <div class="lvl"><span class="box hi">奕東電子科技股份有限公司（301123，深交所創業板）</span></div>
+        <div class="arrow">↓ 全資</div>
+        <div class="lvl"><span class="box">東莞華珂電子科技有限公司</span></div>
+        <div class="arrow">↓ 81%（增資後）</div>
+        <div class="lvl"><span class="box hi">東莞市可俐星電子有限公司</span></div>
+      </div>
+      <h3>增資前後股權</h3>
+      <table>
+        <tr><th>股東</th><th class="num">增資前</th><th class="num">增資後</th></tr>
+        <tr><td>東莞華珂電子（奕東全資子公司）</td><td class="num">90%</td><td class="num">81%</td></tr>
+        <tr><td>廣州杰睿投資</td><td class="num">10%</td><td class="num">9%</td></tr>
+        <tr style="background:var(--accent-wash)"><td>梁立壯或其指定第三方</td><td class="num">—</td><td class="num">10%</td></tr>
+      </table>
+      <p class="note" style="margin-top:8px">奕東 2025 年報釋義稱東莞可俐星為「全資孫公司」，與上述增資公告揭露的股權比例不一致，推測為年報用語寬鬆或以不同時點表述，<b>實際比例以增資公告為準</b>。</p>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="t">梁立壯是誰？——這筆增資揭露了一個交叉綁定</div>
+    <p class="body" style="margin-bottom:0">梁立壯是<b>深圳冠鼎金屬科技</b>的法定代表人與原大股東。2025 年 11 月同一份公告裡，奕東以 6,120 萬元收購深圳冠鼎 51%（冠鼎為埋管冷板廠，自稱「AI 算力液冷散熱產品結構綜合解決方案商、液冷散熱領域頭部客戶核心供應商」），同時梁立壯以 3,000 萬元換取可俐星 10%。<b>兩家液冷主體交叉持股、互相綁定</b>，並附有五年後可按原出資額回購的條款。這代表奕東正在把液冷資源集中整併，不是鬆散的投資。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">2</span>業務定位與能力</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">公司自我定位（奕東公告原文）</h3>
+      <p class="body">「公司專注 AI 算力液冷散熱產品的<b>業務主體</b>，進入了 AI 算力液冷產品<b>全球頭部客戶供應鏈</b>。」</p>
+      <p class="body" style="margin-bottom:0">換句話說，可俐星不是奕東旗下一個普通的五金加工點，而是集團<b>指定承接 AI 液冷業務的公司</b>。它的存在目的就是做我們想做的那件事。</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">已確認 / 仍待查</h3>
+      <table>
+        <tr><td>AI 算力液冷散熱產品</td><td style="color:var(--good-text)">✓ 公告確認為主營</td></tr>
+        <tr><td>電子元器件、五金製品、模具</td><td style="color:var(--good-text)">✓ 經營範圍涵蓋</td></tr>
+        <tr><td>湖北第二基地</td><td style="color:var(--good-text)">✓ 年報釋義確認</td></tr>
+        <tr><td>具體產品品項（冷板／manifold／結構件）</td><td class="tag-na">未拆分揭露</td></tr>
+        <tr><td>設備清單（CNC／鏟齒／焊接／檢漏）</td><td class="tag-na">查無</td></tr>
+        <tr><td>員工人數、廠房面積</td><td class="tag-na">查無</td></tr>
+        <tr><td>體系認證</td><td class="tag-na">查無（需索取證書）</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">3</span>財務體質</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">可俐星（2025-08-31 基準）</h3>
+      <table>
+        <tr><th>項目</th><th class="num">金額</th></tr>
+        <tr><td>資產總額</td><td class="num">¥8,100.18 萬</td></tr>
+        <tr><td>負債總額</td><td class="num">¥6,394.10 萬</td></tr>
+        <tr><td>淨資產</td><td class="num">¥1,706.09 萬</td></tr>
+        <tr style="background:var(--accent-wash)"><td>營業收入（1–8 月）</td><td class="num">¥5,685.93 萬</td></tr>
+        <tr style="background:var(--accent-wash)"><td>淨利潤（1–8 月）</td><td class="num">¥553.51 萬</td></tr>
+      </table>
+      <p class="note" style="margin-top:8px">淨利率約 9.7%，以液冷結構件而言屬健康；但<b>負債比達 79%</b>，且增資 3,000 萬中僅 222 萬計入註冊資本、2,778 萬入資本公積，顯示是以現金補強資產負債表。年化營收約 8,500 萬元，屬小型廠規模。</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">母公司奕東電子（2025 全年）</h3>
+      <div class="chart">
+        <div class="chart-title">營收與獲利</div>
+        <table style="margin-top:8px">
+          <tr><td>營業收入</td><td class="num">¥22.67 億</td></tr>
+          <tr><td>淨利潤</td><td class="num" style="color:var(--critical)">−¥6,685 萬（虧損）</td></tr>
+        </table>
+      </div>
+      <div class="callout warn" style="margin-top:12px">
+        <div class="t">母集團正在虧損</div>
+        <p class="body" style="margin-bottom:0">奕東 2025 年全年虧損 6,685 萬元。母公司自身失血的情況下，對孫公司的資金支援能力、以及在價格戰中的行為模式（低價搶單以衝營收）都需要警戒。這一點與本系列第 02 份報告對奕東「現金流與短債」的疑慮一致。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">4</span>客戶重疊 —— 本案的核心問題</h2>
+  <p class="body">奕東電子 2025 年報明確列舉其液冷散熱領域客戶：</p>
+  <div class="card">
+    <table>
+      <tr><th>客戶</th><th>與鑫鴻騰的關係</th></tr>
+      <tr style="background:var(--accent-wash)"><td><b>奇宏電子（AVC．奇鋐）</b></td><td>我方目標客戶——對方已經在裡面了</td></tr>
+      <tr style="background:var(--accent-wash)"><td><b>泰碩電子</b></td><td>台系散熱廠，我方潛在客戶</td></tr>
+      <tr><td>寶德 BOYD</td><td>國際散熱大廠</td></tr>
+      <tr><td>英維克</td><td>陸系液冷龍頭</td></tr>
+      <tr><td>飛榮達</td><td>陸系散熱大廠（亦為潤星泰母公司）</td></tr>
+      <tr><td>恒運昌、同裕電子、昂湃技術</td><td>陸系液冷業者</td></tr>
+    </table>
+  </div>
+  <div class="callout warn">
+    <div class="t">與潤星泰不同性質的風險：不是「帶競爭對手進門」，是「被繞過」</div>
+    <p class="body">潤星泰的問題是母公司飛榮達為客戶的競爭對手，會被客戶否決。可俐星的問題不一樣——它的母集團<b>已經是奇鋐的液冷供應商</b>，客戶端不會有牴觸。</p>
+    <p class="body" style="margin-bottom:0">真正的風險在我方這一側：<b>奕東是與鑫鴻騰爭奪同一批委外訂單的競爭者</b>（本系列第 02 份報告已判定為「最正面對位」）。若我方把奇鋐的專案圖面、規格與 NPI 需求交給可俐星做，等於把自己的案子送進競爭者手裡，而對方在客戶那邊已有直接窗口。<b>被繞過（disintermediation）幾乎是必然的商業選擇，不需要對方有惡意</b>。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">5</span>合作視角 SWOT</h2>
+  <div class="swot">
+    <div class="card"><h3><span class="dot" style="background:var(--good)"></span>優勢 Strengths</h3><ul>
+      <li><b>真的在做 AI 液冷，而且有獲利。</b>2025 年前八月營收 5,686 萬、淨利 554 萬，淨利率 9.7%，不是紙上談兵。</li>
+      <li><b>上市公司體系內。</b>財務揭露、內控與合規程度優於一般民營小廠。</li>
+      <li><b>雙基地。</b>東莞＋湖北，具產能調度彈性。</li>
+      <li><b>集團資源整併中。</b>與深圳冠鼎（埋管冷板）交叉持股，工藝互補。</li>
+    </ul></div>
+    <div class="card"><h3><span class="dot" style="background:var(--critical)"></span>劣勢 Weaknesses</h3><ul>
+      <li><b>規模小。</b>年化營收約 8,500 萬元，淨資產僅 1,706 萬，大案承載力有限。</li>
+      <li><b>負債比 79%。</b>剛靠增資補資本，財務彈性不高。</li>
+      <li><b>母公司虧損。</b>奕東 2025 全年虧損 6,685 萬，集團失血。</li>
+      <li><b>能力細節不透明。</b>設備、認證、員工數皆未揭露，無法判斷實際製程覆蓋範圍。</li>
+    </ul></div>
+    <div class="card"><h3><span class="dot" style="background:var(--series-1)"></span>機會 Opportunities</h3><ul>
+      <li><b>非奇鋐／雙鴻案的單製程外協。</b>若有與奕東客戶群無重疊的案子，其液冷結構件產能是可用的。</li>
+      <li><b>作為市場情報來源。</b>它的動向直接反映奕東的液冷布局，值得持續觀察而非合作。</li>
+      <li><b>反向參考。</b>它示範了「集團內設液冷專責主體＋交叉持股綁定工藝夥伴」的組織打法，我方可評估仿效。</li>
+    </ul></div>
+    <div class="card"><h3><span class="dot" style="background:var(--warning)"></span>風險 Risks</h3><ul>
+      <li><b>被繞過（最高）。</b>母集團已是奇鋐液冷供應商，我方交出的圖面與客戶需求等同送給競爭者。</li>
+      <li><b>技術與價格資訊外洩。</b>報價結構、製程參數、良率數據都會落入正面競爭者手中。</li>
+      <li><b>產能優先序。</b>集團自有訂單必然優先，我方是最後被排的。</li>
+      <li><b>價格戰誘因。</b>母公司虧損中，有低價搶單衝營收的動機，對我方報價形成壓力而非助力。</li>
+      <li><b>盡調盲區。</b>設備、認證、司法與環保紀錄仍未取得。</li>
+    </ul></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">6</span>對鑫鴻騰的意涵與建議</h2>
+  <h3>配合適配度評估（1–5，5 = 最適合作為本案配合供應商）</h3>
+  <div class="card">
+    <div class="meter-row"><div class="m-label">液冷冷板／結構件外協</div><div class="meter-track"><div class="meter-fill" style="width:40%"></div></div><div class="m-val">2 / 5</div></div>
+    <div class="meter-row"><div class="m-label">單一製程代工（非核心件）</div><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><div class="m-val">3 / 5</div></div>
+    <div class="meter-row"><div class="m-label">作為第二供應來源</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1 / 5</div></div>
+    <div class="meter-row"><div class="m-label">客戶關係相容性</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1 / 5</div></div>
+    <div class="meter-row"><div class="m-label">資訊安全（分數越高越安全）</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1 / 5</div></div>
+    <p class="note" style="margin-top:8px">評分邏輯：技術與獲利能力沒有問題，扣分全部來自「它是競爭者集團的液冷主體、且已在我方目標客戶的供應鏈內」。</p>
+  </div>
+
+  <div class="callout warn">
+    <div class="t">核心結論</div>
+    <p class="body" style="margin-bottom:0">可俐星是<b>奕東電子集團專責 AI 液冷的業務主體</b>，不是中立的協力廠。奕東是與鑫鴻騰爭奪同一批委外訂單的正面競爭者，且其液冷客戶名單已包含奇鋐與泰碩。<b>不建議在奇鋐、雙鴻的委外案中與可俐星配合</b>——這不是品質或產能的問題，而是把自己的案子與圖面交給一個已經站在客戶門內的競爭者。若真有產能缺口，寧可找與奕東、飛榮達兩大集團都無關係的獨立廠。</p>
+  </div>
+
+  <h3>建議行動</h3>
+  <div class="card">
+    <table>
+      <tr><th style="width:120px">項目</th><th>作法</th></tr>
+      <tr><td>本案定位</td><td><b>不納入</b>奇鋐／雙鴻委外案的協力名單。若已有初步接觸，控制在通用製程層級，不揭露專案內容。</td></tr>
+      <tr><td>資訊防護</td><td>不提供圖面、料號、客戶身分、報價結構與良率數據。任何技術交流須先簽 NDA 並附競業與禁止繞單條款——但要認清合約擋不住結構性動機。</td></tr>
+      <tr><td>改列觀察對象</td><td>把可俐星從「潛在供應商」改列為<b>競爭者觀察名單</b>，與第 02 份奕東報告合併追蹤。它的營收成長就是奕東液冷放量的先行指標。</td></tr>
+      <tr><td>若仍要試單</td><td>僅限與奇鋐／雙鴻無關的非核心件，且以我方圖面之最小資訊揭露為原則，作為產能備援的壓力測試，不談長期配合。</td></tr>
+      <tr><td>監測訊號</td><td>① 可俐星年度營收是否在奕東年報中單獨揭露、成長幅度；② 湖北基地是否量產液冷件；③ 梁立壯的 10% 是否行使五年回購權（代表整併失敗）；④ 是否新增台系散熱廠客戶；⑤ 奕東是否轉虧為盈。</td></tr>
+      <tr><td>我方組織啟示</td><td>奕東的打法是「集團內設液冷專責主體（可俐星）＋併購工藝互補廠（冠鼎）＋交叉持股綁定」，從決策到出貨速度很快。我方若要縮短入鏈時間，這個組織模式值得評估仿效。</td></tr>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <h3 style="color:var(--text-primary)">資料來源</h3>
+  <ul>
+    <li><a href="http://static.cninfo.com.cn/finalpage/2025-11-26/1224828329.PDF">奕東電子：關於對外投資與子公司增資的公告（2025-11-26，公告編號 2025-066）</a>——可俐星統編、成立日、法人、地址、增資前後股權、2025 年 1–8 月財務、深圳冠鼎收購案與梁立壯交叉持股</li>
+    <li><a href="https://disc.static.szse.cn/disc/disk03/finalpage/2026-04-29/ab5a2d99-6fac-40d5-98b3-04873c2d8659.PDF">奕東電子：2025 年年度報告（2026-04-29）</a>——東莞可俐星與湖北可俐星為孫公司、東莞華珂為全資子公司、2025 全年營收 22.67 億與淨利 −6,685 萬、液冷客戶名單</li>
+    <li><a href="https://www.21jingji.com/article/20251127/herald/0f7ba15bd94e4a7733b53dddede3106f.html">21 經濟網：奕東電子擬收購深圳冠鼎 51% 股權，加碼 AI 液冷散熱業務</a></li>
+    <li><a href="https://finance.sina.cn/2025-11-26/detail-infytuqz1625783.d.html">新浪財經：奕東電子 6,120 萬收購深圳冠鼎 51% 股權</a></li>
+    <li><a href="https://finance.sina.com.cn/stock/aiassist/agqsjs/2026-04-30/doc-inhwhkum4198535.shtml">新浪財經：奕東電子 2025 年營收 22.67 億、淨利 −6,816.8 萬</a>（與年報數字略有出入，以年報為準）</li>
+    <li>本系列第 02 份報告：<b>02_奕東電子_301123_競爭者分析.html</b>——奕東的實控人鄧玉泉／鄧可父子、與我方最正面對位之判定、液冷客戶含奇宏 AVC 與英維克</li>
+  </ul>
+  <h3 style="color:var(--text-primary)">未驗證事項</h3>
+  <ul>
+    <li>可俐星的設備清單、員工人數、廠房面積、體系認證<b>仍全部未取得</b>，需直接向對方索取。</li>
+    <li>2025 年報釋義稱東莞可俐星為「全資孫公司」，與增資公告揭露之 81%／9%／10% 股權結構不一致，未解；以增資公告為準。</li>
+    <li>法定代表人「鄧可」與奕東實控人之一同名，兩者是否為同一人未直接查證，但依集團架構研判高度可能。</li>
+    <li>司法涉訴、行政與環保處罰紀錄未取得（大陸工商平台於本次調研被反爬蟲擋下），屬未能查證而非確認無。</li>
+    <li>2025 年 1–8 月財務為<b>八個月數字</b>，年化推算僅供參考，非公司揭露之全年值。</li>
+  </ul>
+  <p style="margin-top:12px">本報告僅供鑫鴻騰內部策略參考，不對外提供。</p>
+</footer>
+</div>
+</body>
+</html>
