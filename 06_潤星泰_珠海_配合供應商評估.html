@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>珠海市潤星泰電器有限公司｜配合供應商評估（鑫鴻騰內部）</title>
+<style>
+
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;      /* 卡片/圖表面 */
+    --page: #f9f9f7;           /* 頁面底 */
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;       /* 主色（藍） */
+    --series-1-track: #cde2fb; /* 藍 100，meter 未填軌 */
+    --seq-250: #86b6ef;
+    --seq-450: #2a78d6;
+    --seq-600: #184f95;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --accent-wash: rgba(42,120,214,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-1-track: #0d366b;
+      --seq-250: #1c5cab;
+      --seq-450: #3987e5;
+      --seq-600: #6da7ec;
+      --good-text: #0ca30c;
+      --accent-wash: rgba(57,135,229,0.12);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  /* ===== 頁首 ===== */
+  .report-tag { font-size:12px; letter-spacing:.12em; color:var(--text-muted); text-transform:uppercase; }
+  header.hero { padding: 8px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing:.01em; margin-top: 4px; }
+  h1 .code { font-weight: 400; font-size: 18px; color: var(--text-secondary); margin-left: 8px; }
+  .hero-sub { color: var(--text-secondary); margin-top: 6px; max-width: 72ch; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+  .badge { font-size:12.5px; padding:3px 10px; border-radius:99px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-secondary); }
+  .badge.threat { border-color: var(--critical); color: var(--critical); font-weight:600; }
+  .meta-line { margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+
+  /* ===== 區塊 ===== */
+  section { margin-bottom: 36px; }
+  h2 { font-size: 20px; font-weight: 700; padding-bottom: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h2 .num { color: var(--series-1); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 18px 0 8px; }
+  p.body { color: var(--text-primary); margin-bottom: 10px; max-width: 80ch; }
+  .note { font-size: 12.5px; color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .grid-3 { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+  @media (max-width: 760px){ .grid-2,.grid-3{grid-template-columns:1fr;} }
+
+  /* ===== 摘要統計磚 ===== */
+  .tiles { display:grid; grid-template-columns: repeat(6,1fr); gap:12px; }
+  @media (max-width: 900px){ .tiles{grid-template-columns: repeat(3,1fr);} }
+  @media (max-width: 560px){ .tiles{grid-template-columns: repeat(2,1fr);} }
+  .tile { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:14px 14px 12px; }
+  .tile .label { font-size:12px; color:var(--text-muted); }
+  .tile .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .tile .delta { font-size:12px; margin-top:2px; }
+  .delta.up { color: var(--good-text); }
+  .delta.down { color: var(--critical); }
+  .delta.flat { color: var(--text-muted); }
+
+  /* ===== 表格 ===== */
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-weight:600; color:var(--text-secondary); font-size:12.5px; padding:8px 10px; border-bottom:1px solid var(--baseline); white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:top; }
+  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom:none; }
+
+  /* ===== 時間軸 ===== */
+  .timeline { list-style:none; position:relative; padding-left:20px; }
+  .timeline::before { content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--grid); border-radius:1px; }
+  .timeline li { position:relative; padding:0 0 14px 12px; }
+  .timeline li::before { content:""; position:absolute; left:-20px; top:7px; width:8px; height:8px; border-radius:50%; background:var(--series-1); box-shadow: 0 0 0 2px var(--surface-1); }
+  .timeline .yr { font-weight:700; font-variant-numeric: tabular-nums; margin-right:8px; }
+  .timeline .desc { color:var(--text-secondary); }
+
+  /* ===== 圖表（純 HTML/CSS 橫條圖） ===== */
+  .chart { margin-top: 10px; }
+  .chart-title { font-size:13.5px; font-weight:600; }
+  .chart-sub { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .hbar-row { display:grid; grid-template-columns: 118px 1fr 120px; align-items:center; gap:10px; padding:5px 0; }
+  .hbar-row .cat { font-size:13px; color:var(--text-secondary); text-align:right; }
+  .hbar-track { position:relative; height:20px; }
+  .hbar-fill { position:absolute; left:0; top:0; height:20px; background:var(--series-1); border-radius:0 4px 4px 0; transition: opacity .15s; }
+  .hbar-row:hover .hbar-fill { opacity:.82; }
+  .hbar-row .val { font-size:13px; color:var(--text-primary); font-variant-numeric:tabular-nums; }
+  .hbar-row .val .pct { color:var(--text-muted); }
+  .axis-note { border-top:1px solid var(--baseline); margin-top:6px; padding-top:5px; font-size:11.5px; color:var(--text-muted); text-align:right; }
+
+  /* 縱向柱狀（年度趨勢，小倍數） */
+  .cols { display:flex; align-items:flex-end; gap:26px; height:170px; padding:0 6px; border-bottom:1px solid var(--baseline); }
+  .col-g { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
+  .col-bar { width:100%; max-width:44px; background:var(--series-1); border-radius:4px 4px 0 0; position:relative; transition: opacity .15s; }
+  .col-bar.est { background: var(--seq-250); }
+  .col-g:hover .col-bar { opacity:.82; }
+  .col-val { font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--text-primary); margin-bottom:4px; }
+  .col-x { display:flex; gap:26px; padding:6px 6px 0; }
+  .col-x div { flex:1; text-align:center; font-size:12px; color:var(--text-muted); }
+
+  /* ===== SWOT ===== */
+  .swot { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .swot{grid-template-columns:1fr;} }
+  .swot .card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+  .swot .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .swot ul { padding-left:18px; }
+  .swot li { margin-bottom:8px; color:var(--text-primary); }
+  .swot li b { font-weight:600; }
+
+  /* ===== 重點框 ===== */
+  .callout { background: var(--accent-wash); border:1px solid var(--border); border-left:3px solid var(--series-1); border-radius:8px; padding:14px 16px; margin:14px 0; }
+  .callout.warn { border-left-color: var(--critical); background: rgba(208,59,59,0.06); }
+  .callout .t { font-weight:700; font-size:13.5px; margin-bottom:4px; }
+
+  /* ===== 評分 meter ===== */
+  .meter-row { display:grid; grid-template-columns: 170px 1fr 56px; gap:12px; align-items:center; padding:6px 0; }
+  .meter-row .m-label { font-size:13.5px; color:var(--text-secondary); text-align:right; }
+  .meter-track { height:10px; border-radius:5px; background:var(--series-1-track); position:relative; overflow:hidden; }
+  .meter-fill { position:absolute; left:0; top:0; bottom:0; background:var(--series-1); border-radius:5px; }
+  .meter-row .m-val { font-size:13px; font-variant-numeric:tabular-nums; color:var(--text-primary); }
+
+  footer { border-top:1px solid var(--border); padding-top:16px; font-size:12.5px; color:var(--text-muted); }
+  footer a { color: var(--series-1); text-decoration:none; word-break:break-all; }
+  footer li { margin-bottom:4px; }
+  sup.est { color: var(--text-muted); }
+
+  .badge.ok { border-color: var(--good); color: var(--good-text); font-weight:600; }
+  .badge.mid { border-color: var(--warning); color: var(--warning); font-weight:600; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .grid-2{grid-template-columns:1fr;} }
+  .card { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:16px; }
+  .tiles { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .tag-na { color:var(--text-muted); font-style:italic; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="report-tag">大陸配合供應商評估 · 01 / 02</div>
+  <h1>珠海市潤星泰電器有限公司<span class="code">RXT · 飛榮達 300602 控股子公司</span></h1>
+  <div class="hero-sub">以「半固態壓鑄」起家的珠海壓鑄廠，主力為 4G／5G 基站散熱殼體與濾波器件，2019 年起由深交所上市公司<b>飛榮達（300602）持股 51%</b>。本報告不以競爭者角度撰寫，而是評估：若鑫鴻騰要與其配合、共同承接奇鋐與雙鴻的液冷零組件委外訂單，它補得上什麼、補不上什麼、風險在哪。</div>
+  <div class="badges">
+    <span class="badge threat">配合適配度：不建議（結構性利益衝突）</span>
+    <span class="badge">招牌製程：半固態壓鑄</span>
+    <span class="badge">控股方：飛榮達 300602（51%）</span>
+    <span class="badge">員工約 1,000–1,300 人</span>
+    <span class="badge">未上市（IPO 承諾未兌現）</span>
+  </div>
+  <div class="meta-line">報告日期 2026-08-11 · 資料截至公開可得之最新揭露（飛榮達 2025 年報／2025 半年報） · 幣別：人民幣 · 標註 <sup class="est">＊</sup> 者為由揭露門檻或名錄門檻反推之估算值</div>
+</header>
+
+<section>
+  <div class="tiles">
+    <div class="tile"><div class="label">註冊資本</div><div class="value">¥9,158.88萬</div><div class="delta flat">2019 年飛榮達增資後（原 4,900 萬）</div></div>
+    <div class="tile"><div class="label">控股方持股</div><div class="value">51%</div><div class="delta flat">飛榮達 300602，作價約 ¥1.7 億</div></div>
+    <div class="tile"><div class="label">員工人數</div><div class="value">約 1,000–1,300</div><div class="delta flat">來源間有出入，參保人數查無</div></div>
+    <div class="tile"><div class="label">2018 營收</div><div class="value">¥3.95億</div><div class="delta down">▼ 當年淨利 −922.58 萬（虧損）</div></div>
+    <div class="tile"><div class="label">近年營收（推估）</div><div class="value">&lt; ¥10億<sup class="est">＊</sup></div><div class="delta flat">未入珠海百強（門檻 10 億）</div></div>
+    <div class="tile"><div class="label">液冷後段能力</div><div class="value">查無</div><div class="delta down">▼ FSW／釺焊／檢漏 皆無證據</div></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">1</span>公司概況與股權結構</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">基本資料</h3>
+      <table>
+        <tr><td style="width:110px;color:var(--text-muted)">全名</td><td>珠海市潤星泰電器有限公司（品牌 RXT）</td></tr>
+        <tr><td style="color:var(--text-muted)">成立</td><td>2002-06-07（另有來源稱 1997 年創辦團隊起步，以工商登記 2002 為準）</td></tr>
+        <tr><td style="color:var(--text-muted)">廠區</td><td>珠海市香洲區前山鎮山星工業園；七棟自有廠房，分壓鑄、機加、支架、模具四個生產基地</td></tr>
+        <tr><td style="color:var(--text-muted)">廠區面積</td><td>5.6 萬 ㎡ 或 6.8 萬 ㎡（<span class="tag-na">兩來源矛盾，未解</span>）</td></tr>
+        <tr><td style="color:var(--text-muted)">法定代表人</td><td>張莹（張瑛）；2018–2019 交易時為創辦人任懷德</td></tr>
+        <tr><td style="color:var(--text-muted)">控股結構</td><td>深圳市飛榮達科技（300602.SZ）持股 51%。收購前股東：任懷德 40.04%、張瑛 38.96%、李曉武 21.00%</td></tr>
+        <tr><td style="color:var(--text-muted)">體系認證</td><td>ISO 9001:2008、ISO/TS 16949:2009、ISO 14001:2004、OHSAS 18001:2004、CE、3C、UL<br><span class="note">版本號皆為舊版，是否已換證至 2015／2016 版無法確認</span></td></tr>
+        <tr><td style="color:var(--text-muted)">統一社會信用代碼</td><td class="tag-na">查無（大陸工商平台於本次調研全數被擋）</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">發展時間軸</h3>
+      <ul class="timeline">
+        <li><span class="yr">2002</span><span class="desc">珠海市潤星泰電器有限公司登記成立，以壓鑄件起家</span></li>
+        <li><span class="yr">2016</span><span class="desc">與高校、科研院所產教融合，投入半固態壓鑄技術產業化，公司自述為「轉型升級的分水嶺」</span></li>
+        <li><span class="yr">2018-08</span><span class="desc">飛榮達（300602）公告擬以現金增資並收購 51% 股權</span></li>
+        <li><span class="yr">2019-04</span><span class="desc">交易完成，作價約 ¥1.7 億元（標的全部權益估值 ¥1.76855 億元），成為飛榮達控股子公司</span></li>
+        <li><span class="yr">2020</span><span class="desc">獲中國機械工業科學技術獎—技術發明獎三等獎；廣東省專利銀獎</span></li>
+        <li><span class="yr">2023-11</span><span class="desc">對外宣稱「預計兩年內完成 IPO」；截至 2026-08 查無任何輔導備案或受理紀錄，承諾未兌現</span></li>
+        <li><span class="yr">2025-12</span><span class="desc">飛榮達公告「控股子公司完成股份制改制及更名」，標的是否為潤星泰未能確認，建議持續追蹤</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout warn">
+    <div class="t">解讀：這不是一家獨立的陸資零組件廠</div>
+    <p class="body" style="margin-bottom:0">潤星泰的決策權自 2019 年起在飛榮達手上。評估它，實質上是在評估飛榮達願不願意、以及適不適合出現在奇鋐與雙鴻的供應鏈裡。所有商務條件、產能排程與客戶關係判斷，都必須拉到母公司層級來看，不能只看珠海這個廠。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">2</span>技術與製程能力 —— 補得上什麼、補不上什麼</h2>
+  <p class="body">潤星泰對外唯一的技術標籤是<b>半固態壓鑄（半固態流變壓鑄，rheocasting）</b>：將合金控制在液—固共存區間形成半固態漿料，中速順序填充模腔，鑄件組織細小緻密、氣孔少。這條路線的長處是<b>薄壁、高密度鰭片、一體成形殼體</b>。</p>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">確認具備（可補鑫鴻騰之不足）</h3>
+      <table>
+        <tr><td>半固態壓鑄</td><td>招牌製程，多家官媒與行業媒體一致報導</td></tr>
+        <tr><td>薄鰭成形</td><td>拔模斜度 0.5°、高度 96 mm、無頂出凸台條件下做到 0.8 mm 最薄散熱齒<span class="note">（企業自述）</span></td></tr>
+        <tr><td>模具自製</td><td>設有模具生產基地，壓鑄／機加／支架／模具四線並行</td></tr>
+        <tr><td>機加與沖壓</td><td>對外宣稱涵蓋模具、壓鑄、塑膠、機加、沖壓、表面處理、裝配</td></tr>
+        <tr><td>製程良率</td><td>5G 基站散熱殼體一次合格率 95%<span class="note">（企業自述，未經第三方核實）</span></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">查無證據（液冷板後段關鍵能力）</h3>
+      <table>
+        <tr><td>攪拌摩擦焊 FSW</td><td class="tag-na">查無任何證據</td></tr>
+        <tr><td>真空／氣氛保護釺焊</td><td class="tag-na">查無任何證據</td></tr>
+        <tr><td>氣密與檢漏（氫檢／氦檢）</td><td class="tag-na">查無任何證據</td></tr>
+        <tr><td>壓鑄機噸位與台數</td><td class="tag-na">查無明細（僅「各類設備 1,000 餘台套」籠統說法）</td></tr>
+        <tr><td>CNC 台數</td><td class="tag-na">查無</td></tr>
+        <tr><td>無塵組裝</td><td class="tag-na">查無</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="t">技術路線判讀</div>
+    <p class="body" style="margin-bottom:0">AI 伺服器液冷板的主流工藝是<b>銅／鋁 CNC 銑流道 → 真空釺焊或 FSW 封蓋 → 氣密與微漏率檢測</b>；潤星泰的招牌能力是<b>壓鑄件一體成形</b>，兩者屬不同技術路線。換句話說，<b>它的強項不等於冷板製造能力</b>。若鑫鴻騰缺的是大件鋁壓鑄毛胚與薄鰭散熱殼體，它確實補得上；若缺的是焊接與檢漏，它補不上——而後者正是冷板案子的關鍵工序。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">3</span>產品線與液冷布局</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">產品應用領域</h3>
+      <table>
+        <tr><th>領域</th><th>內容</th><th>證據等級</th></tr>
+        <tr><td>通訊（核心）</td><td>4G／5G 基站殼體、散熱器、濾波器、天線基座</td><td>上市公司公告</td></tr>
+        <tr><td>新能源汽車</td><td>電動車零部件（未見具體品項與占比）</td><td>公告與官網</td></tr>
+        <tr><td>光伏逆變器</td><td>官網產品分類可見</td><td>搜尋索引</td></tr>
+        <tr style="background:var(--accent-wash)"><td>液冷相關</td><td>飛榮達 2025 半年報將其主營描述為「散熱器件、模組及<b>液冷相關產品</b>」</td><td>年報釋義（唯一一手證據）</td></tr>
+        <tr><td>各線營收占比</td><td class="tag-na">查無（潤星泰未單獨揭露分部營收）</td><td>—</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">AI 伺服器液冷進度</h3>
+      <p class="body">以<b>潤星泰</b>為主體的液冷板／manifold 送樣或量產證據：<b class="tag-na">查無</b>。</p>
+      <p class="body">母公司<b>飛榮達</b>層級確有進展：2024 年報稱「AI 伺服器相關業務獲得批量訂單並量產」；2025 年報稱單相／兩相液冷冷板模組與 CDU「與國內主流伺服器廠商達成供應合作，部分產品已實現批量交付」。但<b>均未指明由潤星泰承製</b>。</p>
+      <p class="body" style="margin-bottom:0">在行業媒體整理的 NVIDIA MGX 液冷模組主流供應商名單中，陸系僅列英維克、立訊精密、鴻佰科技，<b>潤星泰與飛榮達均未出現</b>。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">4</span>規模與財務透明度</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="margin-top:0">可取得的財務數字</h3>
+      <table>
+        <tr><th>年度</th><th class="num">營收</th><th class="num">淨利</th><th>來源等級</th></tr>
+        <tr><td>2018</td><td class="num">¥3.948 億</td><td class="num" style="color:var(--critical)">−922.58 萬</td><td>上市公司收購公告</td></tr>
+        <tr><td>2021</td><td class="num tag-na">未拆分</td><td class="num" style="color:var(--critical)">虧損</td><td>媒體（8 家收購標的中 7 家虧損，合計 −9,507.61 萬）</td></tr>
+        <tr><td>2023–2025</td><td class="num tag-na">未揭露</td><td class="num tag-na">未揭露</td><td>—</td></tr>
+      </table>
+      <p class="note" style="margin-top:10px">潤星泰未進入飛榮達年報「主要控股參股公司分析」表（門檻為對母公司淨利影響達 10% 以上），亦未進入 2024 珠海企業 100 強（門檻主營收入 10 億元）。據此反推近年營收約在 <b>4–10 億元</b>區間、淨利貢獻低於飛榮達淨利之 10%<sup class="est">＊</sup>。</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">母公司飛榮達（對照）</h3>
+      <div class="chart">
+        <div class="chart-title">飛榮達 300602 營收（億元）</div>
+        <div class="cols">
+          <div class="col-g"><div class="col-val">50.31</div><div class="col-bar" style="height:77%"></div></div>
+          <div class="col-g"><div class="col-val">65.27</div><div class="col-bar" style="height:100%"></div></div>
+        </div>
+        <div class="col-x"><div>2024</div><div>2025</div></div>
+      </div>
+      <div class="chart" style="margin-top:14px">
+        <div class="chart-title">飛榮達 300602 歸母淨利（億元）</div>
+        <div class="cols" style="height:120px">
+          <div class="col-g"><div class="col-val">1.89</div><div class="col-bar" style="height:52%"></div></div>
+          <div class="col-g"><div class="col-val">3.65</div><div class="col-bar" style="height:100%"></div></div>
+        </div>
+        <div class="col-x"><div>2024</div><div>2025</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="callout warn">
+    <div class="t">財務風險</div>
+    <p class="body" style="margin-bottom:0">潤星泰被併購當年即虧損，近三年財務完全未單獨揭露，無法驗證其獲利能力、現金流與付款能力。母公司則有連續併購後多家子公司虧損、商譽減值頻繁、關聯交易評估增值倍數異常等公開質疑紀錄。以配合供應商而言，這代表<b>對方的財務體質無法從公開資料背書，必須靠合約與付款條件自保</b>。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">5</span>客戶結構與供應鏈相容性 —— 本案關鍵</h2>
+  <div class="card">
+    <table>
+      <tr><th>對象</th><th>狀態</th><th>意涵</th></tr>
+      <tr><td>中興通訊</td><td>具名客戶（合作開發 5G 基站散熱殼體）</td><td>證明其通訊殼體實績為真</td></tr>
+      <tr><td>華為</td><td>潤星泰層級查無；母公司飛榮達為華為散熱核心供應商</td><td>帶明確地緣政治標籤</td></tr>
+      <tr style="background:var(--accent-wash)"><td>台系散熱廠（奇鋐、雙鴻、健策、泰碩）</td><td class="tag-na">查無任何供應或合作證據</td><td>無既有信任基礎可借力</td></tr>
+      <tr><td>NVIDIA 供應鏈</td><td>未出現在 MGX 液冷模組主流供應商名單</td><td>無法以此背書</td></tr>
+      <tr><td>飛榮達自身的伺服器客戶</td><td>緯創、緯穎、仁寶、華碩等台系 ODM；中興、思科、浪潮、新華三、聯想、超聚變</td><td>母公司已直接經營台系 ODM 通路</td></tr>
+    </table>
+  </div>
+  <div class="callout warn">
+    <div class="t">結構性利益衝突（本報告最重要的一段）</div>
+    <p class="body">飛榮達自產單相／兩相液冷冷板模組、3D VC 與 CDU，並已切入緯創、緯穎、仁寶、華碩等台系 ODM 供應鏈——它<b>就是奇鋐、雙鴻在液冷冷板領域的直接競爭對手</b>。</p>
+    <p class="body" style="margin-bottom:0">因此，把潤星泰引進奇鋐或雙鴻的委外案，等同於把這兩家客戶的競爭對手以關係企業身分帶進他們的供應鏈。這是<b>股權層次的結構性衝突，靠保密協議或合約條款無法迴避</b>；一旦客戶的供應商稽核查到股權鏈，不只該案會被否決，還可能連帶影響鑫鴻騰自身的供應商資格與信任。這一點與貴司既有的簡報規範（全份不得出現飛榮達品牌、logo 或照片）方向一致，可視為同一風險的延伸。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">6</span>合作視角 SWOT</h2>
+  <div class="swot">
+    <div class="card"><h3><span class="dot" style="background:var(--good)"></span>優勢 Strengths</h3><ul>
+      <li><b>半固態壓鑄為稀缺製程。</b>薄壁高鰭片一體成形，0.8 mm 齒厚水準在壓鑄路線屬前段班，鑫鴻騰目前沒有這條能力。</li>
+      <li><b>通訊殼體量產實績明確。</b>中興通訊具名合作、國家級技術發明獎與省級專利獎，技術非空口。</li>
+      <li><b>四線垂直整合。</b>模具、壓鑄、機加、支架同廠，毛胚到粗加工可一站完成。</li>
+      <li><b>母公司為上市公司。</b>資本與規模穩定度優於一般民營小廠。</li>
+    </ul></div>
+    <div class="card"><h3><span class="dot" style="background:var(--critical)"></span>劣勢 Weaknesses</h3><ul>
+      <li><b>冷板後段能力全部查無。</b>FSW、真空釺焊、氣密與檢漏三項關鍵工序沒有任何證據。</li>
+      <li><b>技術路線不對口。</b>壓鑄件強項無法直接轉為 CNC 銑流道冷板的產能。</li>
+      <li><b>財務不透明。</b>近三年無單獨揭露，被併購當年即虧損。</li>
+      <li><b>認證版本老舊。</b>公開資料停留在 2008／2009／2004 版，換證狀態不明。</li>
+      <li><b>對外治理鬆散。</b>官網使用自簽 SSL 憑證、公開簡介多年未更新、員工數與廠區面積在不同來源間互相矛盾。</li>
+    </ul></div>
+    <div class="card"><h3><span class="dot" style="background:var(--series-1)"></span>機會 Opportunities</h3><ul>
+      <li><b>非奇鋐／雙鴻案的其他用途。</b>若鑫鴻騰有通訊、儲能、光伏或車用的鋁壓鑄殼體需求，且該案客戶與飛榮達無競爭關係，它是合理的毛胚供應選項。</li>
+      <li><b>壓鑄毛胚＋自家後段。</b>理論上可由其供毛胚、鑫鴻騰做焊接與檢漏，形成互補分工——但前提是解決股權衝突。</li>
+      <li><b>股權若變動。</b>2025-12 飛榮達公告控股子公司股份制改制及更名，若標的為潤星泰且未來獨立分拆，衝突可能減弱。</li>
+    </ul></div>
+    <div class="card"><h3><span class="dot" style="background:var(--warning)"></span>風險 Risks</h3><ul>
+      <li><b>客戶關係風險（最高）。</b>母公司是客戶的競爭對手，稽核一查即現形。</li>
+      <li><b>技術外洩風險。</b>共案過程中鑫鴻騰的圖面、治具與製程參數會流向競爭對手的關係企業。</li>
+      <li><b>產能排擠。</b>母公司自身液冷業務正在放量，集團資源優先序不會偏向外部夥伴。</li>
+      <li><b>紅色供應鏈標籤。</b>飛榮達的華為核心供應商身分，對強調非中國原產地彈性的鑫鴻騰是反向拉扯。</li>
+      <li><b>盡調盲區。</b>訴訟、環保處罰、失信紀錄因大陸工商平台被擋而<b>未能查證</b>，屬「查不到」而非「確認沒有」。</li>
+    </ul></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">7</span>對鑫鴻騰的意涵與建議</h2>
+  <h3>配合適配度評估（1–5，5 = 最適合作為本案配合供應商）</h3>
+  <div class="card">
+    <div class="meter-row"><div class="m-label">鋁壓鑄殼體／薄鰭散熱件</div><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><div class="m-val">5 / 5</div></div>
+    <div class="meter-row"><div class="m-label">冷板銑流道與封蓋焊接</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1 / 5</div></div>
+    <div class="meter-row"><div class="m-label">氣密與檢漏（氫檢／氦檢）</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1 / 5</div></div>
+    <div class="meter-row"><div class="m-label">UQD 精密車銑件</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1 / 5</div></div>
+    <div class="meter-row"><div class="m-label">客戶關係相容性</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1 / 5</div></div>
+    <p class="note" style="margin-top:8px">評分邏輯：以「本案（奇鋐／雙鴻液冷零組件委外）」為前提。壓鑄殼體是其真本事故給滿分；焊接、檢漏、精密車銑三項查無能力故給 1；客戶關係相容性因母公司為客戶競爭對手而給 1。</p>
+  </div>
+
+  <div class="callout warn">
+    <div class="t">核心結論</div>
+    <p class="body" style="margin-bottom:0">潤星泰在<b>鋁壓鑄薄鰭殼體</b>這一塊確實能補鑫鴻騰的不足，技術也不是虛的。但本案的否決點不在技術，而在股權：它是飛榮達的控股子公司，而飛榮達正是奇鋐與雙鴻在液冷冷板領域的直接競爭對手。<b>不建議把潤星泰放進要提報給奇鋐、雙鴻的協力體系</b>。若日後有與飛榮達無競爭關係的案子（通訊、儲能、光伏、車用殼體），再單獨評估其壓鑄產能，是合理的。</p>
+  </div>
+
+  <h3>建議行動</h3>
+  <div class="card">
+    <table>
+      <tr><th style="width:120px">項目</th><th>作法</th></tr>
+      <tr><td>本案定位</td><td><b>不納入</b>奇鋐／雙鴻委外案的協力名單。壓鑄毛胚需求改找與台系散熱廠無競爭關係的獨立壓鑄廠。</td></tr>
+      <tr><td>若仍要接觸</td><td>先取得三份文件再談：<b>(a)</b> 現行有效的 ISO 9001:2015／IATF 16949:2016／ISO 14001:2015 證書；<b>(b)</b> 壓鑄機噸位台數表與 CNC 設備清單；<b>(c)</b> FSW／真空釺焊／氦檢或氫檢的設備與製程能力書面確認。目前這三項全部查無。</td></tr>
+      <tr><td>資訊防護</td><td>任何接觸都不得提供奇鋐／雙鴻的專案資訊、圖面或客戶身分；技術交流限於通用製程層級。</td></tr>
+      <tr><td>能力補強（我方）</td><td>壓鑄薄鰭是我方確實的缺口。建議另尋台灣或東南亞的獨立壓鑄夥伴，或評估自建，把這條能力握在自己手上。</td></tr>
+      <tr><td>監測訊號</td><td>① 飛榮達 2025-12-30「控股子公司完成股份制改制及更名」標的是否為潤星泰；② 潤星泰是否重啟 IPO 輔導；③ 飛榮達持股是否降至 50% 以下；④ 潤星泰是否出現在任何台系散熱廠的供應商名錄。</td></tr>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <h3 style="color:var(--text-primary)">資料來源</h3>
+  <ul>
+    <li><a href="https://pdf.dfcfw.com/pdf/H2_AN201904281323738602_1.pdf">飛榮達關於現金增資並收購珠海潤星泰的公告（2019-04-28）</a>——51% 持股、作價、收購前股東結構、2018 年財務</li>
+    <li><a href="http://static.cninfo.com.cn/finalpage/2018-08-06/1205258566.PDF">飛榮達收購珠海潤星泰公告（2018-08-06）</a>——產品線描述</li>
+    <li><a href="http://static.cninfo.com.cn/finalpage/2025-08-19/1224504291.pdf">飛榮達 2025 年半年度報告</a>——潤星泰主營「散熱器件、模組及液冷相關產品」、集團架構</li>
+    <li><a href="https://static.cninfo.com.cn/finalpage/2026-04-28/1225207278.PDF">飛榮達 2025 年年度報告摘要</a>——液冷冷板模組與 CDU 批量交付</li>
+    <li><a href="https://file.finance.qq.com/finance/hs/pdf/2025/04/16/1223100742.PDF">飛榮達 2024 年年度報告摘要</a>——AI 伺服器業務量產</li>
+    <li><a href="http://news.10jqka.com.cn/field/sn/20251230/55484477.shtml">飛榮達關於控股子公司完成股份制改制及更名的公告（2025-12-30）</a>——待追蹤線索</li>
+    <li><a href="https://finance.sina.com.cn/stock/relnews/cn/2025-02-20/doc-inemcxva2211643.shtml">新浪財經：飛榮達液冷散熱技術儲備與伺服器客戶名單</a></li>
+    <li><a href="https://www.jiemian.com/article/7513166.html">界面新聞：飛榮達收購八家公司七家虧損</a></li>
+    <li><a href="https://finance.sina.com.cn/stock/observe/2025-01-27/doc-inehkpri1428562.shtml">新浪財經：飛榮達 3.8 億收購實控人新能源資產之關聯交易質疑</a></li>
+    <li><a href="https://news.qq.com/rain/a/20231108A0B22D00">騰訊新聞：專注半固態壓鑄技術，潤星泰引領行業發展</a>——技術指標與 IPO 宣示</li>
+    <li><a href="https://ep.ycwb.com/epaper/ywdf/h5/html5/2023-11/09/content_788_612689.htm">羊城晚報：潤星泰半固態壓鑄專訪</a></li>
+    <li><a href="http://zhuzaotoutiao.com/xw/html/3426.shtml">鑄造頭條：潤星泰獲國家級技術發明獎與專利銀獎</a>——中興通訊具名客戶</li>
+    <li><a href="https://cddc.nfu.edu.cn/index.php/web/index/company-info?id=16748">廣州南方學院就業指導中心：潤星泰公司簡介</a>——員工數、廠區、認證清單</li>
+    <li><a href="https://www.cnpp.cn/pinpai/4166767.html">CNPP：潤星泰 RXT 品牌簡介</a></li>
+    <li><a href="https://www.cnpp.cn/focus/3515576.html">CNPP：2024 珠海百強企業名單</a>——營收門檻反推依據</li>
+    <li><a href="https://www.abnotebook.com/a/21473">艾邦：NVIDIA MGX 液冷模組主流供應商一覽</a></li>
+  </ul>
+  <h3 style="color:var(--text-primary)">估算值與未驗證事項</h3>
+  <ul>
+    <li><sup class="est">＊</sup> 年營收低於 10 億元：依 2024 珠海企業百強入圍門檻反推，非公司揭露值。</li>
+    <li><sup class="est">＊</sup> 淨利貢獻低於飛榮達淨利 10%：依年報「主要控股參股公司」揭露門檻反推。</li>
+    <li>0.8 mm 最薄散熱齒、95% 一次合格率、全國細分市占 18%（第一）等為企業自述，未經第三方核實。</li>
+    <li>訴訟、環保處罰、失信紀錄查無，但係因愛企查、企查查、天眼查等大陸工商平台於本次調研全數被反爬蟲擋下，屬<b>未能查證</b>而非確認無。建議請當地窗口代查完整信用報告。</li>
+    <li>員工數（1,000 vs 1,300）與廠區面積（5.6 萬 vs 6.8 萬 ㎡）在不同來源間矛盾，未解。</li>
+    <li>委託方原先假設之「與春興精工（002547）的關係」經雙向查證<b>不成立</b>：春興精工 2024 年報子公司清單無潤星泰，潤星泰控股方為飛榮達。</li>
+  </ul>
+  <p style="margin-top:12px">本報告僅供鑫鴻騰內部策略參考，不對外提供。</p>
+</footer>
+</div>
+</body>
+</html>
