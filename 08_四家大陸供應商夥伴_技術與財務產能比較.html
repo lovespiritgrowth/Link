@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>四家大陸配合廠技術優劣與財務產能比較｜可俐星·胜藍·富其揚·潤星泰</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;      /* 卡片/圖表面 */
+    --page: #f9f9f7;           /* 頁面底 */
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;       /* 主色（藍） */
+    --series-1-track: #cde2fb; /* 藍 100，meter 未填軌 */
+    --seq-250: #86b6ef;
+    --seq-450: #2a78d6;
+    --seq-600: #184f95;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --accent-wash: rgba(42,120,214,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-1-track: #0d366b;
+      --seq-250: #1c5cab;
+      --seq-450: #3987e5;
+      --seq-600: #6da7ec;
+      --good-text: #0ca30c;
+      --accent-wash: rgba(57,135,229,0.12);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  /* ===== 頁首 ===== */
+  .report-tag { font-size:12px; letter-spacing:.12em; color:var(--text-muted); text-transform:uppercase; }
+  header.hero { padding: 8px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing:.01em; margin-top: 4px; }
+  h1 .code { font-weight: 400; font-size: 18px; color: var(--text-secondary); margin-left: 8px; }
+  .hero-sub { color: var(--text-secondary); margin-top: 6px; max-width: 72ch; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+  .badge { font-size:12.5px; padding:3px 10px; border-radius:99px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-secondary); }
+  .badge.threat { border-color: var(--critical); color: var(--critical); font-weight:600; }
+  .meta-line { margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+
+  /* ===== 區塊 ===== */
+  section { margin-bottom: 36px; }
+  h2 { font-size: 20px; font-weight: 700; padding-bottom: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h2 .num { color: var(--series-1); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 18px 0 8px; }
+  p.body { color: var(--text-primary); margin-bottom: 10px; max-width: 80ch; }
+  .note { font-size: 12.5px; color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .grid-3 { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+  @media (max-width: 760px){ .grid-2,.grid-3{grid-template-columns:1fr;} }
+
+  /* ===== 摘要統計磚 ===== */
+  .tiles { display:grid; grid-template-columns: repeat(6,1fr); gap:12px; }
+  @media (max-width: 900px){ .tiles{grid-template-columns: repeat(3,1fr);} }
+  @media (max-width: 560px){ .tiles{grid-template-columns: repeat(2,1fr);} }
+  .tile { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:14px 14px 12px; }
+  .tile .label { font-size:12px; color:var(--text-muted); }
+  .tile .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .tile .delta { font-size:12px; margin-top:2px; }
+  .delta.up { color: var(--good-text); }
+  .delta.down { color: var(--critical); }
+  .delta.flat { color: var(--text-muted); }
+
+  /* ===== 表格 ===== */
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-weight:600; color:var(--text-secondary); font-size:12.5px; padding:8px 10px; border-bottom:1px solid var(--baseline); white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:top; }
+  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom:none; }
+
+  /* ===== 時間軸 ===== */
+  .timeline { list-style:none; position:relative; padding-left:20px; }
+  .timeline::before { content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--grid); border-radius:1px; }
+  .timeline li { position:relative; padding:0 0 14px 12px; }
+  .timeline li::before { content:""; position:absolute; left:-20px; top:7px; width:8px; height:8px; border-radius:50%; background:var(--series-1); box-shadow: 0 0 0 2px var(--surface-1); }
+  .timeline .yr { font-weight:700; font-variant-numeric: tabular-nums; margin-right:8px; }
+  .timeline .desc { color:var(--text-secondary); }
+
+  /* ===== 圖表（純 HTML/CSS 橫條圖） ===== */
+  .chart { margin-top: 10px; }
+  .chart-title { font-size:13.5px; font-weight:600; }
+  .chart-sub { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .hbar-row { display:grid; grid-template-columns: 118px 1fr 120px; align-items:center; gap:10px; padding:5px 0; }
+  .hbar-row .cat { font-size:13px; color:var(--text-secondary); text-align:right; }
+  .hbar-track { position:relative; height:20px; }
+  .hbar-fill { position:absolute; left:0; top:0; height:20px; background:var(--series-1); border-radius:0 4px 4px 0; transition: opacity .15s; }
+  .hbar-row:hover .hbar-fill { opacity:.82; }
+  .hbar-row .val { font-size:13px; color:var(--text-primary); font-variant-numeric:tabular-nums; }
+  .hbar-row .val .pct { color:var(--text-muted); }
+  .axis-note { border-top:1px solid var(--baseline); margin-top:6px; padding-top:5px; font-size:11.5px; color:var(--text-muted); text-align:right; }
+
+  /* 縱向柱狀（年度趨勢，小倍數） */
+  .cols { display:flex; align-items:flex-end; gap:26px; height:170px; padding:0 6px; border-bottom:1px solid var(--baseline); }
+  .col-g { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
+  .col-bar { width:100%; max-width:44px; background:var(--series-1); border-radius:4px 4px 0 0; position:relative; transition: opacity .15s; }
+  .col-bar.est { background: var(--seq-250); }
+  .col-g:hover .col-bar { opacity:.82; }
+  .col-val { font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--text-primary); margin-bottom:4px; }
+  .col-x { display:flex; gap:26px; padding:6px 6px 0; }
+  .col-x div { flex:1; text-align:center; font-size:12px; color:var(--text-muted); }
+
+  /* ===== SWOT ===== */
+  .swot { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .swot{grid-template-columns:1fr;} }
+  .swot .card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+  .swot .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .swot ul { padding-left:18px; }
+  .swot li { margin-bottom:8px; color:var(--text-primary); }
+  .swot li b { font-weight:600; }
+
+  /* ===== 重點框 ===== */
+  .callout { background: var(--accent-wash); border:1px solid var(--border); border-left:3px solid var(--series-1); border-radius:8px; padding:14px 16px; margin:14px 0; }
+  .callout.warn { border-left-color: var(--critical); background: rgba(208,59,59,0.06); }
+  .callout .t { font-weight:700; font-size:13.5px; margin-bottom:4px; }
+
+  /* ===== 評分 meter ===== */
+  .meter-row { display:grid; grid-template-columns: 170px 1fr 56px; gap:12px; align-items:center; padding:6px 0; }
+  .meter-row .m-label { font-size:13.5px; color:var(--text-secondary); text-align:right; }
+  .meter-track { height:10px; border-radius:5px; background:var(--series-1-track); position:relative; overflow:hidden; }
+  .meter-fill { position:absolute; left:0; top:0; bottom:0; background:var(--series-1); border-radius:5px; }
+  .meter-row .m-val { font-size:13px; font-variant-numeric:tabular-nums; color:var(--text-primary); }
+
+  footer { border-top:1px solid var(--border); padding-top:16px; font-size:12.5px; color:var(--text-muted); }
+  footer a { color: var(--series-1); text-decoration:none; word-break:break-all; }
+  footer li { margin-bottom:4px; }
+  sup.est { color: var(--text-muted); }
+
+  /* ===== 本報告新增（四家橫向比較） ===== */
+  .grid-4 { display:grid; grid-template-columns: repeat(4,1fr); gap:14px; }
+  @media (max-width: 980px){ .grid-4{grid-template-columns:1fr 1fr;} }
+  @media (max-width: 560px){ .grid-4{grid-template-columns:1fr;} }
+  .co { border-top:3px solid var(--series-1); }
+  .co.k { border-top-color:#2a78d6; }
+  .co.s { border-top-color:#0ca30c; }
+  .co.f { border-top-color:#fab219; }
+  .co.r { border-top-color:#d03b3b; }
+  .co .nm { font-size:16px; font-weight:700; }
+  .co .pa { font-size:12px; color:var(--text-muted); margin-bottom:6px; }
+  .co .one { font-size:13.5px; color:var(--text-secondary); }
+  .co dl { margin-top:10px; font-size:12.5px; }
+  .co dt { color:var(--text-muted); float:left; clear:left; width:64px; }
+  .co dd { margin-left:64px; margin-bottom:3px; }
+  .cmp th:first-child, .cmp td:first-child { position:sticky; left:0; background:var(--surface-1); font-weight:600; color:var(--text-secondary); }
+  .cmp th { white-space:normal; }
+  .cmp td { font-size:13px; }
+  .scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .cmp { min-width:760px; }
+  .pill { display:inline-block; font-size:10.5px; line-height:1.5; padding:0 6px; border-radius:99px; border:1px solid var(--border); color:var(--text-muted); margin-left:4px; white-space:nowrap; vertical-align:1px; }
+  .pill.self { border-color:var(--warning); color:#8a6100; }
+  .pill.pub { border-color:var(--good); color:var(--good-text); }
+  .pill.none { border-color:var(--baseline); }
+  @media (prefers-color-scheme: dark){ .pill.self{color:#fab219;} }
+  .yes { color:var(--good-text); font-weight:700; }
+  .no { color:var(--text-muted); }
+  .part { color:#8a6100; font-weight:600; }
+  @media (prefers-color-scheme: dark){ .part{color:#fab219;} }
+  .rowhl td { background: var(--accent-wash); }
+  .meter-row.k .meter-fill { background:#2a78d6; }
+  .meter-row.s .meter-fill { background:#0ca30c; }
+  .meter-row.f .meter-fill { background:#fab219; }
+  .meter-row.r .meter-fill { background:#d03b3b; }
+  .legend { display:flex; flex-wrap:wrap; gap:14px; font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .legend span::before { content:""; display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:5px; vertical-align:-1px; }
+  .legend .lk::before{background:#2a78d6;} .legend .ls::before{background:#0ca30c;}
+  .legend .lf::before{background:#fab219;} .legend .lr::before{background:#d03b3b;}
+  .blk { page-break-inside: avoid; }
+
+  td.down, .down { color: var(--critical); }
+
+  @media print {
+    .scroll { overflow: visible; }
+    .cmp { min-width: 0; font-size: 11px; }
+    .cmp td, .cmp th { padding: 5px 6px; }
+    .card, .co, .callout, section { page-break-inside: avoid; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ===== 速評卡（每公司一卡） ===== */
+  .vrow { display:flex; gap:10px; margin-top:10px; font-size:13.5px; }
+  .vrow > div { color:var(--text-primary); }
+  .vk { flex:0 0 auto; align-self:flex-start; font-size:11px; font-weight:700; line-height:1.6; padding:0 7px; border-radius:5px; margin-top:2px; }
+  .vk.plus { color:var(--good-text); background:rgba(12,163,12,0.10); border:1px solid rgba(12,163,12,0.35); }
+  .vk.minus { color:var(--critical); background:rgba(208,59,59,0.08); border:1px solid rgba(208,59,59,0.35); }
+  @media (prefers-color-scheme: dark){
+    .vk.plus { background:rgba(12,163,12,0.16); }
+    .vk.minus { background:rgba(208,59,59,0.16); }
+  }
+  .vtag { font-size:11.5px; font-weight:600; padding:1px 8px; border-radius:99px; margin-left:8px; vertical-align:2px; }
+  .vtag.good { color:var(--good-text); border:1px solid rgba(12,163,12,0.4); }
+  .vtag.warn { color:var(--critical); border:1px solid rgba(208,59,59,0.4); }
+
+  .vk.note { color:var(--series-1); background:var(--accent-wash); border:1px solid rgba(42,120,214,0.35); }
+  @media (prefers-color-scheme: dark){ .vk.note { border-color:rgba(57,135,229,0.45); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="report-tag">大陸液冷供應商調研 · 08 · 橫向整合比較</div>
+  <h1>四家大陸配合廠技術優劣與財務產能比較<span class="code">可俐星 · 胜藍 · 富其揚 · 潤星泰</span></h1>
+  <p class="hero-sub">站在鑫鴻騰要挑「大陸生產夥伴」去承接奇鋐、雙鴻委外訂單的角度，把四家候選（含其母公司／集團）放在同一張表上比。結論先講：這四家不是同一類標的，硬選一家會顧此失彼；正確做法是<b>依品項配對</b>——UQD 一家、冷板與鏟齒一家、規模化備援一家，並排除一家。</p>
+  <div class="badges">
+    <span class="badge">建議主軸：分品項配對，非單一獨家</span>
+    <span class="badge">冷板／鏟齒首選：富其揚</span>
+    <span class="badge">UQD 首選：胜藍（已有勝鴻騰合資）</span>
+    <span class="badge">規模化備援：可俐星（母：奕東電子）</span>
+    <span class="badge threat">建議排除：潤星泰（母公司為客戶的直接對手）</span>
+  </div>
+  <div class="meta-line">報告日期 2026-08-14｜資料截至：公司簡報 2026-04（富其揚）／2025-12（潤星泰）／2026-07（可俐星）；上市公司財報至 2026Q1｜幣別：人民幣｜標「<sup class="est">＊</sup>」為估算值，標籤說明見第 9 節</div>
+</header>
+
+<section class="blk">
+  <h2><span class="num">0</span>一頁結論：怎麼配</h2>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr>
+      <th style="width:120px">品項／角色</th><th>配對對象</th><th>理由</th><th>要先談定的事</th>
+    </tr></thead>
+    <tbody>
+      <tr class="rowhl"><td>液冷快接頭 UQD</td><td><b>胜藍</b>（勝鴻騰合資廠）</td><td>四家中唯一有完整 UQD 成品線與氦質譜檢漏產能的：800㎡ 萬級無塵車間、4 條組裝線、自報 15 萬套／月（長白班）、30 萬套／月（白夜班）；已依託 CNAS 實驗室建立耐壓爆破、壓力脈衝、流阻、插拔、環境試驗全套驗證。</td><td>合資股權與訂單歸屬；第二台氦檢機調試完成後的實際產能；胜藍上市公司端「台系散熱廠小批量訂單」是否與我方目標客戶重疊。</td></tr>
+      <tr class="rowhl"><td>水冷板本體（釺焊／FSW）與鏟齒微流道</td><td><b>富其揚</b></td><td>四家中冷板技術純度最高：釺焊線與 FSW 並行、19 台鏟齒設備、自研鏟齒機做到齒厚 0.03–0.10mm／步距 0.08–0.20mm，且有 FSW 智慧刀柄全程參數追溯與 CU1100 焊後強度實測資料。體量小（180 餘人、1.0 億營收）反而讓我方在合作中握有主導權。</td><td>擴產承諾（釺焊 1→2 條、FSW 4→8 台）誰出錢；旺季排程優先權；治具與流道 know-how 歸屬。</td></tr>
+      <tr><td>規模化冷板、分水器與備援產能</td><td><b>可俐星</b>（母：奕東電子 301123）</td><td>製程最完整的一家：真空釺焊＋氮檢＋氦檢＋超聲波 C 掃＋流阻測試一條龍，另有 6000W 大功率自動雷射焊分水器線、自有電鍍四線、模具自製 117 台精密機台。集團 2026Q1 已扭虧，且液冷客戶名單含奇宏電子（AVC）——客戶端沒有阻力。</td><td>角色分工：可俐星既是我方夥伴、也已直接供應 AVC，須先談定客戶窗口與承接範圍，避免我方變成可被跳過的一段。</td></tr>
+      <tr><td>鋁壓鑄殼體、大件結構件（若日後有此需求）</td><td><b>潤星泰</b>（母：飛榮達 300602）</td><td>壓鑄實力是四家最強：99 台壓鑄機（160T–4500T）、18 台套半固態壓鑄單元、410 台 CNC、14 台 FSW。但這是壓鑄／結構件的強，不是銅冷板與 UQD 的強。</td><td class="no">建議此案不採用——見第 6 節，母公司飛榮達本身即是奇鋐、雙鴻的直接競爭對手，此為一票否決項。</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout">
+    <div class="t">核心判斷</div>
+    <p class="body">四家的能力圈幾乎不重疊：<b>胜藍強在 UQD 與精密車銑（走心機）</b>、<b>富其揚強在冷板焊接與鏟齒</b>、<b>可俐星強在製程完整度與集團資源</b>、<b>潤星泰強在鋁壓鑄大件</b>。把它們當成四個「選一個」的候選來比是錯的比法——真正的問題是「哪一段給誰做，以及我方在每一段裡是不是還握得住客戶關係」。依這個標準，富其揚是最該綁緊的（能力對、體量小、可控），胜藍是既有關係要守住的（UQD 產能是硬資產），可俐星是要談清楚分工才能用的（能力強但可能繞過我方），潤星泰是這一案要避開的（客戶關係衝突）。</p>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">1</span>四家定位速覽</h2>
+  <div class="grid-4">
+    <div class="card co k">
+      <div class="nm">可俐星</div>
+      <div class="pa">東莞市可俐星電子有限公司｜母公司：奕東電子 301123</div>
+      <div class="one">冷板全製程 ＋ 分水器 ＋ 光模組件的「製程百貨公司」，靠上市集團供養擴產。</div>
+      <dl>
+        <dt>成立</dt><dd>2016-11-14</dd>
+        <dt>持股</dt><dd>東莞華珂 81%（奕東全資子）／廣州杰睿 9%／第三方 10%</dd>
+        <dt>本體營收</dt><dd>2025 年 1–8 月 5,685.93 萬<span class="pill pub">公告</span></dd>
+        <dt>集團營收</dt><dd>2025 年 22.67 億<span class="pill pub">公告</span></dd>
+        <dt>基地</dt><dd>東莞東城、湖北可俐星；集團另有深圳冠鼎（51%，埋管冷板）</dd>
+      </dl>
+    </div>
+    <div class="card co s">
+      <div class="nm">胜藍</div>
+      <div class="pa">胜蓝科技股份有限公司 300843｜與我方合資：勝鴻騰</div>
+      <div class="one">連接器大廠橫向切入液冷，UQD 成品線與氦檢產能是四家中唯一成形的。</div>
+      <dl>
+        <dt>成立</dt><dd>2007-12-14；2020-07-02 創業板上市</dd>
+        <dt>實控人</dt><dd>黃雪林（控股 51.59%）</dd>
+        <dt>營收</dt><dd>2025 年 17.41 億（+35.26%）<span class="pill pub">公告</span></dd>
+        <dt>員工</dt><dd>3,647 人（2025-12-31）</dd>
+        <dt>基地</dt><dd>東莞長安／東坑、韶關；泰國、美國</dd>
+      </dl>
+    </div>
+    <div class="card co f">
+      <div class="nm">富其揚</div>
+      <div class="pa">東莞市富其揚電子科技有限公司｜品牌 CooNong｜未上市、無集團母公司</div>
+      <div class="one">四家中體量最小，但冷板焊接與鏟齒的技術純度最高、資料揭露也最實在。</div>
+      <dl>
+        <dt>沿革</dt><dd>2007 北京明日新科 → 2012 深圳設廠 → 2017 遷東莞橫瀝更名</dd>
+        <dt>營收</dt><dd>2025 年 1.0 億<span class="pill self">自報</span></dd>
+        <dt>員工</dt><dd>180 餘人；獨立廠院 12,000 ㎡</dd>
+        <dt>認證</dt><dd>IATF 16949、ISO 9001、ISO 14001；22 項專利</dd>
+        <dt>客戶結構</dt><dd>伺服器 47%、工業應用 30%、電競 10%、網路安全 8%</dd>
+      </dl>
+    </div>
+    <div class="card co r">
+      <div class="nm">潤星泰</div>
+      <div class="pa">珠海市潤星泰電器有限公司｜母公司：飛榮達 300602（持股 51%）</div>
+      <div class="one">壓鑄結構件巨人，液冷主要是「壓鑄件裡的一個應用」，而非冷板本業。</div>
+      <dl>
+        <dt>入股</dt><dd>2019-04 飛榮達以約 1.7 億取得 51%</dd>
+        <dt>營收</dt><dd>2025 年 珠海本部 9.2 億／整體 17.5 億<span class="pill self">自報</span></dd>
+        <dt>員工</dt><dd>1,200 人；研發 120 人</dd>
+        <dt>基地</dt><dd>珠海 111,000㎡、常州 75,000㎡、惠州 15,000㎡、中山 7,000㎡、越南 8,000㎡</dd>
+        <dt>認證</dt><dd>IATF 16949 等 8 項體系認證</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+<section class="blk">
+  <h2><span class="num">2</span>技術能力對照矩陣</h2>
+  <p class="body">以我方要承接的液冷零組件品項為軸，逐項比對。<span class="yes">●</span>＝有完整量產線並有具體數據佐證；<span class="part">◐</span>＝有設備或有相近能力，但非該品項的主力；<span class="no">○</span>＝資料中查無。所有數字若來自公司自家簡報，一律標「<span class="pill self">自報</span>」。</p>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr>
+      <th style="width:150px">能力項目</th>
+      <th>可俐星</th><th>胜藍（勝鴻騰廠）</th><th>富其揚</th><th>潤星泰</th>
+    </tr></thead>
+    <tbody>
+      <tr class="rowhl">
+        <td>冷板真空／鏈帶釺焊</td>
+        <td><span class="yes">●</span> 真空釺焊列於冷板模組全製程<span class="pill self">自報</span></td>
+        <td><span class="no">○</span> 液冷板仍在送樣／小批量，未見釺焊產線<span class="pill pub">公告</span></td>
+        <td><span class="yes">●</span> 鏈帶釺焊線 1 條、月產能 30K PCS，規劃 2 條<span class="pill self">自報</span></td>
+        <td><span class="no">○</span> 全份簡報未見銅冷板釺焊</td>
+      </tr>
+      <tr class="rowhl">
+        <td>攪拌摩擦焊 FSW</td>
+        <td><span class="no">○</span> 未列</td>
+        <td><span class="no">○</span> 未列</td>
+        <td><span class="yes">●</span> FSW 4 台、月產能 50K PCS，規劃 8 台；智慧刀柄記錄溫度／壓力／扭矩，逐片可追溯；CU1100 焊後抗拉保留 89.1%<span class="pill self">自報</span></td>
+        <td><span class="part">◐</span> 瑞松／孚斯威 FSW 14 台，焊深 2–10mm，有焊縫視覺檢測與恆壓力隨動；但用於壓鑄殼體，非銅冷板<span class="pill self">自報</span></td>
+      </tr>
+      <tr class="rowhl">
+        <td>鏟齒微流道成型</td>
+        <td><span class="yes">●</span> 鏟齒全製程含滾齒與化學鎳<span class="pill self">自報</span></td>
+        <td><span class="no">○</span> 未列</td>
+        <td><span class="yes">●</span> 數控鏟齒 6 台＋水冷鏟齒 13 台＋滾齒機 2 台；自研高精密鏟齒機，齒厚 0.03–0.10mm、步距 0.08–0.20mm，無切削液<span class="pill self">自報</span></td>
+        <td><span class="part">◐</span> 沖壓車間有「嵌齒、嵌熱管」，屬組立式鰭片而非鏟齒<span class="pill self">自報</span></td>
+      </tr>
+      <tr class="rowhl">
+        <td>UQD 快接頭成品線</td>
+        <td><span class="part">◐</span> 有精密車銑、蝕刻與電鍍能力，但簡報未見 UQD 成品</td>
+        <td><span class="yes">●</span> 完整 UQD 成品工藝流程：進料檢驗→CCD 全檢→連接環鐳雕→超聲波清洗→清潔度檢測→組裝→氦質譜檢測→靜電除塵→外觀→防塵帽→掃碼→包裝<span class="pill self">自報</span></td>
+        <td><span class="no">○</span> 未列</td>
+        <td><span class="no">○</span> 未列</td>
+      </tr>
+      <tr>
+        <td>檢漏能力</td>
+        <td><span class="yes">●</span> 氮氣檢測＋氦氣檢測＋超聲波 C 掃＋流阻測試<span class="pill self">自報</span></td>
+        <td><span class="yes">●</span> 氦質譜檢漏系統（3 工位／每工位 3 件，14.82 萬 pcs／月）＋高壓氣密測試機 2MPa；第二台氦檢設備調試中<span class="pill self">自報</span></td>
+        <td><span class="yes">●</span> 氫氣檢驗（冷板線第 13 站氫漏測試）＋氣密測試儀＋超聲波相控探傷＋流量流阻檢測機＋流道清洗機<span class="pill self">自報</span></td>
+        <td><span class="part">◐</span> 氣密測試儀、氦檢系統、相控陣超聲、X 光探傷、孔隙度——為壓鑄件缺陷檢測配置<span class="pill self">自報</span></td>
+      </tr>
+      <tr>
+        <td>精密車銑（UQD 零件）</td>
+        <td><span class="part">◐</span> 有 CNC 與模具自製，台數未揭露</td>
+        <td><span class="yes">●</span> CNC 機床 3,100 台、車床 500 台；UQD-04 一套 7 個機加零件，走心機占 90%、CNC 占 10%，30 萬套／月需 612 台<span class="pill self">自報</span></td>
+        <td><span class="part">◐</span> CNC 85 台，以冷板精加工為主</td>
+        <td><span class="yes">●</span> CNC 410 台（含牧野、兄弟、斗山、哈斯）、五面體 35 台、數車／數銑 44 台；2025-09 新機加大樓規劃再增 150 台<span class="pill self">自報</span></td>
+      </tr>
+      <tr>
+        <td>無塵環境</td>
+        <td><span class="part">◐</span> 有無塵組裝，等級未揭露</td>
+        <td><span class="yes">●</span> 800 ㎡ 萬級無塵車間、4 條流水組裝線<span class="pill self">自報</span></td>
+        <td><span class="part">◐</span> 百萬級無塵車間 1 間<span class="pill self">自報</span></td>
+        <td><span class="part">◐</span> 組裝車間設無塵區，等級未揭露</td>
+      </tr>
+      <tr>
+        <td>驗證實驗室</td>
+        <td><span class="part">◐</span> 雷射平面度檢測、膜厚公差 ±1.5μm 等製程內檢測</td>
+        <td><span class="yes">●</span> 依託 CNAS 實驗室，另增耐壓爆破試驗機、壓力脈衝測試台、流阻性能試驗機、連接力插拔測試機、環境試驗箱<span class="pill self">自報</span></td>
+        <td><span class="yes">●</span> 三次元／二點五次元、恆溫恆濕、震動、跌落、熱阻測試、清潔度檢測室、鹽霧、粗糙度、風洞 R 值測試平台、閃測儀<span class="pill self">自報</span></td>
+        <td><span class="yes">●</span> 三坐標、光譜、金相、拉力、冷熱衝擊、鹽霧、紫外老化、清潔度（ISO 16232）<span class="pill self">自報</span></td>
+      </tr>
+      <tr>
+        <td>表面處理自有</td>
+        <td><span class="yes">●</span> 自有電鍍資質 4 條線，膜厚公差 ±1.5μm；化學鎳<span class="pill self">自報</span></td>
+        <td><span class="no">○</span> 未列</td>
+        <td><span class="part">◐</span> 外發表面處理（抗氧化、陽極、鍍鎳）；廠內有等離子電拋</td>
+        <td><span class="yes">●</span> 粉體塗裝線（GEMA 自動噴房，500–800 PCS/H）、電鍍／鈍化／氧化（越南廠）<span class="pill self">自報</span></td>
+      </tr>
+      <tr>
+        <td>模具自製</td>
+        <td><span class="yes">●</span> 117 台精密機台（慢走絲 32／火花機 26／精密磨床 28／CNC 22 等），精度 0.002–0.0005mm<span class="pill self">自報</span></td>
+        <td><span class="part">◐</span> 連接器本業有模具能力，液冷簡報未單列</td>
+        <td><span class="part">◐</span> CNC 夾治具設計加工列於液冷流程第 2 站</td>
+        <td><span class="yes">●</span> 模具中心 5,000㎡、51 台設備、80 餘位工程師，480 套／年，可配 5000T 以下壓鑄模<span class="pill self">自報</span></td>
+      </tr>
+      <tr>
+        <td>其他關鍵差異能力</td>
+        <td>6000W 大功率自動雷射焊分水器線＋雷射平面度檢測；3000T 冷鍛壓 IGBT 銅基板；銅／不鏽鋼／鈦蝕刻（鈦精度 0.02mm、側蝕 0.03mm）<span class="pill self">自報</span></td>
+        <td>連接器端子沖壓與精密注塑（本業）；光學透鏡</td>
+        <td>回流焊、高頻焊、雷射焊、鍛壓；FLOTHERM 熱模擬與整機測試（4U 8 卡雙路 AI 伺服器液冷套件案例）<span class="pill self">自報</span></td>
+        <td>半固態壓鑄 18 台套（自稱國內最多）、擠壓壓鑄；鎂合金壓鑄（中山，年產能 8,000 噸）；11 款自研合金（導熱最高 190 W/m·K）<span class="pill self">自報</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 style="margin-top:20px">技術面優劣速評</h3>
+  <div class="grid-2" style="margin-top:8px">
+    <div class="card co f">
+      <div class="nm">富其揚 <span class="vtag good">冷板技術純度最高</span></div>
+      <div class="vrow"><span class="vk plus">強</span><div>唯一同時具備釺焊與 FSW 兩條冷板路線，且把兩者優劣攤開對比：釺焊工藝成熟、連續生產效率高，但高溫軟化材料、異質釺料有反應風險；FSW 加工硬化強度更高、無異質材料、長期可靠性佳，但少量生產能耗與效率較差。</div></div>
+      <div class="vrow"><span class="vk plus">強</span><div>提供 FSW 焊後力學實測（CU1100 抗拉 89.1%、屈服 88.8% 保留率）——資料揭露程度四家最高，代表它是真的在做冷板，不是在賣簡報。</div></div>
+      <div class="vrow"><span class="vk minus">弱</span><div>體量小（180 餘人），無 UQD 成品能力，擴產須靠外部訂單支撐。</div></div>
+    </div>
+    <div class="card co k">
+      <div class="nm">可俐星 <span class="vtag good">製程廣度第一</span></div>
+      <div class="vrow"><span class="vk plus">強</span><div>真空釺焊、氦氮雙檢、超聲波 C 掃、流阻測試、6000W 雷射焊分水器、自有電鍍四線、模具自製，一條龍最完整。</div></div>
+      <div class="vrow"><span class="vk plus">強</span><div>已在跑高階案子：GB200／GB300／VR 世代伺服器散熱與 DIMM 系列產品。</div></div>
+      <div class="vrow"><span class="vk minus">弱</span><div>沒有 FSW；鏟齒與釺焊的具體產能數字未揭露，無法與富其揚做量的對比。</div></div>
+    </div>
+    <div class="card co s">
+      <div class="nm">胜藍 <span class="vtag good">UQD 一枝獨秀</span></div>
+      <div class="vrow"><span class="vk plus">強</span><div>強項全部集中在 UQD：精密車銑（走心機＋CNC）、超聲波清洗、清潔度檢測、氦質譜檢漏、萬級無塵組裝，加上 CNAS 實驗室支撐的耐壓爆破與壓力脈衝驗證。</div></div>
+      <div class="vrow"><span class="vk minus">弱</span><div>冷板明確落後：上市公司口徑到 2025-09 仍是「液冷板在送樣測試中」，2026-04 才說「已實現液冷產品商業化落地」，未揭露品項與量。</div></div>
+    </div>
+    <div class="card co r">
+      <div class="nm">潤星泰 <span class="vtag warn">實力強，方向不對</span></div>
+      <div class="vrow"><span class="vk plus">強</span><div>鋁／鎂壓鑄與 CNC 大件加工是四家最強：99 台壓鑄機、半固態、擠壓壓鑄、最高 4500T，服務通訊基站殼體、新能源車三電殼體、光儲充結構件。</div></div>
+      <div class="vrow"><span class="vk minus">弱</span><div>液冷在其簡報裡只佔一頁（「為國內頭部企業提供鋁／銅／不鏽鋼液冷散熱結構件」）：沒有冷板釺焊線、沒有鏟齒、沒有 UQD。</div></div>
+      <div class="vrow"><span class="vk minus">弱</span><div>它的 FSW 與氦檢是為壓鑄件服務的，不能直接換算成冷板能力。</div></div>
+    </div>
+  </div>
+</section>
+<section class="blk">
+  <h2><span class="num">3</span>財務實力比較（含母公司）</h2>
+  <div class="tiles">
+    <div class="tile"><div class="label">奕東電子 2025 營收</div><div class="value">22.67 億</div><div class="delta up">▲ 32.8%</div></div>
+    <div class="tile"><div class="label">奕東電子 2025 歸母淨利</div><div class="value">−6,685 萬</div><div class="delta down">▼ 由盈轉虧</div></div>
+    <div class="tile"><div class="label">胜藍 2025 營收</div><div class="value">17.41 億</div><div class="delta up">▲ 35.3%</div></div>
+    <div class="tile"><div class="label">胜藍 2025 歸母淨利</div><div class="value">1.119 億</div><div class="delta up">▲ 8.9%</div></div>
+    <div class="tile"><div class="label">飛榮達 2025 營收</div><div class="value">65.27 億</div><div class="delta up">▲ 29.7%</div></div>
+    <div class="tile"><div class="label">飛榮達 2025 歸母淨利</div><div class="value">3.65 億</div><div class="delta up">▲ 93.1%</div></div>
+  </div>
+
+  <div class="grid-2" style="margin-top:18px">
+    <div class="card">
+      <div class="chart-title">2025 年營收規模對照（本體 vs 母公司）</div>
+      <div class="chart-sub">單位：億元人民幣。母公司與本體並列，看清楚「集團很大」和「這家工廠很大」不是同一件事。</div>
+      <div class="chart">
+        <div class="hbar-row" title="飛榮達 65.27 億"><div class="cat">飛榮達 300602</div><div class="hbar-track"><div class="hbar-fill" style="width:100%"></div></div><div class="val">65.27 <span class="pct">母·潤星泰</span></div></div>
+        <div class="hbar-row" title="奕東電子 22.67 億"><div class="cat">奕東電子 301123</div><div class="hbar-track"><div class="hbar-fill" style="width:34.7%"></div></div><div class="val">22.67 <span class="pct">母·可俐星</span></div></div>
+        <div class="hbar-row" title="潤星泰整體 17.5 億（自報）"><div class="cat">潤星泰（整體）</div><div class="hbar-track"><div class="hbar-fill" style="width:26.8%"></div></div><div class="val">17.5 <span class="pct">自報</span></div></div>
+        <div class="hbar-row" title="胜藍 17.41 億"><div class="cat">胜藍 300843</div><div class="hbar-track"><div class="hbar-fill" style="width:26.7%"></div></div><div class="val">17.41 <span class="pct">上市本體</span></div></div>
+        <div class="hbar-row" title="潤星泰珠海本部 9.2 億（自報）"><div class="cat">潤星泰珠海本部</div><div class="hbar-track"><div class="hbar-fill" style="width:14.1%"></div></div><div class="val">9.20 <span class="pct">自報</span></div></div>
+        <div class="hbar-row" title="富其揚 1.0 億（自報）"><div class="cat">富其揚</div><div class="hbar-track"><div class="hbar-fill" style="width:1.5%"></div></div><div class="val">1.00 <span class="pct">自報</span></div></div>
+        <div class="hbar-row" title="可俐星本體 約 0.85 億（估算）"><div class="cat">可俐星（本體）</div><div class="hbar-track"><div class="hbar-fill" style="width:1.3%"></div></div><div class="val">0.85<sup class="est">＊</sup> <span class="pct">年化</span></div></div>
+        <div class="axis-note">0 ────────────────────────── 65.27 億</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>這張圖的重點</h3>
+      <p class="body">若只看母公司，會誤以為潤星泰與可俐星「資源雄厚」。實際要跟我方對接的<b>工廠本體</b>，可俐星年化約 8,500 萬<sup class="est">＊</sup>、富其揚 1.0 億——兩家其實是同一個量級，都比鑫鴻騰預期的「大陸大廠」小得多。</p>
+      <p class="body">差別在<b>背後有沒有人接得住擴產</b>：可俐星有奕東電子的上市平台與湖北第二基地，一旦訂單放大，集團會投錢；富其揚沒有集團，擴產（釺焊 1→2 條、FSW 4→8 台）要靠自己的現金流或外部資金。這是我方談合作時最實際的槓桿點——<b>用訂單承諾換排程優先權與擴產投入</b>，對富其揚特別有效。</p>
+      <p class="body">潤星泰珠海本部 9.2 億是真正的規模，但那 9.2 億絕大部分是壓鑄殼體，不是液冷冷板。</p>
+    </div>
+  </div>
+
+  <h3>三家上市母公司財務趨勢</h3>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:150px">指標</th><th>奕東電子 301123<br><span class="note">可俐星母公司</span></th><th>胜藍 300843<br><span class="note">合資夥伴本體</span></th><th>飛榮達 300602<br><span class="note">潤星泰母公司</span></th></tr></thead>
+    <tbody>
+      <tr><td>2023 營收</td><td>14.70 億</td><td>12.41 億</td><td class="no">未取</td></tr>
+      <tr><td>2024 營收</td><td>17.07 億</td><td>12.87 億</td><td>50.31 億</td></tr>
+      <tr><td>2025 營收</td><td><b>22.67 億</b>（+32.8%）</td><td><b>17.41 億</b>（+35.3%）</td><td><b>65.27 億</b>（+29.7%）</td></tr>
+      <tr><td>2026Q1 營收</td><td>6.087 億（+38.3%）</td><td>4.919 億（+46.1%）</td><td class="no">未取</td></tr>
+      <tr><td>2024 歸母淨利</td><td class="no">未取</td><td>1.028 億</td><td>1.89 億</td></tr>
+      <tr><td>2025 歸母淨利</td><td class="down">−6,685 萬（虧損）</td><td>1.119 億（+8.9%）</td><td>3.65 億（+93.1%）</td></tr>
+      <tr><td>2026Q1 歸母淨利</td><td>948.99 萬（扭虧）</td><td>3,606 萬（+19.6%）</td><td class="no">未取</td></tr>
+      <tr><td>毛利率</td><td>22.06%（2026Q1）</td><td>23.05%（2025）／23.70%（2026Q1）</td><td class="no">未取</td></tr>
+      <tr><td>員工</td><td class="no">未取</td><td>3,647 人（研發 429 人）</td><td class="no">未取</td></tr>
+      <tr><td>研發費用率</td><td class="no">未取</td><td>5.49%（2025，較 2024 的 6.51% 下滑）</td><td class="no">未取</td></tr>
+      <tr><td>市值</td><td class="no">未取</td><td>200.97 億（2026-08-13），PE(TTM) 約 177 倍</td><td class="no">未取</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>工廠本體財務（非上市部分）</h3>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:150px">項目</th><th>可俐星</th><th>富其揚</th><th>潤星泰</th></tr></thead>
+    <tbody>
+      <tr><td>資料來源等級</td><td><span class="pill pub">母公司交易公告，經審計基準日數字</span></td><td><span class="pill self">僅公司自家簡報，無第三方揭露</span></td><td><span class="pill self">簡報自報＋2019 年收購公告</span></td></tr>
+      <tr><td>營收</td><td>2025 年 1–8 月 5,685.93 萬（年化約 8,500 萬<sup class="est">＊</sup>）</td><td>2025 年 1.0 億</td><td>2018 年 3.948 億（收購公告）→ 2025 年珠海本部 9.2 億、整體 17.5 億</td></tr>
+      <tr><td>淨利</td><td>2025 年 1–8 月 553.51 萬（淨利率 9.73%）</td><td class="no">查無</td><td>2018 年 −922.58 萬；近年<b>未於飛榮達年報單獨揭露</b></td></tr>
+      <tr><td>資產／負債</td><td>總資產 8,100.18 萬、負債 6,394.10 萬、淨資產 1,706.09 萬（2025-08-31）→ 資產負債率約 <b>78.9%</b><sup class="est">＊</sup></td><td class="no">查無</td><td>註冊資本 9,158.88 萬；2019 年 51% 股權作價約 1.7 億（整體估值 1.76855 億）</td></tr>
+      <tr><td>近期資本動作</td><td>第三方以 3,000 萬入股取得 10%，投後估值 3 億，附 5 年回購權；集團另以 6,120 萬取得深圳冠鼎 51%（埋管冷板）</td><td class="no">查無融資或擴產公告</td><td>2019-04 飛榮達取得 51%；此後未見再融資</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 style="margin-top:20px">要盯住的財務訊號（依公司區分）</h3>
+  <div class="grid-2" style="margin-top:8px">
+    <div class="card co k">
+      <div class="nm">可俐星 <span class="vtag warn">本體槓桿偏高、估值與淨資產落差大</span></div>
+      <div class="vrow"><span class="vk minus">風險</span><div>淨資產僅 1,706 萬，卻以 3 億投後估值引入第三方（約 17.6 倍 PB<sup class="est">＊</sup>），且附<b>五年回購權</b>——代表這筆錢是有時間壓力的。</div></div>
+      <div class="vrow"><span class="vk minus">風險</span><div>資產負債率約 78.9%<sup class="est">＊</sup>，本體自有資金空間有限，擴產高度依賴奕東集團；而奕東 2025 全年虧損（−6,685 萬），母公司的輸血能力還在恢復中。</div></div>
+      <div class="vrow"><span class="vk plus">正面</span><div>本體有獲利（2025 年 1–8 月淨利率 9.73%）；奕東 2026Q1 已扭虧、毛利率 22.06%。</div></div>
+    </div>
+    <div class="card co s">
+      <div class="nm">胜藍 <span class="vtag warn">成長品質在惡化</span></div>
+      <div class="vrow"><span class="vk minus">風險</span><div>2025 全年營收 +35.3% 但淨利只 +8.9%，落差全部發生在下半年（2025H2 歸母僅約 2,788 萬<sup class="est">＊</sup>，年減約 44%<sup class="est">＊</sup>），公告未說明原因。</div></div>
+      <div class="vrow"><span class="vk minus">風險</span><div>有息負債 6.32 億→14.28 億、資產負債率 29.16%→46.70%、2026Q1 經營現金流轉為 −4,406 萬（年減 933.9%）；控股股東 2026-04 兩日減持套現約 1.92 億、PE 約 177 倍。</div></div>
+      <div class="vrow"><span class="vk note">解讀</span><div>它有擴產的意願，但財務餘裕正在收窄。<b>談 UQD 產能保障時，不能只信口頭承諾，要綁進合約。</b></div></div>
+    </div>
+    <div class="card co f">
+      <div class="nm">富其揚 <span class="vtag warn">財務全靠自報、無第三方揭露</span></div>
+      <div class="vrow"><span class="vk minus">風險</span><div>營收 1.0 億為簡報自報，淨利、資產負債查無任何第三方資料；外部 B2B 名錄還停留在約 2018 年的舊數據，落差大。</div></div>
+      <div class="vrow"><span class="vk minus">風險</span><div>無集團母公司，擴產（釺焊 1→2 條、FSW 4→8 台）只能靠自身現金流或外部資金——訂單斷了，擴產就停。</div></div>
+      <div class="vrow"><span class="vk note">解讀</span><div>這既是風險也是槓桿：<b>我方的訂單承諾就是它最好的融資</b>，拿產能包段換排程與 know-how 條款，現在談最有力。簽約前以工商登記與參保人數核實體量。</div></div>
+    </div>
+    <div class="card co r">
+      <div class="nm">潤星泰 <span class="vtag warn">獲利能力可能遠低於營收印象</span></div>
+      <div class="vrow"><span class="vk minus">風險</span><div>陸股規則下，年報只需單獨揭露「利潤影響達母公司淨利 10% 以上」的子公司。飛榮達 2025 歸母淨利 3.65 億、門檻約 3,650 萬；潤星泰自報整體營收 17.5 億卻未被單獨列出，可推論淨利低於門檻，換算淨利率不到 2%<sup class="est">＊</sup>。</div></div>
+      <div class="vrow"><span class="vk plus">正面</span><div>母公司飛榮達財務最強：2025 營收 65.27 億（+29.7%）、歸母淨利 3.65 億（+93.1%），集團支撐無虞。</div></div>
+      <div class="vrow"><span class="vk note">解讀</span><div>低毛利與壓鑄行業特性相符，也解釋了它為何積極往液冷、光儲充等新應用擴張——但這不改變第 5 節的客戶關係問題。</div></div>
+    </div>
+  </div>
+</section>
+<section class="blk">
+  <h2><span class="num">4</span>產能與設備實力比較</h2>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:150px">項目</th><th>可俐星</th><th>胜藍（勝鴻騰廠）</th><th>富其揚</th><th>潤星泰</th></tr></thead>
+    <tbody>
+      <tr class="rowhl"><td>已明示的品項級月產能</td>
+        <td class="no">未揭露</td>
+        <td><b>UQD 15 萬套／月</b>（長白班）<br><b>30 萬套／月</b>（白夜班）<br>瓶頸：氦質譜檢驗（14.82 萬 pcs／月），第二台調試完成後再提升</td>
+        <td><b>釺焊 30K PCS／月</b>（1 條線）<br><b>FSW 50K PCS／月</b>（4 台）</td>
+        <td>壓鑄件：OBC 15 萬套／月、電控 10 萬套／月、電驅 5 萬套／月、電池端板 120 萬件／月（非液冷）</td>
+      </tr>
+      <tr><td>擴產規劃</td><td>湖北可俐星第二基地；集團併入深圳冠鼎（埋管冷板）</td><td>第二台氦檢設備已到廠調試中</td><td>釺焊線 1→2 條、FSW 4→8 台（場地已規劃）</td><td>2025-09 新機加大樓投用，規劃再增 CNC 150 台</td></tr>
+      <tr><td>焊接設備</td><td>真空釺焊線、6000W 大功率自動雷射焊（分水器）</td><td>雷射焊接機、雷射打標機（UQD 組裝用）</td><td>鏈帶釺焊 1 條、FSW 4 台、回流焊／焊接線 2 條、高頻焊、雷射焊、熱熔機 2 台</td><td>FSW 14 台（瑞松／孚斯威）、焊接機器人 13 台</td></tr>
+      <tr><td>鏟齒／成型設備</td><td>鏟齒全製程（含滾齒、化學鎳），台數未揭露</td><td class="no">無</td><td>數控鏟齒 6 台、水冷鏟齒 13 台、滾齒機 2 台、下料機 2 台、沖壓 5 台</td><td>嵌齒／嵌熱管線；沖壓 86 台（含四柱液壓機 100–650T 11 台、開口壓力機 63–300T 48 台）</td></tr>
+      <tr><td>CNC／車銑</td><td>有，台數未揭露</td><td>CNC 3,100 台、車床 500 台（集團口徑）</td><td>CNC 85 台</td><td>CNC 410 台＋五面體 35 台＋數車／數銑 44 台</td></tr>
+      <tr><td>壓鑄</td><td>3000T 液壓機（冷鍛壓 IGBT 銅基板）；不鏽鋼熱鍛壓</td><td class="no">無</td><td>鍛壓（規格未揭露）</td><td><b>99 台，160T–4500T</b>；半固態壓鑄單元 18 台套；擠壓壓鑄 42 台；鎂合金 9 台（中山，年 8,000 噸）</td></tr>
+      <tr><td>模具</td><td>117 台精密機台，精度 0.002–0.0005mm</td><td class="no">未單列</td><td>CNC 夾治具自製</td><td>51 台設備、5,000㎡、480 套／年</td></tr>
+      <tr><td>組裝</td><td>無塵組裝線（條數未揭露）</td><td>4 條流水組裝線（800㎡ 萬級無塵）</td><td>4 條組裝線</td><td>79 條，佔地 35,000㎡</td></tr>
+      <tr><td>廠房面積</td><td class="no">未揭露</td><td class="no">未揭露（無塵區 800㎡）</td><td>獨立廠院 12,000㎡</td><td>珠海 111,000㎡＋常州 75,000㎡＋惠州 15,000㎡＋中山 7,000㎡＋越南 8,000㎡</td></tr>
+      <tr><td>人力</td><td class="no">未揭露</td><td>集團 3,647 人</td><td>180 餘人（工程 15 人、品質 25 人）</td><td>1,200 人（研發 120 人，博士 2／碩士 10）</td></tr>
+      <tr><td>海外布局</td><td>集團：印度德里、馬來西亞新山、德國斯圖加特、越南嘉平 GVIP</td><td>泰國、美國</td><td class="no">無</td><td>越南（8,000㎡，含模具、壓鑄、機加、沖壓、注塑、表處、組裝全製程）</td></tr>
+      <tr><td>認證</td><td>集團具 IATF 16949 等；本體未單獨揭露</td><td>ISO 9001／14001／45001、QC080000、<b>IATF 16949</b>、ISO 14064</td><td><b>IATF 16949</b>、ISO 9001、ISO 14001；22 項專利</td><td>ISO 9001／14001／45001、<b>IATF 16949</b>、IEC 27001、QC080000、GB/T 29490、ISO 10012；有效專利 174 件（發明 58、PCT 24）</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout">
+    <div class="t">產能可比性的重要提醒</div>
+    <p class="body">四家裡<b>只有胜藍與富其揚給出了品項級的月產能</b>，而且都附了推算過程（胜藍用設備 UPH 逐台核算並指名瓶頸工序；富其揚直接給釺焊線與 FSW 的 PCS／月）。這種揭露方式本身就是可信度的證據——可以拿去現場對機台數量驗證。可俐星與潤星泰給的是設備清單與廠房面積，沒有換算到冷板產能，<b>談判時務必要求對方提供「以我方某一號冷板為例，一個月能出多少片、瓶頸在哪一站」</b>，否則設備台數再多也無法排產。</p>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">5</span>客戶關係相容性——這一案的一票否決項</h2>
+  <p class="body">我方要供的是奇鋐與雙鴻。挑大陸夥伴時，技術與價格都可以談，唯獨一件事不能妥協：<b>這個夥伴的背後，會不會讓客戶覺得自己的圖面與規格流進了對手手裡</b>。四家在這一點上的差距，比技術差距大得多。</p>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:130px"></th><th>與奇鋐／雙鴻的關係</th><th>對我方的風險</th><th>判定</th></tr></thead>
+    <tbody>
+      <tr><td>富其揚</td><td>客戶結構為伺服器 47%、工業應用 30%、電競 10%，未見台系散熱廠；亦未出現在大陸液冷產業的任何一份供應商盤點名單中。</td><td>最低。它沒有既有的台系散熱廠關係可繞過我方，我方是它進入這條鏈的通道，議價與主導權在我方。</td><td class="yes">最相容</td></tr>
+      <tr><td>胜藍</td><td>已與我方成立合資廠（勝鴻騰）；上市公司端另稱「已與台灣地區多個知名散熱廠家洽談合作，個別客戶已下達小批量訂單」，但<b>未點名是誰</b>。</td><td>中等偏低。合資關係綁得住 UQD 這一段，但上市公司自己也在接觸台系散熱廠，若對象就是奇鋐或雙鴻，我方與合資夥伴會在同一個客戶前撞車。</td><td class="part">須先釐清</td></tr>
+      <tr><td>可俐星</td><td>集團（奕東）的液冷客戶名單已包含<b>奇宏電子（AVC）</b>、寶德 BOYD、恒運昌、泰碩電子、英維克、同裕電子、昂湃技術。</td><td>中等。好消息是客戶端完全沒有阻力，AVC 已經認可這家的品質體系；壞消息是它<b>已經有直達客戶的路</b>，我方若沒把角色分工寫進合約，隨時可能被跳過。</td><td class="part">可行，須談分工</td></tr>
+      <tr><td>潤星泰</td><td>母公司飛榮達（300602，持股 51%）本身即是導熱材料與散熱模組廠商，<b>與奇鋐、雙鴻在同一個市場正面競爭</b>；飛榮達甚至同時是奕東電子的液冷客戶。</td><td class="down">高。把奇鋐／雙鴻的冷板圖面、流道設計與規格送進一家由其競爭對手控股 51% 的工廠，客戶稽核時第一個會問這件事，而這個問題沒有好答案。技術再強也救不回來。</td><td class="down">建議排除</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout warn">
+    <div class="t">關於潤星泰</div>
+    <p class="body">這不是對潤星泰能力的否定——它的壓鑄實力在四家中最強，若鑫鴻騰未來要承接鋁壓鑄殼體、大型結構件，或做<b>與奇鋐、雙鴻無關的客戶</b>，它是一個好選項。但在「供應奇鋐、雙鴻」這個特定命題下，51% 控股股東的身分就是硬傷。另外要提醒：潤星泰簡報中將常州製造基地列為自有，而外部資料曾將「潤星泰（常州）」歸屬於江蘇飛榮達體系；越南億澤也以其子公司形式出現。這幾處歸屬關係在簽任何約之前都需要用工商登記核實一次。</p>
+  </div>
+</section>
+<section class="blk">
+  <h2><span class="num">6</span>綜合評分（1–5 分）</h2>
+  <div class="legend">
+    <span class="lk">可俐星</span><span class="ls">胜藍</span><span class="lf">富其揚</span><span class="lr">潤星泰</span>
+    <span style="margin-left:auto">評分基準：5＝有量產線且附可驗證數據｜4＝有完整製程但數據未全揭露｜3＝有相近能力可轉用｜2＝設備部分重疊｜1＝基本錯位</span>
+  </div>
+  <div class="grid-2">
+    <div class="card co k">
+      <div class="nm">可俐星</div><div class="pa">總評 24 / 35 — 製程最完整，但角色關係要先談清楚</div>
+      <div class="meter-row k"><div class="m-label">冷板焊接（釺焊／FSW）</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="m-val">4 / 5</div></div>
+      <div class="meter-row k"><div class="m-label">鏟齒微流道成型</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="m-val">4 / 5</div></div>
+      <div class="meter-row k"><div class="m-label">UQD 快接頭成品</div><div class="meter-track"><div class="meter-fill" style="width:40%"></div></div><div class="m-val">2 / 5</div></div>
+      <div class="meter-row k"><div class="m-label">檢漏與性能驗證</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="m-val">4 / 5</div></div>
+      <div class="meter-row k"><div class="m-label">產能規模與擴充彈性</div><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><div class="m-val">3 / 5</div></div>
+      <div class="meter-row k"><div class="m-label">財務體質與集團支撐</div><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><div class="m-val">3 / 5</div></div>
+      <div class="meter-row k"><div class="m-label">客戶關係相容性</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="m-val">4 / 5</div></div>
+    </div>
+    <div class="card co s">
+      <div class="nm">胜藍</div><div class="pa">總評 22 / 35 — UQD 一枝獨秀，冷板幾乎不能算</div>
+      <div class="meter-row s"><div class="m-label">冷板焊接（釺焊／FSW）</div><div class="meter-track"><div class="meter-fill" style="width:40%"></div></div><div class="m-val">2 / 5</div></div>
+      <div class="meter-row s"><div class="m-label">鏟齒微流道成型</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1 / 5</div></div>
+      <div class="meter-row s"><div class="m-label">UQD 快接頭成品</div><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><div class="m-val">5 / 5</div></div>
+      <div class="meter-row s"><div class="m-label">檢漏與性能驗證</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="m-val">4 / 5</div></div>
+      <div class="meter-row s"><div class="m-label">產能規模與擴充彈性</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="m-val">4 / 5</div></div>
+      <div class="meter-row s"><div class="m-label">財務體質與集團支撐</div><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><div class="m-val">3 / 5</div></div>
+      <div class="meter-row s"><div class="m-label">客戶關係相容性</div><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><div class="m-val">3 / 5</div></div>
+    </div>
+    <div class="card co f">
+      <div class="nm">富其揚</div><div class="pa">總評 24 / 35 — 冷板技術最純、我方主導權最高，弱在體量</div>
+      <div class="meter-row f"><div class="m-label">冷板焊接（釺焊／FSW）</div><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><div class="m-val">5 / 5</div></div>
+      <div class="meter-row f"><div class="m-label">鏟齒微流道成型</div><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><div class="m-val">5 / 5</div></div>
+      <div class="meter-row f"><div class="m-label">UQD 快接頭成品</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1 / 5</div></div>
+      <div class="meter-row f"><div class="m-label">檢漏與性能驗證</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="m-val">4 / 5</div></div>
+      <div class="meter-row f"><div class="m-label">產能規模與擴充彈性</div><div class="meter-track"><div class="meter-fill" style="width:40%"></div></div><div class="m-val">2 / 5</div></div>
+      <div class="meter-row f"><div class="m-label">財務體質與集團支撐</div><div class="meter-track"><div class="meter-fill" style="width:40%"></div></div><div class="m-val">2 / 5</div></div>
+      <div class="meter-row f"><div class="m-label">客戶關係相容性</div><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><div class="m-val">5 / 5</div></div>
+    </div>
+    <div class="card co r">
+      <div class="nm">潤星泰</div><div class="pa">總評 18 / 35 — 規模與財務最強，但方向與客戶關係都不對</div>
+      <div class="meter-row r"><div class="m-label">冷板焊接（釺焊／FSW）</div><div class="meter-track"><div class="meter-fill" style="width:40%"></div></div><div class="m-val">2 / 5</div></div>
+      <div class="meter-row r"><div class="m-label">鏟齒微流道成型</div><div class="meter-track"><div class="meter-fill" style="width:40%"></div></div><div class="m-val">2 / 5</div></div>
+      <div class="meter-row r"><div class="m-label">UQD 快接頭成品</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1 / 5</div></div>
+      <div class="meter-row r"><div class="m-label">檢漏與性能驗證</div><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><div class="m-val">3 / 5</div></div>
+      <div class="meter-row r"><div class="m-label">產能規模與擴充彈性</div><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><div class="m-val">5 / 5</div></div>
+      <div class="meter-row r"><div class="m-label">財務體質與集團支撐</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="m-val">4 / 5</div></div>
+      <div class="meter-row r"><div class="m-label">客戶關係相容性</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1 / 5</div></div>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="t">總分幾乎相同，但意思完全不同</div>
+    <p class="body">可俐星與富其揚同為 24 分，卻是兩種完全不同的 24 分。<b>可俐星是「廣但淺」</b>——每一項都有，但沒有一項給出可驗證的產能數字，而且它強在製程廣度與集團資源，我方在關係中是可被取代的一方。<b>富其揚是「窄但深」</b>——只做冷板與鏟齒，但每一項都給得出設備台數、月產能、材料實測數據，而且它需要我方遠多於我方需要它。若目標是「把冷板這一段做穩、做出自己的技術地基」，富其揚是更好的第一順位；若目標是「快速拿到大量且多樣的產能」，可俐星更合適，但代價是主導權。</p>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">7</span>建議行動</h2>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:120px">項目</th><th>建議</th></tr></thead>
+    <tbody>
+      <tr class="rowhl"><td>整體策略</td><td>不選單一獨家。<b>UQD 走胜藍（既有合資）、冷板與鏟齒走富其揚（深度綁定）、可俐星列為規模化備援與分水器合作對象、潤星泰此案排除。</b>三家分工的好處是任一家出問題不會斷鏈，且我方掌握完整的技術地圖，不會被任何一家用資訊落差綁架。</td></tr>
+      <tr><td>對富其揚（優先推進）</td><td>談<b>產能包段</b>：以年度採購量承諾，換取釺焊第二條線與 FSW 擴至 8 台的優先投入與旺季排程保障。同時明確約定：依我方（客戶）圖面開發的流道設計、治具與製程參數歸我方所有，不得用於其他客戶；FSW 智慧刀柄的焊接參數紀錄須開放給我方與終端客戶稽核。它的體量小、無集團母公司，這些條件現在談得下來，等它做大就談不動了。</td></tr>
+      <tr><td>對胜藍（守住既有）</td><td>把勝鴻騰合資的 UQD 產能保障寫入合約，特別是<b>第二台氦質譜檢漏設備調試完成後的產能歸屬</b>——氦檢是明示的瓶頸工序，誰拿到氦檢時段誰就拿到產能。另外要正面問清楚：上市公司口徑的「台灣多個知名散熱廠家、個別客戶已下小批量訂單」是不是奇鋐或雙鴻；若是，須約定客戶窗口分工，避免在同一個客戶前互相削價。</td></tr>
+      <tr><td>對可俐星（有條件推進）</td><td>可以談，但<b>先談角色、後談價格</b>。合約要處理四件事：客戶窗口與承接範圍（哪些案子經我方、哪些是它既有的 AVC 直供）、產能保障與旺季排程、圖面與治具 know-how 歸屬、資訊交換範圍。另建議把它定位為<b>分水器模組與大批量冷板的第二來源</b>，而非第一順位——它的 6000W 雷射焊分水器線是四家裡獨有的能力，這一段最值得合作。</td></tr>
+      <tr><td>對潤星泰</td><td>此案不推進，但保留關係。若日後承接鋁壓鑄殼體、大型結構件，或服務與奇鋐／雙鴻無關的客戶，它是四家中規模與體系最完整的選項。</td></tr>
+      <tr><td>盡職調查（簽約前必做）</td><td>以工商登記核實三件事：可俐星的股東結構與第三方回購權條款、富其揚的統一社會信用代碼與實際參保人數（驗證 180 人與 1.0 億營收）、潤星泰常州與越南基地的實際歸屬。另外全部四家都要現場走一次產線，重點看：機台數量與簡報是否相符、無塵車間的實際等級、檢漏設備的稼動狀況。</td></tr>
+      <tr><td>試單驗證</td><td>對富其揚與可俐星各下一批同規格冷板試單（同一號圖面、同一批材料），比對：焊後氣密／氫檢良率、流阻實測值、交期達成、異常反應速度。這是唯一能穿透簡報話術的方法，也是把「自報數字」變成「已驗證數字」的唯一途徑。</td></tr>
+      <tr><td>監測訊號</td><td>① 胜藍 2026 年半年報是否單獨揭露液冷營收，以及下半年淨利衰退是否延續；② 奕東電子 2026 年中報，看液冷板塊與深圳冠鼎併表後的貢獻，以及虧轉盈是否站穩；③ 富其揚釺焊第二條線與 FSW 擴至 8 台是否實際落地；④ 飛榮達是否進一步整合潤星泰的液冷業務（若是，排除的理由會更強）。</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">8</span>資料等級與待驗證事項</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>資料等級說明</h3>
+      <table>
+        <tr><td style="width:90px"><span class="pill pub">公告</span></td><td>來自上市公司年報、季報、交易公告或投資者關係紀錄，可信度最高。適用於奕東電子、胜藍、飛榮達，以及可俐星在奕東交易公告中的財務數字。</td></tr>
+        <tr><td><span class="pill self">自報</span></td><td>來自公司自家簡報，未經第三方驗證。四家的設備台數、產能、技術參數<b>全部屬於此類</b>，必須用現場稽核與試單驗證。</td></tr>
+        <tr><td><sup class="est">＊</sup></td><td>本報告依公開數字回推或依揭露規則推論的估算值，已於出現處逐一標註。</td></tr>
+        <tr><td class="no">查無</td><td>本輪外部檢索未取得，非「不存在」。</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>待人脈與現場驗證</h3>
+      <ol style="padding-left:18px">
+        <li style="margin-bottom:6px">胜藍所稱的「台灣地區多個知名散熱廠家」究竟是誰，以及「個別客戶已下達小批量訂單」的實際量級。<b>這一題直接影響合資關係的談法。</b></li>
+        <li style="margin-bottom:6px">胜藍 2025 下半年淨利大幅衰退的原因（價格戰？新產線攤提？一次性損失？）——公告未說明。</li>
+        <li style="margin-bottom:6px">富其揚的營收 1.0 億與員工 180 人：外部 B2B 名錄仍留著約 2018 年的舊資料（年營收 100 萬美元以下、51–100 人），與簡報差距大。以簡報為準較合理，但需以工商登記與參保人數核實。</li>
+        <li style="margin-bottom:6px">潤星泰簡報宣稱的攪拌摩擦焊、常州基地歸屬、越南億澤子公司關係，與先前外部檢索結果不完全一致（FSW 一度查無、常州曾被歸於江蘇飛榮達體系）——本次已由其簡報確認 FSW 有 14 台設備，但歸屬關係仍需工商核實。</li>
+        <li>可俐星本體的廠房面積、產線條數與冷板月產能完全未揭露，須現場實地確認。</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <h3 style="color:var(--text-secondary)">資料來源</h3>
+  <ul style="list-style:none">
+    <li><b>公司自家簡報（本次直接讀取全文）：</b>《可俐星公司介绍 7-6》（40 頁）、《润星泰公司介绍（2025.12）最新》（52 頁）、《富其扬简介（风冷 液冷）(20260701)》（27 頁）、《RUBIN 液冷 UQD 连接器生产介绍》（9 頁，胜藍端提供之勝鴻騰合資廠資料）。</li>
+    <li><b>胜藍 300843：</b><a href="http://static.cninfo.com.cn/finalpage/2026-04-03/1225075676.PDF">2025 年度財務報告（巨潮資訊）</a>、<a href="http://static.cninfo.com.cn/finalpage/2025-09-19/1224671590.PDF">投資者關係活動記錄表 2025-002</a>（UQD 小批量交付、液冷板送樣、與英偉達無直接合作）、<a href="http://pdf.dfcfw.com/pdf/H3_AP202508291736290459_1.pdf">華鑫證券研究報告 2025-08-28</a>（2025H1 分部、台系散熱廠洽談）、<a href="https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?stockid=300843&id=12419280">2026 年債券跟蹤評級報告</a>（有息負債、資產負債率）、<a href="https://www.jisilu.cn/data/stock/300843">集思錄行情頁</a>（市值、PE、PB，檢索 2026-08-13）、<a href="http://www.eeo.com.cn/2026/0430/858789.shtml">經濟觀察網 2026-04-30</a>（液冷商業化落地）。</li>
+    <li><b>奕東電子 301123 與可俐星：</b>奕東電子關於收購東莞市可俐星電子有限公司股權暨增資之交易公告（2025-08-31 基準日經審計財務數字、股東結構、第三方入股與回購條款）、奕東電子 2025 年年度報告與 2026 年第一季報告（營收、歸母淨利、毛利率、液冷客戶名單）、深圳冠鼎 51% 股權收購公告。</li>
+    <li><b>飛榮達 300602 與潤星泰：</b>飛榮達 2019-04 收購珠海市潤星泰電器有限公司 51% 股權之交易公告（作價、估值、2018 年營收與淨利、原股東結構）、飛榮達 2024 與 2025 年年度報告（合併營收與歸母淨利）。</li>
+    <li><b>富其揚：</b><a href="https://www.coolerfast.com/">官網 coolerfast.com</a>（品牌 CooNong；站台對抓取工具回傳 HTTP 430，需以一般瀏覽器人工瀏覽）、<a href="https://www.exporthub.com/dongguan-fuqiyang-electronic-technology-co-ltd/">ExportHub 企業檔案</a>（約 2018 年之舊資料，僅供沿革參考）、<a href="https://www.aibanges.com/a/10783">艾邦儲能網「中國液冷板 45 強」</a>與<a href="https://www.abnotebook.com/a/22122">「UQD 快接頭 20 家核心供應商」</a>（均未列入，佐證其在大陸液冷產業媒體中知名度低）。</li>
+  </ul>
+  <p style="margin-top:12px">檢索日期均為 2026-08-14。公司自家簡報中的設備台數、產能、技術參數皆為<b>自報值</b>，未經第三方查核；本報告已逐項標示，不宜直接引用為承諾。標「<sup class="est">＊</sup>」者為本報告依公開數字回推或依陸股揭露規則推論的估算值。</p>
+  <p style="margin-top:10px"><b>僅供內部策略參考。</b></p>
+</footer>
+
+</div>
+
+</body>
+</html>
