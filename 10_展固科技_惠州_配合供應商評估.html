@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>展固科技（惠州）配合供應商評估｜大陸液冷廠商調研 10</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;      /* 卡片/圖表面 */
+    --page: #f9f9f7;           /* 頁面底 */
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;       /* 主色（藍） */
+    --series-1-track: #cde2fb; /* 藍 100，meter 未填軌 */
+    --seq-250: #86b6ef;
+    --seq-450: #2a78d6;
+    --seq-600: #184f95;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --accent-wash: rgba(42,120,214,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-1-track: #0d366b;
+      --seq-250: #1c5cab;
+      --seq-450: #3987e5;
+      --seq-600: #6da7ec;
+      --good-text: #0ca30c;
+      --accent-wash: rgba(57,135,229,0.12);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  /* ===== 頁首 ===== */
+  .report-tag { font-size:12px; letter-spacing:.12em; color:var(--text-muted); text-transform:uppercase; }
+  header.hero { padding: 8px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing:.01em; margin-top: 4px; }
+  h1 .code { font-weight: 400; font-size: 18px; color: var(--text-secondary); margin-left: 8px; }
+  .hero-sub { color: var(--text-secondary); margin-top: 6px; max-width: 72ch; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+  .badge { font-size:12.5px; padding:3px 10px; border-radius:99px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-secondary); }
+  .badge.threat { border-color: var(--critical); color: var(--critical); font-weight:600; }
+  .meta-line { margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+
+  /* ===== 區塊 ===== */
+  section { margin-bottom: 36px; }
+  h2 { font-size: 20px; font-weight: 700; padding-bottom: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h2 .num { color: var(--series-1); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 18px 0 8px; }
+  p.body { color: var(--text-primary); margin-bottom: 10px; max-width: 80ch; }
+  .note { font-size: 12.5px; color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .grid-3 { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+  @media (max-width: 760px){ .grid-2,.grid-3{grid-template-columns:1fr;} }
+
+  /* ===== 摘要統計磚 ===== */
+  .tiles { display:grid; grid-template-columns: repeat(6,1fr); gap:12px; }
+  @media (max-width: 900px){ .tiles{grid-template-columns: repeat(3,1fr);} }
+  @media (max-width: 560px){ .tiles{grid-template-columns: repeat(2,1fr);} }
+  .tile { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:14px 14px 12px; }
+  .tile .label { font-size:12px; color:var(--text-muted); }
+  .tile .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .tile .delta { font-size:12px; margin-top:2px; }
+  .delta.up { color: var(--good-text); }
+  .delta.down { color: var(--critical); }
+  .delta.flat { color: var(--text-muted); }
+
+  /* ===== 表格 ===== */
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-weight:600; color:var(--text-secondary); font-size:12.5px; padding:8px 10px; border-bottom:1px solid var(--baseline); white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:top; }
+  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom:none; }
+
+  /* ===== 時間軸 ===== */
+  .timeline { list-style:none; position:relative; padding-left:20px; }
+  .timeline::before { content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--grid); border-radius:1px; }
+  .timeline li { position:relative; padding:0 0 14px 12px; }
+  .timeline li::before { content:""; position:absolute; left:-20px; top:7px; width:8px; height:8px; border-radius:50%; background:var(--series-1); box-shadow: 0 0 0 2px var(--surface-1); }
+  .timeline .yr { font-weight:700; font-variant-numeric: tabular-nums; margin-right:8px; }
+  .timeline .desc { color:var(--text-secondary); }
+
+  /* ===== 圖表（純 HTML/CSS 橫條圖） ===== */
+  .chart { margin-top: 10px; }
+  .chart-title { font-size:13.5px; font-weight:600; }
+  .chart-sub { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .hbar-row { display:grid; grid-template-columns: 118px 1fr 120px; align-items:center; gap:10px; padding:5px 0; }
+  .hbar-row .cat { font-size:13px; color:var(--text-secondary); text-align:right; }
+  .hbar-track { position:relative; height:20px; }
+  .hbar-fill { position:absolute; left:0; top:0; height:20px; background:var(--series-1); border-radius:0 4px 4px 0; transition: opacity .15s; }
+  .hbar-row:hover .hbar-fill { opacity:.82; }
+  .hbar-row .val { font-size:13px; color:var(--text-primary); font-variant-numeric:tabular-nums; }
+  .hbar-row .val .pct { color:var(--text-muted); }
+  .axis-note { border-top:1px solid var(--baseline); margin-top:6px; padding-top:5px; font-size:11.5px; color:var(--text-muted); text-align:right; }
+
+  /* 縱向柱狀（年度趨勢，小倍數） */
+  .cols { display:flex; align-items:flex-end; gap:26px; height:170px; padding:0 6px; border-bottom:1px solid var(--baseline); }
+  .col-g { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
+  .col-bar { width:100%; max-width:44px; background:var(--series-1); border-radius:4px 4px 0 0; position:relative; transition: opacity .15s; }
+  .col-bar.est { background: var(--seq-250); }
+  .col-g:hover .col-bar { opacity:.82; }
+  .col-val { font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--text-primary); margin-bottom:4px; }
+  .col-x { display:flex; gap:26px; padding:6px 6px 0; }
+  .col-x div { flex:1; text-align:center; font-size:12px; color:var(--text-muted); }
+
+  /* ===== SWOT ===== */
+  .swot { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .swot{grid-template-columns:1fr;} }
+  .swot .card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+  .swot .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .swot ul { padding-left:18px; }
+  .swot li { margin-bottom:8px; color:var(--text-primary); }
+  .swot li b { font-weight:600; }
+
+  /* ===== 重點框 ===== */
+  .callout { background: var(--accent-wash); border:1px solid var(--border); border-left:3px solid var(--series-1); border-radius:8px; padding:14px 16px; margin:14px 0; }
+  .callout.warn { border-left-color: var(--critical); background: rgba(208,59,59,0.06); }
+  .callout .t { font-weight:700; font-size:13.5px; margin-bottom:4px; }
+
+  /* ===== 評分 meter ===== */
+  .meter-row { display:grid; grid-template-columns: 170px 1fr 56px; gap:12px; align-items:center; padding:6px 0; }
+  .meter-row .m-label { font-size:13.5px; color:var(--text-secondary); text-align:right; }
+  .meter-track { height:10px; border-radius:5px; background:var(--series-1-track); position:relative; overflow:hidden; }
+  .meter-fill { position:absolute; left:0; top:0; bottom:0; background:var(--series-1); border-radius:5px; }
+  .meter-row .m-val { font-size:13px; font-variant-numeric:tabular-nums; color:var(--text-primary); }
+
+  footer { border-top:1px solid var(--border); padding-top:16px; font-size:12.5px; color:var(--text-muted); }
+  footer a { color: var(--series-1); text-decoration:none; word-break:break-all; }
+  footer li { margin-bottom:4px; }
+  sup.est { color: var(--text-muted); }
+
+  /* ===== 本報告新增（四家橫向比較） ===== */
+  .grid-4 { display:grid; grid-template-columns: repeat(4,1fr); gap:14px; }
+  @media (max-width: 980px){ .grid-4{grid-template-columns:1fr 1fr;} }
+  @media (max-width: 560px){ .grid-4{grid-template-columns:1fr;} }
+  .co { border-top:3px solid var(--series-1); }
+  .co.k { border-top-color:#2a78d6; }
+  .co.s { border-top-color:#0ca30c; }
+  .co.f { border-top-color:#fab219; }
+  .co.r { border-top-color:#d03b3b; }
+  .co .nm { font-size:16px; font-weight:700; }
+  .co .pa { font-size:12px; color:var(--text-muted); margin-bottom:6px; }
+  .co .one { font-size:13.5px; color:var(--text-secondary); }
+  .co dl { margin-top:10px; font-size:12.5px; }
+  .co dt { color:var(--text-muted); float:left; clear:left; width:64px; }
+  .co dd { margin-left:64px; margin-bottom:3px; }
+  .cmp th:first-child, .cmp td:first-child { position:sticky; left:0; background:var(--surface-1); font-weight:600; color:var(--text-secondary); }
+  .cmp th { white-space:normal; }
+  .cmp td { font-size:13px; }
+  .scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .cmp { min-width:760px; }
+  .pill { display:inline-block; font-size:10.5px; line-height:1.5; padding:0 6px; border-radius:99px; border:1px solid var(--border); color:var(--text-muted); margin-left:4px; white-space:nowrap; vertical-align:1px; }
+  .pill.self { border-color:var(--warning); color:#8a6100; }
+  .pill.pub { border-color:var(--good); color:var(--good-text); }
+  .pill.none { border-color:var(--baseline); }
+  @media (prefers-color-scheme: dark){ .pill.self{color:#fab219;} }
+  .yes { color:var(--good-text); font-weight:700; }
+  .no { color:var(--text-muted); }
+  .part { color:#8a6100; font-weight:600; }
+  @media (prefers-color-scheme: dark){ .part{color:#fab219;} }
+  .rowhl td { background: var(--accent-wash); }
+  .meter-row.k .meter-fill { background:#2a78d6; }
+  .meter-row.s .meter-fill { background:#0ca30c; }
+  .meter-row.f .meter-fill { background:#fab219; }
+  .meter-row.r .meter-fill { background:#d03b3b; }
+  .legend { display:flex; flex-wrap:wrap; gap:14px; font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .legend span::before { content:""; display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:5px; vertical-align:-1px; }
+  .legend .lk::before{background:#2a78d6;} .legend .ls::before{background:#0ca30c;}
+  .legend .lf::before{background:#fab219;} .legend .lr::before{background:#d03b3b;}
+  .blk { page-break-inside: avoid; }
+
+  td.down, .down { color: var(--critical); }
+
+  @media print {
+    .scroll { overflow: visible; }
+    .cmp { min-width: 0; font-size: 11px; }
+    .cmp td, .cmp th { padding: 5px 6px; }
+    .card, .co, .callout, section { page-break-inside: avoid; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ===== 速評卡（每公司一卡） ===== */
+  .vrow { display:flex; gap:10px; margin-top:10px; font-size:13.5px; }
+  .vrow > div { color:var(--text-primary); }
+  .vk { flex:0 0 auto; align-self:flex-start; font-size:11px; font-weight:700; line-height:1.6; padding:0 7px; border-radius:5px; margin-top:2px; }
+  .vk.plus { color:var(--good-text); background:rgba(12,163,12,0.10); border:1px solid rgba(12,163,12,0.35); }
+  .vk.minus { color:var(--critical); background:rgba(208,59,59,0.08); border:1px solid rgba(208,59,59,0.35); }
+  @media (prefers-color-scheme: dark){
+    .vk.plus { background:rgba(12,163,12,0.16); }
+    .vk.minus { background:rgba(208,59,59,0.16); }
+  }
+  .vtag { font-size:11.5px; font-weight:600; padding:1px 8px; border-radius:99px; margin-left:8px; vertical-align:2px; }
+  .vtag.good { color:var(--good-text); border:1px solid rgba(12,163,12,0.4); }
+  .vtag.warn { color:var(--critical); border:1px solid rgba(208,59,59,0.4); }
+
+  .vk.note { color:var(--series-1); background:var(--accent-wash); border:1px solid rgba(42,120,214,0.35); }
+  @media (prefers-color-scheme: dark){ .vk.note { border-color:rgba(57,135,229,0.45); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="report-tag">大陸液冷廠商調研 · 10 · 配合供應商評估</div>
+  <h1>展固科技<span class="code">惠州展固科技有限公司｜未上市</span></h1>
+  <p class="hero-sub">2014 年登記、註冊資本 2,500 萬的惠州博羅精密五金廠（CNC＋沖壓＋模具＋表面處理），對外主打「AI 液冷散熱部件」並正在外招液冷結構工程師。<b>本次調研最重要的發現來自海關數據：它已經是奇鋐（AVC）越南子公司的銅／鋁零件供應商</b>——574 筆出口紀錄、99.3% 發往越南、最大買家 AVC Technology Vietnam，品項以銅製彎管等管件為主。本報告以「鑫鴻騰挑大陸配合供應商、共同承接奇鋐／雙鴻液冷訂單」的角度評估。</p>
+  <div class="badges">
+    <span class="badge threat">已供貨奇鋐越南廠（海關數據）——既是資格佐證，也是競合關係</span>
+    <span class="badge">能力畫像：CNC·沖壓·模具·表面處理＋管件出口實績</span>
+    <span class="badge">冷板釺焊／FSW／檢漏：查無任何證據</span>
+    <span class="badge">無官網｜認證查無｜未上市</span>
+    <span class="badge">員工口徑分歧：自稱千人 vs 平台欄 50–200 人</span>
+  </div>
+  <div class="meta-line">報告日期 2026-08-18｜檢索日期 2026-08-18｜幣別：人民幣｜工商查詢平台（企查查／天眼查等）境外封鎖，股東結構、參保人數等查無；海關買家名稱以 Volza 單一來源可見（Panjiva 佐證出口商身分與品類），建議付費調閱二次確認｜標「<sup class="est">＊</sup>」為估算或推論</div>
+</header>
+
+<section class="blk">
+  <h2><span class="num">1</span>關鍵數據</h2>
+  <div class="tiles">
+    <div class="tile"><div class="label">統一社會信用代碼</div><div class="value" style="font-size:15px">914413223148165712</div><div class="delta flat">兩招聘平台工商欄一致</div></div>
+    <div class="tile"><div class="label">成立</div><div class="value" style="font-size:18px">2014-08-05</div><div class="delta flat">自稱 2006 年起家（前身口徑）</div></div>
+    <div class="tile"><div class="label">註冊資本</div><div class="value" style="font-size:18px">2,500 萬</div><div class="delta flat">實繳查無</div></div>
+    <div class="tile"><div class="label">法定代表人</div><div class="value" style="font-size:18px">何東萍</div><div class="delta flat">兩來源一致</div></div>
+    <div class="tile"><div class="label">出口紀錄</div><div class="value">574 筆</div><div class="delta up">99.3% 發往越南（Volza）</div></div>
+    <div class="tile"><div class="label">最大買家</div><div class="value" style="font-size:16px">AVC 越南</div><div class="delta flat">奇鋐子公司（海關數據）</div></div>
+  </div>
+  <div class="callout" style="margin-top:14px">
+    <div class="t">這家的價值不在簡報，在海關數據裡</div>
+    <p class="body">展固幾乎沒有對外資訊——無官網、無認證揭露、無媒體報導、無展會紀錄。但海關數據給出了比任何簡報都硬的證據：它<b>持續、批量地對奇鋐越南廠出貨銅質管件（HS 7419 精煉銅無螺紋彎管等）、鋁製品（HS 7616）與鋼鐵件（HS 7326）</b>，另一買家包含台資越南精密廠 VPIC1。換句話說，<b>它已經通過了奇鋐體系的供應商稽核，而且做的正是液冷管路周邊的銅件</b>——這是本系列調研至今，第一家有「台系散熱廠實際供貨紀錄」硬證據的候選。</p>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">2</span>公司概況</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>基本資料</h3>
+      <table>
+        <tr><td style="width:110px;color:var(--text-muted)">全名</td><td>惠州展固科技有限公司（Huizhou Zhangu Technology Co., Ltd.）</td></tr>
+        <tr><td style="color:var(--text-muted)">地址</td><td>廣東省惠州市博羅縣龍溪鎮結窩村（廠址龍橋大道一帶）</td></tr>
+        <tr><td style="color:var(--text-muted)">企業類型</td><td>有限責任公司（自然人投資或控股）；經營狀態存續</td></tr>
+        <tr><td style="color:var(--text-muted)">經營範圍</td><td>生產、銷售：五金配件、電腦配件、塑膠及電子產品；貨物進出口</td></tr>
+        <tr><td style="color:var(--text-muted)">股東結構</td><td class="no">查無（工商平台境外封鎖）；法人何東萍名下其他公司亦查無，但無法完整排除關聯公司</td></tr>
+        <tr><td style="color:var(--text-muted)">認證</td><td class="no">ISO 9001／IATF 16949 查無；自稱「國家高新技術企業」但在可讀取的官方名單中未獲佐證</td></tr>
+        <tr><td style="color:var(--text-muted)">官網</td><td class="no">查無（多種域名拼法均不存在）；對外露出僅招聘平台與 Made-in-China 店鋪（2023 年註冊，聯絡人 Mr. Ken）</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>能力自述與規模口徑</h3>
+      <div class="vrow"><span class="vk minus">自稱</span><div>「國家高新技術企業」、員工 1,000 餘人、占地 10 萬平方米、「數百台高精度 CNC 加工中心、激光切割設備、自動化表面處理生產線」；核心業務含模具設計、精密五金結構件、表面處理及<b>液冷散熱部件</b>，重點布局 AI 液冷與新能源。（智通直聘公司自介）</div></div>
+      <div class="vrow"><span class="vk minus">矛盾</span><div>員工口徑嚴重分歧：卓博平台欄「50–200 人」、智通欄「100–499／500–1000 人」並存、自介稱千人。合理推估實際在<b>數百人級</b><sup class="est">＊</sup>；參保人數查無，無法定錨。</div></div>
+      <div class="vrow"><span class="vk plus">佐證</span><div>在招 35 個職缺中包含<b>液冷結構工程師</b>——與科發盛相同的訊號：液冷工程能力正在從外部補。普工月薪 5–5.5K 包吃住，屬博羅一般製造業水準。</div></div>
+      <div class="vrow"><span class="vk note">解讀</span><div>2014 年登記但自稱 2006 起家，早期做一般五金外銷（2022 年還出過美國酒架產品），之後靠 CNC＋沖壓＋模具吃進奇鋐越南的管件單，現在跟著風口把招牌換成「AI 液冷」。它的液冷是<b>從管件實績往冷板方向擴</b>，方向合理，但冷板核心製程還沒有證據。</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">3</span>能力盤點——對照我方要承接的品項</h2>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:150px">品項／製程</th><th>展固的現況</th><th>證據等級</th><th>對我方的可用性</th></tr></thead>
+    <tbody>
+      <tr class="rowhl"><td>液冷管件（銅彎管、接管件）</td><td>對 AVC 越南持續出口 HS 7419 銅製彎管等管件，574 筆出口紀錄。</td><td><span class="pill pub">海關數據（Volza；Panjiva 佐證品類）</span></td><td class="yes">全系列唯一有台系散熱廠實際供貨紀錄的品項。冷板水路的銅管件、彎管、接頭座可直接詢價試單。</td></tr>
+      <tr class="rowhl"><td>CNC 精密件</td><td>自稱數百台 CNC 加工中心；卓博自介設 CNC 車間；出口品類含銅鋁鋼精密件。</td><td><span class="pill self">自報＋海關品類旁證</span></td><td class="yes">CNC 銅鋁件可承接；台數須現場核實。</td></tr>
+      <tr><td>沖壓與模具</td><td>設沖壓車間、模具設計製造自稱全制程；出口含鋼鐵件（HS 7326）。</td><td><span class="pill self">自報</span></td><td class="part">扣具、支架類可試；無精密度與設備規格資訊。</td></tr>
+      <tr><td>表面處理</td><td>自稱自動化表面處理生產線。</td><td><span class="pill self">自報</span></td><td class="part">線別（陽極／鍍鎳／鈍化？）未揭露，須現場確認。</td></tr>
+      <tr><td>冷板本體（釺焊／FSW）</td><td class="no">查無任何釺焊爐、FSW 設備或冷板成品記載</td><td>—</td><td class="no">目前不可用。液冷結構工程師在招中，能力屬「進行式」。</td></tr>
+      <tr><td>檢漏（氦檢／氫檢／氣密）</td><td class="no">查無</td><td>—</td><td class="no">承接冷板的硬前提，無證據。</td></tr>
+      <tr><td>鏟齒微流道</td><td class="no">查無</td><td>—</td><td class="no">不可用。</td></tr>
+      <tr><td>UQD／Manifold／均溫板／熱管</td><td class="no">查無</td><td>—</td><td class="no">不可用。</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">4</span>客戶查證——分兩級</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>第三方佐證（海關數據）</h3>
+      <div class="vrow"><span class="vk plus">佐證</span><div><b>AVC Technology Vietnam Co., Ltd.（奇鋐越南子公司）為最大買家</b>；奇鋐對該子公司的增資公告可證其隸屬關係。出口品項：銅製管件（HS 7419）、鋁製品（HS 7616）、鋼鐵件（HS 7326）。</div></div>
+      <div class="vrow"><span class="vk plus">佐證</span><div>另有 Vietnam Precision Industrial No.1（VPIC1，台資越南精密廠）等共 7 家買家；99.3% 出口集中於越南。</div></div>
+      <div class="vrow"><span class="vk minus">限制</span><div>買家名稱僅 Volza 單一來源可見（資料至 2025-05-30）；Panjiva 免費頁佐證其出口商身分、3 家客戶與相同品類，但未露出買家名。<b>建議付費調閱 Panjiva／Volza 明細二次確認</b>。</div></div>
+    </div>
+    <div class="card">
+      <h3>自稱與台灣端</h3>
+      <div class="vrow"><span class="vk minus">自稱</span><div>公司自介僅稱服務「AI 算力、新能源」領域，未點名任何客戶——反而比掛滿 logo 的同業誠實。</div></div>
+      <div class="vrow"><span class="vk minus">查無</span><div>媒體報導、展會名單（含深圳液冷展）、「展固＋奇鋐／雙鴻／富士康／英維克」組合檢索——均查無。</div></div>
+      <div class="vrow"><span class="vk minus">查無</span><div>台灣端：繁體媒體與供應鏈報導查無此公司。它與奇鋐體系的往來只存在於海關數據，未進入任何公開敘事——低調，但貨是真的在出。</div></div>
+    </div>
+  </div>
+  <div class="callout warn">
+    <div class="t">對我方的雙面意義</div>
+    <p class="body">好的一面：它已通過奇鋐體系的供應商稽核並持續出貨，代表品質體系至少達到奇鋐管件件別的門檻——找它配合，客戶端阻力小，甚至可能加分。要警惕的一面：<b>它跟我方在同一個客戶池裡</b>，而且它的供貨路線（惠州製造→越南交付）正好對準奇鋐的越南產能布局。若我方把冷板水路的管件外包給它，等於幫它累積往冷板總成走的履歷；它招液冷結構工程師的動作說明它自己也想往上爬。合作前必須談清楚：<b>哪些件號經我方、哪些是它自己的直供盤，以及我方圖面的使用邊界</b>。</p>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">5</span>風險清單</h2>
+  <div class="grid-2">
+    <div class="card">
+      <div class="vrow"><span class="vk minus">風險</span><div><b>透明度全系列最低一級</b>：無官網、無認證揭露、股東結構與參保人數查無、「高新技術企業」與「10 萬平米」自稱無官方佐證。</div></div>
+      <div class="vrow"><span class="vk minus">風險</span><div><b>員工口徑矛盾</b>（50–200 vs 千人）；規模定錨只能靠現場驗廠與社保名冊。</div></div>
+      <div class="vrow"><span class="vk minus">風險</span><div><b>直供競合</b>：既有 AVC 越南直供關係＝可繞過我方的現成通道；角色分工不先談定，我方可能變成可被跳過的一段。</div></div>
+    </div>
+    <div class="card">
+      <div class="vrow"><span class="vk minus">風險</span><div><b>冷板核心製程零證據</b>：釺焊、FSW、檢漏、鏟齒全查無。若合作案涉及這些製程，現階段它接不住。</div></div>
+      <div class="vrow"><span class="vk minus">風險</span><div>訴訟／處罰／異常／出質「查無」是境外可及來源查無，<b>不等於確認無</b>；企查查／裁判文書網須由大陸端複查，含法人何東萍的對外投資。</div></div>
+      <div class="vrow"><span class="vk note">解讀</span><div>它的模式是「悶聲做件」：不開官網、不跑展會、不掛 logo，靠實單吃奇鋐越南的管件。這種廠通常實在但體系文件弱——與科發盛（行銷先行、實績待證）剛好是兩個極端。</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">6</span>配合供應商適配度評分（1–5 分）</h2>
+  <div class="card">
+    <div class="meter-row"><div class="m-label">液冷管件（銅彎管等）</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="m-val">4 / 5</div></div>
+    <div class="meter-row"><div class="m-label">CNC 精密件</div><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><div class="m-val">3 / 5</div></div>
+    <div class="meter-row"><div class="m-label">沖壓件與模具</div><div class="meter-track"><div class="meter-fill" style="width:40%"></div></div><div class="m-val">2 / 5</div></div>
+    <div class="meter-row"><div class="m-label">冷板釺焊與檢漏</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1 / 5</div></div>
+    <div class="meter-row"><div class="m-label">UQD／Manifold</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1 / 5</div></div>
+    <div class="meter-row"><div class="m-label">規模承載力（大案量產）</div><div class="meter-track"><div class="meter-fill" style="width:40%"></div></div><div class="m-val">2 / 5</div></div>
+    <div class="meter-row"><div class="m-label">客戶關係相容性</div><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><div class="m-val">3 / 5</div></div>
+    <div class="meter-row"><div class="m-label">資料透明度</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1 / 5</div></div>
+    <p class="note" style="margin-top:8px">評分基準與系列 06／07／09 一致：5＝有量產線且附可驗證數據；4＝已入台系鏈或有第三方實績佐證；3＝有能力但數據未揭露；1＝查無或基本錯位。液冷管件 4 分的依據是海關數據的 AVC 越南供貨紀錄（單一來源，待二次確認）；相容性 3 分：無客戶衝突，但有直供競合，須先談角色分工。</p>
+  </div>
+  <div class="callout">
+    <div class="t">核心結論</div>
+    <p class="body">展固是本系列第一家<b>用海關數據證明「已在奇鋐體系內出貨」</b>的候選——但供的是管件，不是冷板。它的正確定位是：<b>冷板水路銅管件與 CNC 銅鋁件的配合供應商，尤其適合對接奇鋐越南交付場景</b>；冷板本體、檢漏件不在它目前的能力圈。與科發盛相比：科發盛是「行銷牆超前實績」，展固是「實績藏在海關數據裡」——後者的實在程度更高，但透明度更低，兩家都必須靠驗廠來定案。與可俐星同樣要注意角色分工：它有直達奇鋐的通道，合約要先劃清件號歸屬與圖面邊界。<b>建議：進入候選名單，優先級高於科發盛；以管件試單切入，同步在合約鎖定分工。</b></p>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">7</span>建議行動</h2>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:130px">項目</th><th>建議</th></tr></thead>
+    <tbody>
+      <tr class="rowhl"><td>第一優先動作</td><td>付費調閱 Volza／Panjiva 出口明細，二次確認 AVC 越南買家關係、供貨品項與月均量——這是整份評估的地基，先把單一來源變成雙來源。</td></tr>
+      <tr><td>接觸前必查</td><td>大陸端用企查查 App 拉工商全檔：股東、實繳、參保人數、訴訟／處罰／出質；同時查法人何東萍的對外投資與任職（排除隱形關聯廠）。</td></tr>
+      <tr><td>接觸時必問</td><td>與 AVC 越南的合作內容（哪些件號、直供或透過貿易商、月量）；「高新技術企業」證書編號；有無 ISO 9001／IATF 16949 證書原件；液冷結構工程師是否到位、冷板規劃到哪一步。</td></tr>
+      <tr><td>驗廠重點</td><td>CNC 實際台數與品牌、沖壓與模具車間、表面處理線別、實際在職人數（對照社保名冊）、10 萬平米廠區是否屬實、有無任何釺焊／檢漏設備。</td></tr>
+      <tr><td>試單設計</td><td>下冷板水路銅管件（彎管＋接頭座各一款）試單——正好落在它的海關實績品項上，驗尺寸一致性、清潔度、交期。不下帶檢漏要求的件。</td></tr>
+      <tr><td>合約要點</td><td>件號歸屬與客戶窗口分工（哪些經我方、哪些是它既有直供盤）、我方圖面與治具的使用邊界、旺季排程保障。</td></tr>
+      <tr><td>監測訊號</td><td>① 液冷結構工程師到位與冷板成品動態；② 對 AVC 越南出口品項是否從管件擴到冷板組件（海關數據可持續追蹤）；③ 取得 IATF 16949 或出現檢漏設備；④ 出現官網或對外行銷升級（透明度改善訊號）。</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<footer>
+  <h3 style="color:var(--text-secondary)">資料來源（檢索日期均 2026-08-18）</h3>
+  <ul style="list-style:none">
+    <li><a href="https://www.volza.com/company-profile/huizhou-zhangu-technology-co-ltd-59943194/">Volza 出口檔案</a>（574 筆出口、99.3% 越南、最大買家 AVC Technology Vietnam、HS 7419／7616／7326 品類；資料至 2025-05-30，買家名稱單一來源）</li>
+    <li><a href="https://panjiva.com/Huizhou-Zhangu-Technology-Co-Ltd/194998546">Panjiva 供應商頁</a>（佐證出口商身分、3 家客戶、銅鋁鋼品類）；<a href="https://cn.panjiva.com/Avc-Technology-Vietnam-Co-Ltd/136679349">Panjiva AVC Vietnam 頁</a></li>
+    <li><a href="https://www.marketscreener.com/quote/stock/ASIA-VITAL-COMPONENTS-CO--6496092/news/Announcement-of-the-AVC-s-Board-of-Directors-approved-the-capital-increase-to-subsidiary-AVC-Technol-36982352/">奇鋐（3017）董事會對 AVC Technology (Vietnam) 增資公告</a>（確認其為奇鋐子公司）</li>
+    <li><a href="https://www.job5156.com/comp/1584120">智通直聘公司頁</a>（工商欄：統一社會信用代碼、成立日、法人、註冊資本；公司自介與 35 個在招職缺含液冷結構工程師）</li>
+    <li><a href="https://m.jobcn.com/touch/position/getCompanyInfo.uhtml?m.comId=659459">卓博人才網公司頁</a>（CNC／沖壓車間自介、平台欄員工 50–200 人）</li>
+    <li><a href="https://www.cnverify.com/company/Huizhou-Zhangu-Technology-Co-Ltd">cnverify 工商摘要</a>（企業類型、經營範圍、法人交叉驗證）</li>
+    <li><a href="https://www.made-in-china.com/showroom/ba65ecb30b20dc4b/">Made-in-China 店鋪</a>（2023 年註冊、主營五金／電腦／汽車／醫療配件、無認證揭露）；<a href="https://www.importgenius.com/suppliers/huizhou-zhangu-technology-co-ltd">ImportGenius</a>（2022 年對美 1 筆酒架產品，早期一般五金外銷佐證）</li>
+    <li>查無：官網（多域名試探）、ISO／IATF 認證、高新技術企業官方名單佐證、1688 店鋪、台灣端報導、與雙鴻往來證據、訴訟／處罰／異常／出質（境外可及來源）。</li>
+  </ul>
+  <p style="margin-top:12px">員工數、廠區面積、設備台數、「國家高新技術企業」均為<b>公司自稱</b>且口徑互相矛盾，未經第三方查核。AVC 越南買家關係來自 Volza 單一來源（Panjiva 佐證品類與出口商身分），<b>務必付費調閱明細二次確認後再據以決策</b>。標「<sup class="est">＊</sup>」者為本報告推論。</p>
+  <p style="margin-top:10px"><b>僅供內部策略參考。</b></p>
+</footer>
+
+</div>
+
+</body>
+</html>
