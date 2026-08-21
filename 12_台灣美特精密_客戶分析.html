@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>台灣美特精密 客戶分析｜液冷供應鏈調研 12</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;      /* 卡片/圖表面 */
+    --page: #f9f9f7;           /* 頁面底 */
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;       /* 主色（藍） */
+    --series-1-track: #cde2fb; /* 藍 100，meter 未填軌 */
+    --seq-250: #86b6ef;
+    --seq-450: #2a78d6;
+    --seq-600: #184f95;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --accent-wash: rgba(42,120,214,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-1-track: #0d366b;
+      --seq-250: #1c5cab;
+      --seq-450: #3987e5;
+      --seq-600: #6da7ec;
+      --good-text: #0ca30c;
+      --accent-wash: rgba(57,135,229,0.12);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  /* ===== 頁首 ===== */
+  .report-tag { font-size:12px; letter-spacing:.12em; color:var(--text-muted); text-transform:uppercase; }
+  header.hero { padding: 8px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing:.01em; margin-top: 4px; }
+  h1 .code { font-weight: 400; font-size: 18px; color: var(--text-secondary); margin-left: 8px; }
+  .hero-sub { color: var(--text-secondary); margin-top: 6px; max-width: 72ch; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+  .badge { font-size:12.5px; padding:3px 10px; border-radius:99px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-secondary); }
+  .badge.threat { border-color: var(--critical); color: var(--critical); font-weight:600; }
+  .meta-line { margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+
+  /* ===== 區塊 ===== */
+  section { margin-bottom: 36px; }
+  h2 { font-size: 20px; font-weight: 700; padding-bottom: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h2 .num { color: var(--series-1); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 18px 0 8px; }
+  p.body { color: var(--text-primary); margin-bottom: 10px; max-width: 80ch; }
+  .note { font-size: 12.5px; color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .grid-3 { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+  @media (max-width: 760px){ .grid-2,.grid-3{grid-template-columns:1fr;} }
+
+  /* ===== 摘要統計磚 ===== */
+  .tiles { display:grid; grid-template-columns: repeat(6,1fr); gap:12px; }
+  @media (max-width: 900px){ .tiles{grid-template-columns: repeat(3,1fr);} }
+  @media (max-width: 560px){ .tiles{grid-template-columns: repeat(2,1fr);} }
+  .tile { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:14px 14px 12px; }
+  .tile .label { font-size:12px; color:var(--text-muted); }
+  .tile .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .tile .delta { font-size:12px; margin-top:2px; }
+  .delta.up { color: var(--good-text); }
+  .delta.down { color: var(--critical); }
+  .delta.flat { color: var(--text-muted); }
+
+  /* ===== 表格 ===== */
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-weight:600; color:var(--text-secondary); font-size:12.5px; padding:8px 10px; border-bottom:1px solid var(--baseline); white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:top; }
+  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom:none; }
+
+  /* ===== 時間軸 ===== */
+  .timeline { list-style:none; position:relative; padding-left:20px; }
+  .timeline::before { content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--grid); border-radius:1px; }
+  .timeline li { position:relative; padding:0 0 14px 12px; }
+  .timeline li::before { content:""; position:absolute; left:-20px; top:7px; width:8px; height:8px; border-radius:50%; background:var(--series-1); box-shadow: 0 0 0 2px var(--surface-1); }
+  .timeline .yr { font-weight:700; font-variant-numeric: tabular-nums; margin-right:8px; }
+  .timeline .desc { color:var(--text-secondary); }
+
+  /* ===== 圖表（純 HTML/CSS 橫條圖） ===== */
+  .chart { margin-top: 10px; }
+  .chart-title { font-size:13.5px; font-weight:600; }
+  .chart-sub { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .hbar-row { display:grid; grid-template-columns: 118px 1fr 120px; align-items:center; gap:10px; padding:5px 0; }
+  .hbar-row .cat { font-size:13px; color:var(--text-secondary); text-align:right; }
+  .hbar-track { position:relative; height:20px; }
+  .hbar-fill { position:absolute; left:0; top:0; height:20px; background:var(--series-1); border-radius:0 4px 4px 0; transition: opacity .15s; }
+  .hbar-row:hover .hbar-fill { opacity:.82; }
+  .hbar-row .val { font-size:13px; color:var(--text-primary); font-variant-numeric:tabular-nums; }
+  .hbar-row .val .pct { color:var(--text-muted); }
+  .axis-note { border-top:1px solid var(--baseline); margin-top:6px; padding-top:5px; font-size:11.5px; color:var(--text-muted); text-align:right; }
+
+  /* 縱向柱狀（年度趨勢，小倍數） */
+  .cols { display:flex; align-items:flex-end; gap:26px; height:170px; padding:0 6px; border-bottom:1px solid var(--baseline); }
+  .col-g { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
+  .col-bar { width:100%; max-width:44px; background:var(--series-1); border-radius:4px 4px 0 0; position:relative; transition: opacity .15s; }
+  .col-bar.est { background: var(--seq-250); }
+  .col-g:hover .col-bar { opacity:.82; }
+  .col-val { font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--text-primary); margin-bottom:4px; }
+  .col-x { display:flex; gap:26px; padding:6px 6px 0; }
+  .col-x div { flex:1; text-align:center; font-size:12px; color:var(--text-muted); }
+
+  /* ===== SWOT ===== */
+  .swot { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .swot{grid-template-columns:1fr;} }
+  .swot .card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+  .swot .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .swot ul { padding-left:18px; }
+  .swot li { margin-bottom:8px; color:var(--text-primary); }
+  .swot li b { font-weight:600; }
+
+  /* ===== 重點框 ===== */
+  .callout { background: var(--accent-wash); border:1px solid var(--border); border-left:3px solid var(--series-1); border-radius:8px; padding:14px 16px; margin:14px 0; }
+  .callout.warn { border-left-color: var(--critical); background: rgba(208,59,59,0.06); }
+  .callout .t { font-weight:700; font-size:13.5px; margin-bottom:4px; }
+
+  /* ===== 評分 meter ===== */
+  .meter-row { display:grid; grid-template-columns: 170px 1fr 56px; gap:12px; align-items:center; padding:6px 0; }
+  .meter-row .m-label { font-size:13.5px; color:var(--text-secondary); text-align:right; }
+  .meter-track { height:10px; border-radius:5px; background:var(--series-1-track); position:relative; overflow:hidden; }
+  .meter-fill { position:absolute; left:0; top:0; bottom:0; background:var(--series-1); border-radius:5px; }
+  .meter-row .m-val { font-size:13px; font-variant-numeric:tabular-nums; color:var(--text-primary); }
+
+  footer { border-top:1px solid var(--border); padding-top:16px; font-size:12.5px; color:var(--text-muted); }
+  footer a { color: var(--series-1); text-decoration:none; word-break:break-all; }
+  footer li { margin-bottom:4px; }
+  sup.est { color: var(--text-muted); }
+
+  /* ===== 本報告新增（四家橫向比較） ===== */
+  .grid-4 { display:grid; grid-template-columns: repeat(4,1fr); gap:14px; }
+  @media (max-width: 980px){ .grid-4{grid-template-columns:1fr 1fr;} }
+  @media (max-width: 560px){ .grid-4{grid-template-columns:1fr;} }
+  .co { border-top:3px solid var(--series-1); }
+  .co.k { border-top-color:#2a78d6; }
+  .co.s { border-top-color:#0ca30c; }
+  .co.f { border-top-color:#fab219; }
+  .co.r { border-top-color:#d03b3b; }
+  .co .nm { font-size:16px; font-weight:700; }
+  .co .pa { font-size:12px; color:var(--text-muted); margin-bottom:6px; }
+  .co .one { font-size:13.5px; color:var(--text-secondary); }
+  .co dl { margin-top:10px; font-size:12.5px; }
+  .co dt { color:var(--text-muted); float:left; clear:left; width:64px; }
+  .co dd { margin-left:64px; margin-bottom:3px; }
+  .cmp th:first-child, .cmp td:first-child { position:sticky; left:0; background:var(--surface-1); font-weight:600; color:var(--text-secondary); }
+  .cmp th { white-space:normal; }
+  .cmp td { font-size:13px; }
+  .scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .cmp { min-width:760px; }
+  .pill { display:inline-block; font-size:10.5px; line-height:1.5; padding:0 6px; border-radius:99px; border:1px solid var(--border); color:var(--text-muted); margin-left:4px; white-space:nowrap; vertical-align:1px; }
+  .pill.self { border-color:var(--warning); color:#8a6100; }
+  .pill.pub { border-color:var(--good); color:var(--good-text); }
+  .pill.none { border-color:var(--baseline); }
+  @media (prefers-color-scheme: dark){ .pill.self{color:#fab219;} }
+  .yes { color:var(--good-text); font-weight:700; }
+  .no { color:var(--text-muted); }
+  .part { color:#8a6100; font-weight:600; }
+  @media (prefers-color-scheme: dark){ .part{color:#fab219;} }
+  .rowhl td { background: var(--accent-wash); }
+  .meter-row.k .meter-fill { background:#2a78d6; }
+  .meter-row.s .meter-fill { background:#0ca30c; }
+  .meter-row.f .meter-fill { background:#fab219; }
+  .meter-row.r .meter-fill { background:#d03b3b; }
+  .legend { display:flex; flex-wrap:wrap; gap:14px; font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .legend span::before { content:""; display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:5px; vertical-align:-1px; }
+  .legend .lk::before{background:#2a78d6;} .legend .ls::before{background:#0ca30c;}
+  .legend .lf::before{background:#fab219;} .legend .lr::before{background:#d03b3b;}
+  .blk { page-break-inside: avoid; }
+
+  td.down, .down { color: var(--critical); }
+
+  @media print {
+    .scroll { overflow: visible; }
+    .cmp { min-width: 0; font-size: 11px; }
+    .cmp td, .cmp th { padding: 5px 6px; }
+    .card, .co, .callout, section { page-break-inside: avoid; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ===== 速評卡（每公司一卡） ===== */
+  .vrow { display:flex; gap:10px; margin-top:10px; font-size:13.5px; }
+  .vrow > div { color:var(--text-primary); }
+  .vk { flex:0 0 auto; align-self:flex-start; font-size:11px; font-weight:700; line-height:1.6; padding:0 7px; border-radius:5px; margin-top:2px; }
+  .vk.plus { color:var(--good-text); background:rgba(12,163,12,0.10); border:1px solid rgba(12,163,12,0.35); }
+  .vk.minus { color:var(--critical); background:rgba(208,59,59,0.08); border:1px solid rgba(208,59,59,0.35); }
+  @media (prefers-color-scheme: dark){
+    .vk.plus { background:rgba(12,163,12,0.16); }
+    .vk.minus { background:rgba(208,59,59,0.16); }
+  }
+  .vtag { font-size:11.5px; font-weight:600; padding:1px 8px; border-radius:99px; margin-left:8px; vertical-align:2px; }
+  .vtag.good { color:var(--good-text); border:1px solid rgba(12,163,12,0.4); }
+  .vtag.warn { color:var(--critical); border:1px solid rgba(208,59,59,0.4); }
+
+  .vk.note { color:var(--series-1); background:var(--accent-wash); border:1px solid rgba(42,120,214,0.35); }
+  @media (prefers-color-scheme: dark){ .vk.note { border-color:rgba(57,135,229,0.45); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="report-tag">液冷供應鏈調研 · 12 · 客戶分析（台灣）</div>
+  <h1>台灣美特精密<span class="code">Taiwan Metal Precision（TMP）｜統編 69758084｜未公開發行</span></h1>
+  <p class="hero-sub">本次調研最重要的發現：美特不只是雙鴻供應鏈裡的整合廠——<b>它是雙鴻（3324）持股 55% 的子公司，董事長就是雙鴻董事長林育申</b>。我方「做好零組件交美特、美特整合後交雙鴻」的流向，其實是把貨交進雙鴻的集團內部整合工廠。這改變了經營這位客戶的方式：服務好美特＝直接服務雙鴻的垂直整合體系；在美特廠內的表現，雙鴻高層看得一清二楚。本報告涵蓋其股權與財務、五大產品線，以及我方可以再切入的品項機會。</p>
+  <div class="badges">
+    <span class="badge">身分：雙鴻 55% 子公司（2022-11 併入）｜45% 為創始家族方</span>
+    <span class="badge">角色：雙鴻在台灣的機構件·機櫃·液冷整合廠</span>
+    <span class="badge">產品線：液冷 CDU／Manifold／浸沒槽·OCP 機櫃·3C·車用·醫療</span>
+    <span class="badge">母集團體質：雙鴻 2025 EPS 28.26 歷史新高</span>
+    <span class="badge threat">本體財報未公開：交易條件仍須以 TMP 法人主體徵信</span>
+  </div>
+  <div class="meta-line">報告日期 2026-08-21｜檢索日期 2026-08-21｜幣別：新台幣｜TMP 為未公開發行公司，本體財務屬低透明度；母公司雙鴻數據為上櫃公開資訊｜標「<sup class="est">＊</sup>」為估算或推論</div>
+</header>
+
+<section class="blk">
+  <h2><span class="num">1</span>關鍵數據</h2>
+  <div class="tiles">
+    <div class="tile"><div class="label">統一編號</div><div class="value" style="font-size:17px">69758084</div><div class="delta flat">桃園市桃園區中山路 1306 號</div></div>
+    <div class="tile"><div class="label">設立</div><div class="value" style="font-size:18px">2018-02-05</div><div class="delta flat">2020 改組股份有限公司</div></div>
+    <div class="tile"><div class="label">實收資本額</div><div class="value">2.5 億</div><div class="delta up">▲ 1.15 億（2020）→ 2.5 億</div></div>
+    <div class="tile"><div class="label">雙鴻持股</div><div class="value">55%</div><div class="delta flat">2022-11 以 8,250 萬取得</div></div>
+    <div class="tile"><div class="label">母公司雙鴻 2025</div><div class="value" style="font-size:17px">營收 232.8 億</div><div class="delta up">▲ +47.5%，EPS 28.26 新高</div></div>
+    <div class="tile"><div class="label">TMP 本體營收</div><div class="value">查無</div><div class="delta flat">未公開發行</div></div>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">2</span>股權結構與沿革——先弄清楚我們在跟誰做生意</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>基本資料</h3>
+      <table>
+        <tr><td style="width:110px;color:var(--text-muted)">全名</td><td>台灣美特精密股份有限公司（Taiwan Metal Precision Co., Ltd.）</td></tr>
+        <tr><td style="color:var(--text-muted)">代表人</td><td><b>林育申</b>（即雙鴻科技董事長）；雙鴻以法人股東身分派任 3 席董事（陳志偉、巫謄靈等），法人持股 13,200,000 股</td></tr>
+        <tr><td style="color:var(--text-muted)">股權</td><td>雙鴻 55%；其餘約 45% 為創始家族方（境外控股 CRYSTAL FORTUNE INC.，與桃園沖壓板金廠<b>特鼎工業</b>同屬黃啓瑞家族體系）</td></tr>
+        <tr><td style="color:var(--text-muted)">廠區</td><td>總部廠（桃園中山路 1306 號）＋玉河廠（桃園玉河街 17 巷 68 號 3–4F）；查無海外廠</td></tr>
+        <tr><td style="color:var(--text-muted)">認證</td><td>ISO 9001:2015、ISO 14001:2015；車規品質系統（IATF/TS 16949，廠證所列）；2023 加入 OCP（Open Compute Project）</td></tr>
+        <tr><td style="color:var(--text-muted)">最近變更</td><td>2026-07-13（商工登記）</td></tr>
+        <tr><td style="color:var(--text-muted)">員工數</td><td class="no">查無；2025 溫室氣體盤查總排放僅 705.83 tCO₂e，屬中小型廠規模<sup class="est">＊</sup></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>沿革</h3>
+      <ul class="timeline">
+        <li><span class="yr">2018</span><span class="desc">成立桃園樣品中心與伺服器機架廠；取得 ISO 9001／14001。前身為黃啓瑞家族的台灣美特精密有限公司（特鼎工業同體系）。</span></li>
+        <li><span class="yr">2020</span><span class="desc">改組為股份有限公司，實收 1.15 億。</span></li>
+        <li><span class="yr">2022-11</span><span class="desc"><b>雙鴻以 8,250 萬取得 55%</b>（當時全公司估值約 1.5 億<sup class="est">＊</sup>），納為機構件／液冷整合子公司，董事長改由林育申出任。</span></li>
+        <li><span class="yr">2023</span><span class="desc">加入 OCP，直接參與資料中心機櫃生態系（ORV2／ORV3）。</span></li>
+        <li><span class="yr">2026</span><span class="desc">實收增至 2.5 億；配合雙鴻「液冷關鍵零件自製率 70%」策略，承擔台灣端機構與整合產能。</span></li>
+      </ul>
+      <p class="body" style="margin-top:8px"><b>解讀：</b>美特是「家族沖壓板金廠 × 雙鴻資本」的合資體。對我方的實務意義有二：第一，<b>它的採購決策最終邏輯是雙鴻的成本與交期</b>，不是獨立廠商的利潤最大化——把自己定位成「幫美特達成雙鴻 KPI 的人」，比單純報低價有效。第二，45% 家族方仍在（特鼎工業本身就是沖壓板金廠），<b>沖壓板金類的件它傾向自己做或給特鼎做</b>，我方硬去搶意義不大；要切的是它做不了、又不好外包的精密件。</p>
+    </div>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">3</span>財務——本體薄、靠山硬</h2>
+  <div class="grid-2">
+    <div class="card co k">
+      <div class="nm">TMP 本體 <span class="vtag warn">未公開發行，透明度低</span></div>
+      <div class="vrow"><span class="vk minus">缺口</span><div>營收、損益、毛利率全部查無。可定錨的只有：2022 年估值約 1.5 億<sup class="est">＊</sup>、實收資本 2.5 億、中小型廠的碳盤查規模。</div></div>
+      <div class="vrow"><span class="vk minus">留意</span><div>雙鴻曾發更正公告揭露：TMP 對家族方「特鼎集團」提供背書保證 2,323 萬～5,400 萬，<b>一度占 TMP 淨值逾 6 倍</b>——顯示 2023 年初其淨值仍薄，且與家族企業有資金連帶。此公告文字為轉載，建議至公開資訊觀測站核對原文。</div></div>
+      <div class="vrow"><span class="vk note">對策</span><div>應收帳款管理照規矩來：以 TMP 法人主體做徵信、設信用額度；付款條件談判時可提及集團關係，但<b>合約權利義務不要想當然耳地及於雙鴻</b>——除非拿到集團背書。</div></div>
+    </div>
+    <div class="card co s">
+      <div class="nm">母集團雙鴻 3324 <span class="vtag good">體質極強、動能仍在加速</span></div>
+      <div class="vrow"><span class="vk plus">正面</span><div>2023 營收 127.1 億（EPS 14.28）→ 2024 157.8 億（毛利率 25.5%、EPS 21.23）→ <b>2025 232.8 億（+47.5%）、毛利率 27.4%、EPS 28.26 歷史新高</b>。</div></div>
+      <div class="vrow"><span class="vk plus">正面</span><div>2026 動能：Q1 EPS 12.61（+123%）；1–7 月每月營收年增 40%～122%，7 月 37.65 億（+116.7%）；公司目標全年營收 +70%、毛利率站上 30%。</div></div>
+      <div class="vrow"><span class="vk plus">正面</span><div>液冷產能滿載：台灣 Rack Manifold 月產能 2,000 組已滿載、In-Row CDU 月產能 100–150 台（2026-03 法說）——<b>整合端塞車，正是零組件供應商加碼的時機</b>。</div></div>
+      <div class="vrow"><span class="vk note">解讀</span><div>付款能力實質掛在雙鴻集團上，倒帳風險低；真正的風險不是收不到錢，是<b>訂單流向改變</b>（見第 5 節泰國廠）。</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">4</span>產品線盤點與我方切入機會——這一節是重點</h2>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:130px">產品線</th><th>內容</th><th>它自有的製程</th><th>我方的機會</th></tr></thead>
+    <tbody>
+      <tr class="rowhl"><td>液冷解決方案</td><td><b>CDU</b>（含 In-Row 機櫃式）、<b>Manifold 分歧管</b>、<b>Immersion Tank 浸沒槽</b>——配合雙鴻自製率 70% 策略的核心任務。</td><td>板金、焊接、組裝、氣密／液密結構設計。</td><td class="yes"><b>最大機會帶。</b>Manifold 管件與接頭座、CDU 內部金屬加工件與框架、浸沒槽精密結構件、QD 座——以及<b>波紋管／伸縮補償件（它官網完全空白，我方現成有規格書）</b>。</td></tr>
+      <tr class="rowhl"><td>雲端伺服器機構</td><td>OCP 標準機櫃 ORV2／ORV3、Server Rack、Chassis（1U–10U）、HDD tray、NAS。</td><td>沖壓、板金、烤漆、組裝。</td><td class="part">大宗板金它自己做（且有特鼎），我方切<b>精密沖壓件、滑軌托盤件、CNC 銑削結構件</b>等高精度環節。</td></tr>
+      <tr><td>3C 產品</td><td>電視前後蓋、顯示器框架；筆電 A／D 件、觸控筆、手機框殼（AIT 製程）。</td><td>沖壓、表面處理、烤漆。</td><td class="no">外觀件非我方主場，優先度低。</td></tr>
+      <tr><td>馬達／車用</td><td><b>車用電池模組結構件</b>、沖壓金屬件、組裝；廠證含車規品質系統。</td><td>沖壓、組裝。</td><td class="part">電池模組的 busbar 支架、端板等精密件可提案——我方若有 IATF 16949 對應能力，這是液冷之外的第二條線。</td></tr>
+      <tr><td>醫療設備</td><td>組裝、鎖固件（locking components）。</td><td>組裝。</td><td class="part">精密車銑鎖固件可承接，量小但毛利與黏著度好。</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout">
+    <div class="t">切入邏輯：補它的短板，不搶它的本業</div>
+    <p class="body">美特的能力圈是<b>沖壓、板金、焊接、烤漆、組裝整合</b>——而且 45% 股東方自己就是沖壓板金廠。所以送板金件報價單過去是白費力氣。它結構上比較可能外購的是：<b>精密 CNC 車銑件、深加工件、特殊管件與波紋管、氣密等級的精密零組件</b>——這些恰好全部落在我方能力圈。搭配雙鴻整合端產能滿載（Manifold 月產 2,000 組滿載、CDU 100–150 台）的時點，我方提案的正確姿勢是：「這些零件我來，讓你的整合線跑得更快」。</p>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">5</span>風險與注意事項</h2>
+  <div class="grid-2">
+    <div class="card">
+      <div class="vrow"><span class="vk minus">風險</span><div><b>訂單流向風險大於信用風險</b>：雙鴻泰國二期 2026 年暑假量產，若整合產能往泰國移，桃園美特的業務量與我方的交貨流向都會變——要盯集團產能配置，並預先想好「跟著去泰國供貨」的方案。</div></div>
+      <div class="vrow"><span class="vk minus">風險</span><div><b>關係人結構複雜</b>：55／45 合資＋TMP 對特鼎集團的背書保證前科。做生意照徵信規矩來，帳期不宜放寬。</div></div>
+    </div>
+    <div class="card">
+      <div class="vrow"><span class="vk minus">風險</span><div><b>單一集團依存</b>：我方經美特的生意本質上全繫於雙鴻——這與我方對雙鴻的直接指定供應商關係是同一個籃子，集中度風險要在客戶組合層面管理（奇鋐線、其他客戶線並進）。</div></div>
+      <div class="vrow"><span class="vk note">軟性訊號</span><div>員工評價（掛前身公司名下）提及「典型家族企業、常態加班」——等級低僅供參考，但與其合資背景一致；對接窗口的穩定度值得留意。訴訟／裁罰／負面新聞查無。</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">6</span>客戶價值評分（1–5 分）</h2>
+  <div class="card">
+    <div class="meter-row"><div class="m-label">訂單成長動能（集團）</div><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><div class="m-val">5 / 5</div></div>
+    <div class="meter-row"><div class="m-label">我方品項契合度</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="m-val">4 / 5</div></div>
+    <div class="meter-row"><div class="m-label">付款能力（集團視角）</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="m-val">4 / 5</div></div>
+    <div class="meter-row"><div class="m-label">策略價值（通往雙鴻核心）</div><div class="meter-track"><div class="meter-fill" style="width:100%"></div></div><div class="m-val">5 / 5</div></div>
+    <div class="meter-row"><div class="m-label">本體財務透明度</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="m-val">1 / 5</div></div>
+    <div class="meter-row"><div class="m-label">我方議價空間</div><div class="meter-track"><div class="meter-fill" style="width:40%"></div></div><div class="m-val">2 / 5</div></div>
+    <p class="note" style="margin-top:8px">評分視角為「客戶價值」，與供應商系列（06–11）的適配度評分不同軸。議價空間 2 分：它背後是雙鴻的採購紀律＋自家沖壓體系，價格戰打不得；要用精密度、氣密等級與交期換價值。</p>
+  </div>
+  <div class="callout">
+    <div class="t">核心結論</div>
+    <p class="body">美特精密是<b>穿著供應鏈整合廠外衣的「雙鴻內部窗口」</b>：董事長是林育申、採購邏輯是雙鴻的 KPI、付款能力是雙鴻的資產負債表。經營這位客戶的正確方式不是把它當一般客戶跑業務，而是<b>把每一次交貨都當成在雙鴻集團內部累積口碑</b>——在美特廠內的良率與交期表現，就是我方在雙鴻擴大指定範圍的履歷。品項上，最大的空白是波紋管／伸縮補償件與 Manifold 精密管件（它的官網對此完全空白，而我方現成有無縫波紋管規格書），其次是 CDU 內構件、ORV3 精密沖壓件、車用電池模組精密件與醫療鎖固件。<b>切入原則一句話：補它的短板（精密 CNC、特殊管件、氣密件），不搶它的本業（板金沖壓組裝）。</b></p>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">7</span>建議行動</h2>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:130px">項目</th><th>建議</th></tr></thead>
+    <tbody>
+      <tr class="rowhl"><td>第一步提案</td><td>帶著<b>無縫波紋管規格書</b>與 Manifold 管件、QD 座的樣品能力清單去談——瞄準它液冷線（CDU／Manifold／浸沒槽）的採購缺口，訴求「讓滿載的整合線跑更快」。</td></tr>
+      <tr><td>對口策略</td><td>雙軌並進：美特廠端（採購與工程窗口，談件號與交期）＋雙鴻端（我方既有的指定供應商關係，讓集團層知道我方在美特的角色）。兩邊講的故事要一致：我方是集團液冷垂直整合的零組件補強者。</td></tr>
+      <tr><td>信用管理</td><td>以 TMP 法人主體徵信、設信用額度；帳期照行規不放寬；至公開資訊觀測站核對雙鴻對 TMP／特鼎的資金貸與及背書保證公告原文，掌握其資金連帶全貌。</td></tr>
+      <tr><td>第二條線</td><td>液冷之外，依序開發：ORV3 機櫃精密沖壓件與滑軌托盤件 → 車用電池模組精密結構件（確認我方車規對應）→ 醫療鎖固件（量小利厚）。避開大宗板金與外觀件。</td></tr>
+      <tr><td>泰國預案</td><td>先問清雙鴻泰國二期量產後，美特桃園的角色定位；同步評估我方「台灣製造→泰國交付」或於泰國設點／找泰國夥伴的可行性，別等訂單移走才反應。</td></tr>
+      <tr><td>監測訊號</td><td>① 雙鴻月營收與液冷產能公告（滿載→擴產＝我方件號機會）；② 美特增資或改選（股權天平變化）；③ 特鼎背書保證動態；④ 泰國二期量產進度與美特角色；⑤ 美特是否開始自建 CNC／管件產能（我方空間收縮的前兆）。</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<footer>
+  <h3 style="color:var(--text-secondary)">資料來源（檢索日期均 2026-08-21）</h3>
+  <ul style="list-style:none">
+    <li><a href="https://www.tmp.com.tw/">台灣美特精密官網</a>（產品五大線、製程、沿革、雙廠區、OCP、溫室氣體盤查——公司自述）</li>
+    <li><a href="https://www.honsec.com.tw/uploads/underWriting/2147_4.pdf">雙鴻第五次無擔保轉換公司債公開說明書</a>（持股 55%、2022-11 投資 8,250 萬、關係企業組織圖——等級 A）</li>
+    <li><a href="https://info.technews.tw/company/69758084-%E5%8F%B0%E7%81%A3%E7%BE%8E%E7%89%B9%E7%B2%BE%E5%AF%86%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8">商工登記鏡像（TechNews）</a>（林育申、雙鴻法人董事、實收 2.5 億、變更 2026-07-13）；<a href="https://notebz.com/com/69758084">工商筆記本</a>（2020 快照：黃啓瑞、CRYSTAL FORTUNE）；<a href="https://twbi.com.tw/company/144106/info">台灣工商服務資訊網</a>（2021 快照：實收 1.35 億）；<a href="https://www.web66.com.tw/CW178/-B178765.html">web66 黃頁</a>（資本額交叉、CNC／雷射板金關鍵字）</li>
+    <li><a href="https://news.cnyes.com/news/id/5188878">鉅亨：雙鴻更正資金貸與及背書保證公告</a>（TMP 對特鼎集團背書保證、Crystal Fortune 關聯——公告轉載，建議核對原文）</li>
+    <li>雙鴻 3324 財務：<a href="https://statementdog.com/news/15880">財報狗（2025 EPS 28.26）</a>、<a href="https://statementdog.com/analysis/3324/eps">財報狗 EPS 頁</a>、<a href="https://www.wantgoo.com/stock/3324/financial-statements/monthly-revenue">玩股網月營收</a>、<a href="https://histock.tw/stock/3324/%E6%AF%8F%E8%82%A1%E7%9B%88%E9%A4%98">HiStock 歷年 EPS</a>、<a href="https://blog.fugle.tw/post/earnings-call-3324-1">富果 2026-03-12 法說備忘錄</a>（自製率 70%、Manifold 月產 2,000 組滿載、CDU 100–150 台、泰國二期）、<a href="https://money.udn.com/money/story/11074/9517814">經濟日報（2026 拚增 70%）</a></li>
+    <li><a href="https://www.518.com.tw/job-N4aAgA.html">518 熊班：特鼎工業</a>（桃園沖壓板金廠佐證）；<a href="https://salary.tw/c/4M3C">比薪水（前身公司員工評價，等級 C）</a></li>
+    <li>查無：TMP 單獨財報、員工數（104／1111 反爬）、雙鴻以外具名客戶、海外廠、進出口實績、「美特精密工業股份有限公司」（無此登記）。</li>
+  </ul>
+  <p style="margin-top:12px">TMP 為未公開發行公司，本體財務屬低透明度；「特鼎集團背書保證占淨值比」出自公告轉載，決策前請至公開資訊觀測站核對原文。標「<sup class="est">＊</sup>」者為本報告推論（2022 年估值由 8,250 萬／55% 回推；廠規模由碳盤查數字推估）。</p>
+  <p style="margin-top:10px"><b>僅供內部策略參考。</b></p>
+</footer>
+
+</div>
+
+</body>
+</html>
