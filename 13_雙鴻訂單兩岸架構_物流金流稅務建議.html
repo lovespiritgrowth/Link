@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>雙鴻訂單兩岸架構建議｜物流·金流·稅務</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;      /* 卡片/圖表面 */
+    --page: #f9f9f7;           /* 頁面底 */
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;       /* 主色（藍） */
+    --series-1-track: #cde2fb; /* 藍 100，meter 未填軌 */
+    --seq-250: #86b6ef;
+    --seq-450: #2a78d6;
+    --seq-600: #184f95;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --accent-wash: rgba(42,120,214,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-1-track: #0d366b;
+      --seq-250: #1c5cab;
+      --seq-450: #3987e5;
+      --seq-600: #6da7ec;
+      --good-text: #0ca30c;
+      --accent-wash: rgba(57,135,229,0.12);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  /* ===== 頁首 ===== */
+  .report-tag { font-size:12px; letter-spacing:.12em; color:var(--text-muted); text-transform:uppercase; }
+  header.hero { padding: 8px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing:.01em; margin-top: 4px; }
+  h1 .code { font-weight: 400; font-size: 18px; color: var(--text-secondary); margin-left: 8px; }
+  .hero-sub { color: var(--text-secondary); margin-top: 6px; max-width: 72ch; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+  .badge { font-size:12.5px; padding:3px 10px; border-radius:99px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-secondary); }
+  .badge.threat { border-color: var(--critical); color: var(--critical); font-weight:600; }
+  .meta-line { margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+
+  /* ===== 區塊 ===== */
+  section { margin-bottom: 36px; }
+  h2 { font-size: 20px; font-weight: 700; padding-bottom: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h2 .num { color: var(--series-1); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 18px 0 8px; }
+  p.body { color: var(--text-primary); margin-bottom: 10px; max-width: 80ch; }
+  .note { font-size: 12.5px; color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .grid-3 { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+  @media (max-width: 760px){ .grid-2,.grid-3{grid-template-columns:1fr;} }
+
+  /* ===== 摘要統計磚 ===== */
+  .tiles { display:grid; grid-template-columns: repeat(6,1fr); gap:12px; }
+  @media (max-width: 900px){ .tiles{grid-template-columns: repeat(3,1fr);} }
+  @media (max-width: 560px){ .tiles{grid-template-columns: repeat(2,1fr);} }
+  .tile { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:14px 14px 12px; }
+  .tile .label { font-size:12px; color:var(--text-muted); }
+  .tile .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .tile .delta { font-size:12px; margin-top:2px; }
+  .delta.up { color: var(--good-text); }
+  .delta.down { color: var(--critical); }
+  .delta.flat { color: var(--text-muted); }
+
+  /* ===== 表格 ===== */
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-weight:600; color:var(--text-secondary); font-size:12.5px; padding:8px 10px; border-bottom:1px solid var(--baseline); white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:top; }
+  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom:none; }
+
+  /* ===== 時間軸 ===== */
+  .timeline { list-style:none; position:relative; padding-left:20px; }
+  .timeline::before { content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--grid); border-radius:1px; }
+  .timeline li { position:relative; padding:0 0 14px 12px; }
+  .timeline li::before { content:""; position:absolute; left:-20px; top:7px; width:8px; height:8px; border-radius:50%; background:var(--series-1); box-shadow: 0 0 0 2px var(--surface-1); }
+  .timeline .yr { font-weight:700; font-variant-numeric: tabular-nums; margin-right:8px; }
+  .timeline .desc { color:var(--text-secondary); }
+
+  /* ===== 圖表（純 HTML/CSS 橫條圖） ===== */
+  .chart { margin-top: 10px; }
+  .chart-title { font-size:13.5px; font-weight:600; }
+  .chart-sub { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .hbar-row { display:grid; grid-template-columns: 118px 1fr 120px; align-items:center; gap:10px; padding:5px 0; }
+  .hbar-row .cat { font-size:13px; color:var(--text-secondary); text-align:right; }
+  .hbar-track { position:relative; height:20px; }
+  .hbar-fill { position:absolute; left:0; top:0; height:20px; background:var(--series-1); border-radius:0 4px 4px 0; transition: opacity .15s; }
+  .hbar-row:hover .hbar-fill { opacity:.82; }
+  .hbar-row .val { font-size:13px; color:var(--text-primary); font-variant-numeric:tabular-nums; }
+  .hbar-row .val .pct { color:var(--text-muted); }
+  .axis-note { border-top:1px solid var(--baseline); margin-top:6px; padding-top:5px; font-size:11.5px; color:var(--text-muted); text-align:right; }
+
+  /* 縱向柱狀（年度趨勢，小倍數） */
+  .cols { display:flex; align-items:flex-end; gap:26px; height:170px; padding:0 6px; border-bottom:1px solid var(--baseline); }
+  .col-g { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
+  .col-bar { width:100%; max-width:44px; background:var(--series-1); border-radius:4px 4px 0 0; position:relative; transition: opacity .15s; }
+  .col-bar.est { background: var(--seq-250); }
+  .col-g:hover .col-bar { opacity:.82; }
+  .col-val { font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--text-primary); margin-bottom:4px; }
+  .col-x { display:flex; gap:26px; padding:6px 6px 0; }
+  .col-x div { flex:1; text-align:center; font-size:12px; color:var(--text-muted); }
+
+  /* ===== SWOT ===== */
+  .swot { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .swot{grid-template-columns:1fr;} }
+  .swot .card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+  .swot .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .swot ul { padding-left:18px; }
+  .swot li { margin-bottom:8px; color:var(--text-primary); }
+  .swot li b { font-weight:600; }
+
+  /* ===== 重點框 ===== */
+  .callout { background: var(--accent-wash); border:1px solid var(--border); border-left:3px solid var(--series-1); border-radius:8px; padding:14px 16px; margin:14px 0; }
+  .callout.warn { border-left-color: var(--critical); background: rgba(208,59,59,0.06); }
+  .callout .t { font-weight:700; font-size:13.5px; margin-bottom:4px; }
+
+  /* ===== 評分 meter ===== */
+  .meter-row { display:grid; grid-template-columns: 170px 1fr 56px; gap:12px; align-items:center; padding:6px 0; }
+  .meter-row .m-label { font-size:13.5px; color:var(--text-secondary); text-align:right; }
+  .meter-track { height:10px; border-radius:5px; background:var(--series-1-track); position:relative; overflow:hidden; }
+  .meter-fill { position:absolute; left:0; top:0; bottom:0; background:var(--series-1); border-radius:5px; }
+  .meter-row .m-val { font-size:13px; font-variant-numeric:tabular-nums; color:var(--text-primary); }
+
+  footer { border-top:1px solid var(--border); padding-top:16px; font-size:12.5px; color:var(--text-muted); }
+  footer a { color: var(--series-1); text-decoration:none; word-break:break-all; }
+  footer li { margin-bottom:4px; }
+  sup.est { color: var(--text-muted); }
+
+  /* ===== 本報告新增（四家橫向比較） ===== */
+  .grid-4 { display:grid; grid-template-columns: repeat(4,1fr); gap:14px; }
+  @media (max-width: 980px){ .grid-4{grid-template-columns:1fr 1fr;} }
+  @media (max-width: 560px){ .grid-4{grid-template-columns:1fr;} }
+  .co { border-top:3px solid var(--series-1); }
+  .co.k { border-top-color:#2a78d6; }
+  .co.s { border-top-color:#0ca30c; }
+  .co.f { border-top-color:#fab219; }
+  .co.r { border-top-color:#d03b3b; }
+  .co .nm { font-size:16px; font-weight:700; }
+  .co .pa { font-size:12px; color:var(--text-muted); margin-bottom:6px; }
+  .co .one { font-size:13.5px; color:var(--text-secondary); }
+  .co dl { margin-top:10px; font-size:12.5px; }
+  .co dt { color:var(--text-muted); float:left; clear:left; width:64px; }
+  .co dd { margin-left:64px; margin-bottom:3px; }
+  .cmp th:first-child, .cmp td:first-child { position:sticky; left:0; background:var(--surface-1); font-weight:600; color:var(--text-secondary); }
+  .cmp th { white-space:normal; }
+  .cmp td { font-size:13px; }
+  .scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .cmp { min-width:760px; }
+  .pill { display:inline-block; font-size:10.5px; line-height:1.5; padding:0 6px; border-radius:99px; border:1px solid var(--border); color:var(--text-muted); margin-left:4px; white-space:nowrap; vertical-align:1px; }
+  .pill.self { border-color:var(--warning); color:#8a6100; }
+  .pill.pub { border-color:var(--good); color:var(--good-text); }
+  .pill.none { border-color:var(--baseline); }
+  @media (prefers-color-scheme: dark){ .pill.self{color:#fab219;} }
+  .yes { color:var(--good-text); font-weight:700; }
+  .no { color:var(--text-muted); }
+  .part { color:#8a6100; font-weight:600; }
+  @media (prefers-color-scheme: dark){ .part{color:#fab219;} }
+  .rowhl td { background: var(--accent-wash); }
+  .meter-row.k .meter-fill { background:#2a78d6; }
+  .meter-row.s .meter-fill { background:#0ca30c; }
+  .meter-row.f .meter-fill { background:#fab219; }
+  .meter-row.r .meter-fill { background:#d03b3b; }
+  .legend { display:flex; flex-wrap:wrap; gap:14px; font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .legend span::before { content:""; display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:5px; vertical-align:-1px; }
+  .legend .lk::before{background:#2a78d6;} .legend .ls::before{background:#0ca30c;}
+  .legend .lf::before{background:#fab219;} .legend .lr::before{background:#d03b3b;}
+  .blk { page-break-inside: avoid; }
+
+  td.down, .down { color: var(--critical); }
+
+  @media print {
+    .scroll { overflow: visible; }
+    .cmp { min-width: 0; font-size: 11px; }
+    .cmp td, .cmp th { padding: 5px 6px; }
+    .card, .co, .callout, section { page-break-inside: avoid; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ===== 速評卡（每公司一卡） ===== */
+  .vrow { display:flex; gap:10px; margin-top:10px; font-size:13.5px; }
+  .vrow > div { color:var(--text-primary); }
+  .vk { flex:0 0 auto; align-self:flex-start; font-size:11px; font-weight:700; line-height:1.6; padding:0 7px; border-radius:5px; margin-top:2px; }
+  .vk.plus { color:var(--good-text); background:rgba(12,163,12,0.10); border:1px solid rgba(12,163,12,0.35); }
+  .vk.minus { color:var(--critical); background:rgba(208,59,59,0.08); border:1px solid rgba(208,59,59,0.35); }
+  @media (prefers-color-scheme: dark){
+    .vk.plus { background:rgba(12,163,12,0.16); }
+    .vk.minus { background:rgba(208,59,59,0.16); }
+  }
+  .vtag { font-size:11.5px; font-weight:600; padding:1px 8px; border-radius:99px; margin-left:8px; vertical-align:2px; }
+  .vtag.good { color:var(--good-text); border:1px solid rgba(12,163,12,0.4); }
+  .vtag.warn { color:var(--critical); border:1px solid rgba(208,59,59,0.4); }
+
+  .vk.note { color:var(--series-1); background:var(--accent-wash); border:1px solid rgba(42,120,214,0.35); }
+  @media (prefers-color-scheme: dark){ .vk.note { border-color:rgba(57,135,229,0.45); } }
+
+  figure { margin:14px 0 6px; }
+  figure svg { display:block; color:var(--text-primary); }
+  figcaption { margin-top:6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="report-tag">內部決策文件 · 13 · 兩岸訂單架構</div>
+  <h1>雙鴻訂單的物流·金流·稅務架構建議<span class="code">XHT／CHT／C 廠／廣州交貨</span></h1>
+  <p class="hero-sub">情境：台灣雙鴻下單給鑫鴻騰（XHT），XHT 下給大陸合資公司（CHT），CHT 下給大陸工廠（C 廠），急單由 C 廠直接交貨廣州雙鴻——<b>貨從頭到尾沒離開中國大陸，但單據和錢繞了台灣一圈</b>。所有稅務與金流問題都從這個矛盾長出來。本報告給出雙軌配置建議與注意清單。</p>
+  <div class="badges">
+    <span class="badge threat">關鍵認知：無出口報關 → 台陸兩邊都沒有退稅</span>
+    <span class="badge">建議：A／B 雙軌，境內交貨的錢不跨境</span>
+    <span class="badge">XHT 利潤：框架協議＋服務費＋股利三條腿</span>
+  </div>
+  <div class="meta-line">報告日期 2026-08-25｜本文為產業實務角度之內部分析，非正式稅務或法律意見；落地前請與台灣會計師、大陸稅務師及報關行逐項確認</div>
+</header>
+
+<section class="blk">
+  <h2><span class="num">1</span>先看清楚現況鏈的三個斷點</h2>
+  <figure>
+    <svg viewBox="0 0 920 300" role="img" aria-label="現況訂單鏈：貨物未出中國大陸，導致台灣無外銷零稅率、大陸無出口退稅、跨境貨款無法核銷三個斷點" style="max-width:100%;height:auto">
+      <defs>
+        <marker id="ar1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+        </marker>
+        <marker id="ar1g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#0ca30c"/>
+        </marker>
+      </defs>
+      <!-- boundary -->
+      <line x1="250" y1="16" x2="250" y2="238" stroke="currentColor" stroke-width="1" stroke-dasharray="6 5" opacity=".45"/>
+      <text x="238" y="34" font-size="12" text-anchor="end" fill="currentColor" opacity=".65">台灣</text>
+      <text x="262" y="34" font-size="12" fill="currentColor" opacity=".65">中國大陸</text>
+      <!-- boxes -->
+      <g fill="none" stroke="currentColor" stroke-width="1.3">
+        <rect x="20"  y="60" width="120" height="44" rx="8"/>
+        <rect x="20"  y="160" width="120" height="44" rx="8"/>
+        <rect x="330" y="160" width="120" height="44" rx="8"/>
+        <rect x="580" y="160" width="120" height="44" rx="8"/>
+        <rect x="580" y="60" width="120" height="44" rx="8"/>
+      </g>
+      <g font-size="13" fill="currentColor" text-anchor="middle">
+        <text x="80"  y="86">台灣雙鴻</text>
+        <text x="80"  y="186">XHT 鑫鴻騰</text>
+        <text x="390" y="186">CHT 合資公司</text>
+        <text x="640" y="186">C 廠</text>
+        <text x="640" y="86">廣州雙鴻</text>
+      </g>
+      <!-- PO chain -->
+      <line x1="80" y1="104" x2="80" y2="158" stroke="currentColor" stroke-width="1.3" marker-end="url(#ar1)"/>
+      <text x="90" y="136" font-size="11.5" fill="currentColor">下單 PO</text>
+      <line x1="142" y1="182" x2="328" y2="182" stroke="currentColor" stroke-width="1.3" marker-end="url(#ar1)"/>
+      <text x="235" y="174" font-size="11.5" text-anchor="middle" fill="currentColor">下單 PO</text>
+      <line x1="452" y1="182" x2="578" y2="182" stroke="currentColor" stroke-width="1.3" marker-end="url(#ar1)"/>
+      <text x="515" y="174" font-size="11.5" text-anchor="middle" fill="currentColor">下單 PO</text>
+      <!-- goods -->
+      <line x1="640" y1="158" x2="640" y2="106" stroke="currentColor" stroke-width="3" marker-end="url(#ar1)"/>
+      <text x="652" y="136" font-size="11.5" fill="currentColor">急單直發（貨未出境）</text>
+      <!-- money cross border -->
+      <path d="M 330 196 C 260 232, 200 232, 144 200" fill="none" stroke="#0ca30c" stroke-width="1.6" stroke-dasharray="7 5" marker-start="url(#ar1g)"/>
+      <text x="238" y="246" font-size="11.5" text-anchor="middle" fill="#0ca30c">XHT 付 CHT「貨款」？</text>
+      <!-- break annotations -->
+      <g font-size="12" fill="#d03b3b">
+        <text x="20"  y="272">✕ 台灣：貨未經台灣，無出口報單 → 非外銷零稅率，無退稅</text>
+        <text x="20"  y="292">✕ 大陸：貨未出境 → CHT 無出口退稅（內銷應開 13% 專票）</text>
+        <text x="480" y="272">✕ 外匯：無出口報關單可核對 → 跨境貨款</text>
+        <text x="480" y="292">　 銀行難核銷，可能拒收或要求說明</text>
+      </g>
+    </svg>
+    <figcaption class="note">現況鏈的三個斷點：貨物沒有跨過任何一次海關，台灣端沒有外銷零稅率可言、大陸端沒有出口退稅可言，而「XHT 付 CHT 貨款」這筆跨境匯款找不到對應的報關單。</figcaption>
+  </figure>
+</section>
+
+<section class="blk">
+  <h2><span class="num">2</span>建議配置：A／B 雙軌</h2>
+  <p class="body">跟台灣雙鴻把訂單分成兩類，各走各的軌。<b>商務主導權留在 XHT</b>：價格、規格、產能承諾寫進 XHT 與台灣雙鴻的總約框架協議，框架載明「中國境內交付之訂單，由雙方之中國關係企業執行」。</p>
+
+  <h3>B 軌｜中國境內交貨（含急單）——錢與票都在境內閉環</h3>
+  <figure>
+    <svg viewBox="0 0 920 400" role="img" aria-label="B 軌架構：廣州雙鴻對 CHT 下單付人民幣，C 廠受託直發廣州並開專票給 CHT，CHT 開 13% 專票給廣州雙鴻，XHT 以服務費與股利取得利潤" style="max-width:100%;height:auto">
+      <defs>
+        <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+        </marker>
+        <marker id="ar2g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#0ca30c"/>
+        </marker>
+        <marker id="ar2b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#2a78d6"/>
+        </marker>
+      </defs>
+      <!-- legend -->
+      <g font-size="11.5">
+        <line x1="620" y1="24" x2="660" y2="24" stroke="currentColor" stroke-width="3"/><text x="666" y="28" fill="currentColor">貨物流</text>
+        <line x1="722" y1="24" x2="762" y2="24" stroke="#0ca30c" stroke-width="1.8" stroke-dasharray="7 5"/><text x="768" y="28" fill="#0ca30c">金流</text>
+        <line x1="808" y1="24" x2="848" y2="24" stroke="#2a78d6" stroke-width="1.8" stroke-dasharray="2 4"/><text x="854" y="28" fill="#2a78d6">發票流</text>
+      </g>
+      <!-- boundary -->
+      <line x1="285" y1="40" x2="285" y2="380" stroke="currentColor" stroke-width="1" stroke-dasharray="6 5" opacity=".45"/>
+      <text x="273" y="58" font-size="12" text-anchor="end" fill="currentColor" opacity=".65">台灣</text>
+      <text x="297" y="58" font-size="12" fill="currentColor" opacity=".65">中國大陸</text>
+      <!-- boxes -->
+      <g fill="none" stroke="currentColor" stroke-width="1.3">
+        <rect x="60"  y="80"  width="150" height="46" rx="8"/>
+        <rect x="60"  y="300" width="150" height="46" rx="8"/>
+        <rect x="700" y="80"  width="150" height="46" rx="8"/>
+        <rect x="420" y="300" width="150" height="46" rx="8"/>
+        <rect x="700" y="300" width="150" height="46" rx="8"/>
+      </g>
+      <g font-size="13" fill="currentColor" text-anchor="middle">
+        <text x="135" y="108">台灣雙鴻</text>
+        <text x="135" y="328">XHT 鑫鴻騰</text>
+        <text x="775" y="108">廣州雙鴻</text>
+        <text x="495" y="328">CHT 合資公司</text>
+        <text x="775" y="328">C 廠</text>
+      </g>
+      <!-- framework -->
+      <line x1="135" y1="126" x2="135" y2="298" stroke="currentColor" stroke-width="1.3" marker-end="url(#ar2)" marker-start="url(#ar2)"/>
+      <text x="145" y="200" font-size="11.5" fill="currentColor">總約框架協議</text>
+      <text x="145" y="216" font-size="11" fill="currentColor" opacity=".7">價格·規格·產能承諾</text>
+      <line x1="212" y1="103" x2="698" y2="103" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4" opacity=".6" marker-end="url(#ar2)"/>
+      <text x="455" y="95" font-size="11" text-anchor="middle" fill="currentColor" opacity=".7">集團內部：依框架對 CHT 下單</text>
+      <!-- PO + RMB from 廣州雙鴻 to CHT -->
+      <line x1="700" y1="115" x2="540" y2="298" stroke="currentColor" stroke-width="1.3" marker-end="url(#ar2)"/>
+      <text x="590" y="196" font-size="11.5" fill="currentColor" text-anchor="middle">訂單 PO</text>
+      <path d="M 728 130 C 680 220, 620 270, 566 296" fill="none" stroke="#0ca30c" stroke-width="1.8" stroke-dasharray="7 5" marker-end="url(#ar2g)"/>
+      <text x="700" y="228" font-size="11.5" fill="#0ca30c">貨款·人民幣</text>
+      <!-- CHT -> C: PO + RMB ; C -> CHT invoice -->
+      <line x1="572" y1="315" x2="698" y2="315" stroke="currentColor" stroke-width="1.3" marker-end="url(#ar2)"/>
+      <text x="635" y="308" font-size="11" text-anchor="middle" fill="currentColor">下單</text>
+      <path d="M 572 330 L 698 330" stroke="#0ca30c" stroke-width="1.8" stroke-dasharray="7 5" marker-end="url(#ar2g)"/>
+      <text x="635" y="345" font-size="11" text-anchor="middle" fill="#0ca30c">人民幣</text>
+      <path d="M 698 340 C 660 366, 610 366, 572 342" fill="none" stroke="#2a78d6" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#ar2b)"/>
+      <text x="635" y="382" font-size="11" text-anchor="middle" fill="#2a78d6">13% 專票</text>
+      <!-- goods C -> 廣州雙鴻 -->
+      <line x1="775" y1="298" x2="775" y2="128" stroke="currentColor" stroke-width="3" marker-end="url(#ar2)"/>
+      <text x="787" y="200" font-size="11.5" fill="currentColor">受託直發</text>
+      <text x="787" y="216" font-size="11" fill="currentColor" opacity=".7">合約載明直運條款</text>
+      <!-- invoice CHT -> 廣州雙鴻 -->
+      <path d="M 528 298 C 580 200, 660 150, 712 128" fill="none" stroke="#2a78d6" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#ar2b)"/>
+      <text x="560" y="250" font-size="11.5" fill="#2a78d6">13% 專票</text>
+      <text x="560" y="266" font-size="11" fill="#2a78d6" opacity=".8">（可抵扣進項）</text>
+      <!-- service fee CHT -> XHT -->
+      <path d="M 420 330 C 330 330, 280 330, 214 328" fill="none" stroke="#0ca30c" stroke-width="1.8" stroke-dasharray="7 5" marker-end="url(#ar2g)"/>
+      <text x="316" y="320" font-size="11.5" text-anchor="middle" fill="#0ca30c">服務費（服貿付匯）＋年度股利</text>
+    </svg>
+    <figcaption class="note">B 軌（境內交貨／急單）：貨、錢、票三流全部在大陸境內閉環且互相對得上；XHT 不在貨的鏈上，利潤改由服務費與股利兩條腿回收，商務主導權由左側的總約框架鎖住。</figcaption>
+  </figure>
+
+  <h3>A 軌｜需要出口報關的單（常態量產、第三地交貨、或刻意保留退稅與買賣鏈）</h3>
+  <figure>
+    <svg viewBox="0 0 920 260" role="img" aria-label="A 軌架構：CHT 出口報關經綜保區或香港一日遊，廣州雙鴻以進口方身分報進，XHT 以美元付 CHT 貨款，CHT 取得出口退稅" style="max-width:100%;height:auto">
+      <defs>
+        <marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+        </marker>
+        <marker id="ar3g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#0ca30c"/>
+        </marker>
+      </defs>
+      <g fill="none" stroke="currentColor" stroke-width="1.3">
+        <rect x="30"  y="60" width="140" height="46" rx="8"/>
+        <rect x="240" y="60" width="140" height="46" rx="8"/>
+        <rect x="460" y="60" width="170" height="46" rx="8" stroke-dasharray="5 4"/>
+        <rect x="700" y="60" width="150" height="46" rx="8"/>
+      </g>
+      <g font-size="13" fill="currentColor" text-anchor="middle">
+        <text x="100" y="88">XHT 鑫鴻騰</text>
+        <text x="310" y="88">CHT（出口方）</text>
+        <text x="545" y="82">綜保區／香港</text>
+        <text x="545" y="98" font-size="11.5" opacity=".75">一日遊（1–3 天）</text>
+        <text x="775" y="88">廣州雙鴻（進口方）</text>
+      </g>
+      <line x1="382" y1="83" x2="458" y2="83" stroke="currentColor" stroke-width="3" marker-end="url(#ar3)"/>
+      <text x="420" y="73" font-size="11.5" text-anchor="middle" fill="currentColor">出口報關</text>
+      <line x1="632" y1="83" x2="698" y2="83" stroke="currentColor" stroke-width="3" marker-end="url(#ar3)"/>
+      <text x="665" y="73" font-size="11.5" text-anchor="middle" fill="currentColor">進口報關</text>
+      <path d="M 100 108 C 100 160, 240 160, 296 108" fill="none" stroke="#0ca30c" stroke-width="1.8" stroke-dasharray="7 5" marker-end="url(#ar3g)"/>
+      <text x="185" y="162" font-size="11.5" text-anchor="middle" fill="#0ca30c">貨款·美元（有報關單可核銷）</text>
+      <g font-size="12">
+        <text x="240" y="216" fill="#0ca30c">✓ CHT 取得出口退稅</text>
+        <text x="240" y="238" fill="#0ca30c">✓ XHT 保住買賣鏈與價差利潤</text>
+        <text x="560" y="216" fill="#0ca30c">✓ 廣州雙鴻進口增值稅可抵扣</text>
+        <text x="560" y="238" fill="currentColor" opacity=".75">代價：多一道物流與報關，急單不適用</text>
+      </g>
+    </svg>
+    <figcaption class="note">A 軌：用一次真實的出口＋進口報關，把「退稅、跨境收匯、XHT 買賣地位」三件事同時做對；廣東綜保區一日遊最快當天至隔天，成本是否划算要用退稅利益逐案試算。</figcaption>
+  </figure>
+</section>
+
+<section class="blk">
+  <h2><span class="num">3</span>大陸端三條路線比較</h2>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:120px"></th><th>① 內銷專票（B 軌）</th><th>② 綜保區／香港一日遊（A 軌）</th><th>③ 轉廠·深加工結轉</th></tr></thead>
+    <tbody>
+      <tr><td>適用</td><td class="yes">急單、境內交貨的常態單</td><td>量大、退稅利益蓋得過物流成本的單</td><td>僅當廣州雙鴻具加工貿易／保稅身分</td></tr>
+      <tr><td>速度</td><td class="yes">最快（省內直發）</td><td>多 1–3 天</td><td>快（不實際出境）</td></tr>
+      <tr><td>退稅</td><td>無（內銷繳 13%，下游可抵扣）</td><td class="yes">CHT 有出口退稅</td><td>結轉一般為免稅處理，非退稅<sup class="est">＊</sup></td></tr>
+      <tr><td>XHT 位置</td><td>不在貨鏈上（框架＋服務費）</td><td class="yes">保留買賣鏈與價差</td><td>不在貨鏈上</td></tr>
+      <tr><td>先決條件</td><td>合約載明受託直發；CHT 能當天開專票</td><td>報關行與綜保區作業安排</td><td><b>先問雙鴻：廣州廠要專票還是保稅轉廠？</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 style="margin-top:18px">附註：轉廠（深加工結轉）怎麼運作</h3>
+  <figure>
+    <svg viewBox="0 0 920 250" role="img" aria-label="轉廠機制：雙方都持有加工貿易手冊，各自向海關辦結轉申報，海關視同出口加進口，貨物境內直運，貨款可跨境或境內結算" style="max-width:100%;height:auto">
+      <defs>
+        <marker id="ar4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+        </marker>
+        <marker id="ar4g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#0ca30c"/>
+        </marker>
+        <marker id="ar4b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#2a78d6"/>
+        </marker>
+      </defs>
+      <g fill="none" stroke="currentColor" stroke-width="1.3">
+        <rect x="380" y="20" width="160" height="42" rx="8"/>
+        <rect x="80"  y="130" width="200" height="46" rx="8"/>
+        <rect x="640" y="130" width="200" height="46" rx="8"/>
+      </g>
+      <g font-size="13" fill="currentColor" text-anchor="middle">
+        <text x="460" y="40">海關·電子帳冊</text>
+        <text x="460" y="55" font-size="11" opacity=".7">視同出口＋進口</text>
+        <text x="180" y="150">CHT／C 廠</text>
+        <text x="180" y="166" font-size="11.5" opacity=".75">須有加工貿易手冊</text>
+        <text x="740" y="150">廣州雙鴻</text>
+        <text x="740" y="166" font-size="11.5" opacity=".75">須有加工貿易手冊</text>
+      </g>
+      <path d="M 220 128 C 260 90, 330 62, 378 50" fill="none" stroke="#2a78d6" stroke-width="1.6" stroke-dasharray="2 4" marker-end="url(#ar4b)"/>
+      <text x="250" y="82" font-size="11.5" fill="#2a78d6">結轉出口申報（手冊核銷）</text>
+      <path d="M 700 128 C 660 90, 590 62, 542 50" fill="none" stroke="#2a78d6" stroke-width="1.6" stroke-dasharray="2 4" marker-end="url(#ar4b)"/>
+      <text x="560" y="82" font-size="11.5" fill="#2a78d6" text-anchor="start">結轉進口申報（手冊記入）</text>
+      <line x1="282" y1="146" x2="638" y2="146" stroke="currentColor" stroke-width="3" marker-end="url(#ar4)"/>
+      <text x="460" y="138" font-size="11.5" text-anchor="middle" fill="currentColor">貨物境內直運（不出境）</text>
+      <path d="M 638 168 L 282 168" stroke="#0ca30c" stroke-width="1.8" stroke-dasharray="7 5" marker-end="url(#ar4g)"/>
+      <text x="460" y="186" font-size="11.5" text-anchor="middle" fill="#0ca30c">貨款：可跨境外幣（視同出口·收匯有據）或境內人民幣</text>
+      <g font-size="12">
+        <text x="80" y="222" fill="#0ca30c">✓ 免增值稅、貨不繞路</text>
+        <text x="290" y="222" fill="#d03b3b">✕ 無退稅；上游若用境內含稅料，進項須轉出變成本</text>
+        <text x="80" y="242" fill="currentColor" opacity=".8">適合：量大·長期·固定件號｜不適合：急單·試單｜第一單由熟悉東莞、廣州關區的報關行陪同</text>
+      </g>
+    </svg>
+    <figcaption class="note">轉廠＝雙方各憑手冊向海關辦結轉申報，紙面上完成一次出口＋進口，貨只在境內移動。硬前提是<b>交易雙方都有加工貿易／保稅資格</b>；只要一方沒有手冊（例如 C 廠是一般內資廠），此路不通。</figcaption>
+  </figure>
+</section>
+
+<section class="blk">
+  <h2><span class="num">4</span>稅負試算——同一張單，三條路的稅怎麼落</h2>
+  <p class="body">示例：C 廠售 CHT 100 萬、CHT 對下游售 110 萬（均不含稅、人民幣）；C 廠開 13% 專票，CHT 進項 13 萬。數字為示意，實際以件號稅率為準。</p>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:150px"></th><th>① 內銷專票（B 軌）</th><th>② 一日遊（A 軌）</th><th>③ 轉廠</th></tr></thead>
+    <tbody>
+      <tr><td>CHT 銷項</td><td>14.3 萬（13%）</td><td>0（零稅率）</td><td>0（免稅）</td></tr>
+      <tr><td>CHT 進項 13 萬</td><td class="yes">可全額抵扣</td><td>按<b>退稅率</b>退還</td><td class="down">須轉出，變成本</td></tr>
+      <tr class="rowhl"><td>CHT 實際稅負</td><td>淨繳 1.3 萬＋附加稅費約 0.16 萬<sup class="est">＊</sup></td><td>退稅率 13%＝0；9%＝4 萬成本；<b>0%＝13 萬成本</b></td><td>13 萬成本（除非料源本身為保稅進口料）</td></tr>
+      <tr><td>廣州雙鴻端</td><td>取得 14.3 萬進項可抵扣</td><td>保稅進口無稅；若一般貿易則繳進口稅費（增值稅可抵）</td><td>保稅結轉，無稅</td></tr>
+      <tr class="rowhl"><td>鏈上淨稅負</td><td class="yes">≈ 0（下游可抵扣時）</td><td>0 ～ 13 萬，取決於退稅率</td><td>0 或 13 萬，取決於料源</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout warn">
+    <div class="t">兩個決定答案的敏感點</div>
+    <p class="body"><b>一、退稅率要逐一查 HS 稅號。</b>大陸自 2024-12 起取消銅材、鋁材多數稅號的出口退稅——若我方件號落在取消清單，A 軌的稅務優勢直接歸零甚至為負；散熱零組件／成品類稅號可能仍有 13%，<b>報價前逐號向報關行確認現行退稅率</b>。</p>
+    <p class="body"><b>二、料源決定轉廠與一日遊的成敗。</b>兩條路的稅務結果都取決於進項是「境內含稅料」還是「保稅料」。我方銅鋁料若以境內採購為主，<b>B 軌內銷反而常是鏈上稅負最低的一條</b>；轉廠的價值在配合客戶保稅身分與解開跨境收匯，不在省稅。</p>
+  </div>
+  <h3>利潤放哪邊的所得稅比較</h3>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:190px">利潤位置</th><th>稅負</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>留在 XHT（A 軌價差）</td><td class="yes">台灣營所稅 20%</td><td>錢已在台灣，無匯回成本。</td></tr>
+      <tr><td>留在 CHT、以股利匯回</td><td>企所稅 25%（高新 15%）＋股利扣繳 10% ≈ 合計 32.5%<sup class="est">＊</sup></td><td>兩岸租稅協議未生效，股利扣繳按 10% 標準稅率。</td></tr>
+      <tr><td>以服務費付 XHT</td><td>大陸端扣繳 6% 增值稅＋核定所得稅；XHT 在台課 20%</td><td>CHT 可列費用抵企所稅，整體通常低於股利路徑；<b>比例受移轉訂價約束</b>，由稅務師定。</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">5</span>金流與幣別——逐段結論</h2>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:190px">區段</th><th>幣別建議</th><th>理由與注意</th></tr></thead>
+    <tbody>
+      <tr><td>台灣雙鴻 → XHT</td><td><b>美元</b></td><td>伺服器鏈以美元計價；與下游應付同幣別形成自然避險。收台幣則匯率風險由 XHT 自扛。</td></tr>
+      <tr class="rowhl"><td>XHT → CHT（跨境）</td><td><b>美元，且僅限有出口報關的單（A 軌）</b></td><td>大陸貨物貿易收匯須與報關單匹配。<b>B 軌沒有報關單，這段錢不要走</b>——硬匯會被銀行退回或列異常，影響 CHT 外匯分類等級。</td></tr>
+      <tr><td>廣州雙鴻 → CHT</td><td>人民幣</td><td>境內交易境內結清，配 13% 專票，月結對票流程要順。</td></tr>
+      <tr><td>CHT → C 廠</td><td>人民幣</td><td>境內採購，取得 13% 專票抵扣。</td></tr>
+      <tr><td>CHT → XHT（利潤回收）</td><td>美元</td><td>服務費（業務承攬／技術支援／品保管理，服貿付匯，涉 6% 增值稅與所得稅源泉扣繳，比例請稅務師抓）＋年度股利（10% 扣繳，兩岸協議另計）。</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">6</span>注意清單</h2>
+  <div class="grid-2">
+    <div class="card">
+      <div class="vrow"><span class="vk minus">必守</span><div><b>三流一致</b>：C 廠直發廣州，合同與發票鏈必須寫明「受託直發」。發票流對不上貨物流，在大陸有被認定虛開專票的風險——那是刑責等級，不是罰款。</div></div>
+      <div class="vrow"><span class="vk minus">必守</span><div><b>移轉訂價</b>：XHT–CHT 為關聯方，兩岸都有 TP 文據要求。服務費比例與買賣價差要有可比性依據，別把利潤全押在單邊。</div></div>
+      <div class="vrow"><span class="vk minus">必守</span><div><b>貨權與風險轉移點</b>：直發廣州那段運輸的 title／risk 建議定在廣州雙鴻簽收，保險責任在框架協議寫死。</div></div>
+    </div>
+    <div class="card">
+      <div class="vrow"><span class="vk note">建議</span><div><b>匯率條款</b>：美元單約定調整區間（如 ±2% 內不調、逾越按月調）；結構橫跨三種幣別，沒有條款就是裸險。</div></div>
+      <div class="vrow"><span class="vk note">建議</span><div><b>維持 CHT 出口紀錄</b>：即使 B 軌為主，也保留一定比例 A 軌出口收匯，養 CHT 的銀行額度、外匯分類與退稅資格。</div></div>
+      <div class="vrow"><span class="vk note">建議</span><div><b>客戶稽核觀感</b>：雙鴻稽核供應鏈時看單據鏈是否乾淨。B 軌三流全對齊反而加分；最忌「PO 對台灣、發票對大陸、錢走第三邊」的錯位結構。</div></div>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:14px">
+    <div class="t">下一步（依序）</div>
+    <p class="body">① 問雙鴻：廣州廠收料要 13% 專票還是保稅轉廠——答案定 B 軌走法。② 與台灣雙鴻簽總約框架，載明中國境內交付由兩岸關係企業執行。③ 請大陸稅務師定 XHT–CHT 服務費架構與比例、台灣會計師確認境外交易的憑證開立。④ CHT 建立當天開專票的流程，急單才急得起來。⑤ 量大件號用退稅利益試算 A 軌是否划算。</p>
+  </div>
+</section>
+
+<footer>
+  <p>本報告依 2026-08 現行兩岸稅制與外匯實務之一般規則撰寫：台灣營業稅零稅率以貨物出口報關為前提；大陸出口退稅與貨物貿易外匯核銷均以報關單為憑；深加工結轉之稅務處理依企業保稅身分而異（標<sup class="est">＊</sup>處）。各項稅率、扣繳與文據要求可能因個案與法規更新而不同，<b>執行前請與台灣會計師、大陸稅務師及報關行逐項確認</b>。</p>
+  <p style="margin-top:10px"><b>僅供內部策略參考。</b></p>
+</footer>
+
+</div>
+
+</body>
+</html>
