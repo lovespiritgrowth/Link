@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>東莞華珂電子 合資架構分析｜大陸液冷廠商調研 14</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;      /* 卡片/圖表面 */
+    --page: #f9f9f7;           /* 頁面底 */
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;       /* 主色（藍） */
+    --series-1-track: #cde2fb; /* 藍 100，meter 未填軌 */
+    --seq-250: #86b6ef;
+    --seq-450: #2a78d6;
+    --seq-600: #184f95;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --accent-wash: rgba(42,120,214,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-1-track: #0d366b;
+      --seq-250: #1c5cab;
+      --seq-450: #3987e5;
+      --seq-600: #6da7ec;
+      --good-text: #0ca30c;
+      --accent-wash: rgba(57,135,229,0.12);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  /* ===== 頁首 ===== */
+  .report-tag { font-size:12px; letter-spacing:.12em; color:var(--text-muted); text-transform:uppercase; }
+  header.hero { padding: 8px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing:.01em; margin-top: 4px; }
+  h1 .code { font-weight: 400; font-size: 18px; color: var(--text-secondary); margin-left: 8px; }
+  .hero-sub { color: var(--text-secondary); margin-top: 6px; max-width: 72ch; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+  .badge { font-size:12.5px; padding:3px 10px; border-radius:99px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-secondary); }
+  .badge.threat { border-color: var(--critical); color: var(--critical); font-weight:600; }
+  .meta-line { margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+
+  /* ===== 區塊 ===== */
+  section { margin-bottom: 36px; }
+  h2 { font-size: 20px; font-weight: 700; padding-bottom: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h2 .num { color: var(--series-1); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 18px 0 8px; }
+  p.body { color: var(--text-primary); margin-bottom: 10px; max-width: 80ch; }
+  .note { font-size: 12.5px; color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .grid-3 { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+  @media (max-width: 760px){ .grid-2,.grid-3{grid-template-columns:1fr;} }
+
+  /* ===== 摘要統計磚 ===== */
+  .tiles { display:grid; grid-template-columns: repeat(6,1fr); gap:12px; }
+  @media (max-width: 900px){ .tiles{grid-template-columns: repeat(3,1fr);} }
+  @media (max-width: 560px){ .tiles{grid-template-columns: repeat(2,1fr);} }
+  .tile { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:14px 14px 12px; }
+  .tile .label { font-size:12px; color:var(--text-muted); }
+  .tile .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .tile .delta { font-size:12px; margin-top:2px; }
+  .delta.up { color: var(--good-text); }
+  .delta.down { color: var(--critical); }
+  .delta.flat { color: var(--text-muted); }
+
+  /* ===== 表格 ===== */
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-weight:600; color:var(--text-secondary); font-size:12.5px; padding:8px 10px; border-bottom:1px solid var(--baseline); white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:top; }
+  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom:none; }
+
+  /* ===== 時間軸 ===== */
+  .timeline { list-style:none; position:relative; padding-left:20px; }
+  .timeline::before { content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--grid); border-radius:1px; }
+  .timeline li { position:relative; padding:0 0 14px 12px; }
+  .timeline li::before { content:""; position:absolute; left:-20px; top:7px; width:8px; height:8px; border-radius:50%; background:var(--series-1); box-shadow: 0 0 0 2px var(--surface-1); }
+  .timeline .yr { font-weight:700; font-variant-numeric: tabular-nums; margin-right:8px; }
+  .timeline .desc { color:var(--text-secondary); }
+
+  /* ===== 圖表（純 HTML/CSS 橫條圖） ===== */
+  .chart { margin-top: 10px; }
+  .chart-title { font-size:13.5px; font-weight:600; }
+  .chart-sub { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .hbar-row { display:grid; grid-template-columns: 118px 1fr 120px; align-items:center; gap:10px; padding:5px 0; }
+  .hbar-row .cat { font-size:13px; color:var(--text-secondary); text-align:right; }
+  .hbar-track { position:relative; height:20px; }
+  .hbar-fill { position:absolute; left:0; top:0; height:20px; background:var(--series-1); border-radius:0 4px 4px 0; transition: opacity .15s; }
+  .hbar-row:hover .hbar-fill { opacity:.82; }
+  .hbar-row .val { font-size:13px; color:var(--text-primary); font-variant-numeric:tabular-nums; }
+  .hbar-row .val .pct { color:var(--text-muted); }
+  .axis-note { border-top:1px solid var(--baseline); margin-top:6px; padding-top:5px; font-size:11.5px; color:var(--text-muted); text-align:right; }
+
+  /* 縱向柱狀（年度趨勢，小倍數） */
+  .cols { display:flex; align-items:flex-end; gap:26px; height:170px; padding:0 6px; border-bottom:1px solid var(--baseline); }
+  .col-g { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
+  .col-bar { width:100%; max-width:44px; background:var(--series-1); border-radius:4px 4px 0 0; position:relative; transition: opacity .15s; }
+  .col-bar.est { background: var(--seq-250); }
+  .col-g:hover .col-bar { opacity:.82; }
+  .col-val { font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--text-primary); margin-bottom:4px; }
+  .col-x { display:flex; gap:26px; padding:6px 6px 0; }
+  .col-x div { flex:1; text-align:center; font-size:12px; color:var(--text-muted); }
+
+  /* ===== SWOT ===== */
+  .swot { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .swot{grid-template-columns:1fr;} }
+  .swot .card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+  .swot .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .swot ul { padding-left:18px; }
+  .swot li { margin-bottom:8px; color:var(--text-primary); }
+  .swot li b { font-weight:600; }
+
+  /* ===== 重點框 ===== */
+  .callout { background: var(--accent-wash); border:1px solid var(--border); border-left:3px solid var(--series-1); border-radius:8px; padding:14px 16px; margin:14px 0; }
+  .callout.warn { border-left-color: var(--critical); background: rgba(208,59,59,0.06); }
+  .callout .t { font-weight:700; font-size:13.5px; margin-bottom:4px; }
+
+  /* ===== 評分 meter ===== */
+  .meter-row { display:grid; grid-template-columns: 170px 1fr 56px; gap:12px; align-items:center; padding:6px 0; }
+  .meter-row .m-label { font-size:13.5px; color:var(--text-secondary); text-align:right; }
+  .meter-track { height:10px; border-radius:5px; background:var(--series-1-track); position:relative; overflow:hidden; }
+  .meter-fill { position:absolute; left:0; top:0; bottom:0; background:var(--series-1); border-radius:5px; }
+  .meter-row .m-val { font-size:13px; font-variant-numeric:tabular-nums; color:var(--text-primary); }
+
+  footer { border-top:1px solid var(--border); padding-top:16px; font-size:12.5px; color:var(--text-muted); }
+  footer a { color: var(--series-1); text-decoration:none; word-break:break-all; }
+  footer li { margin-bottom:4px; }
+  sup.est { color: var(--text-muted); }
+
+  /* ===== 本報告新增（四家橫向比較） ===== */
+  .grid-4 { display:grid; grid-template-columns: repeat(4,1fr); gap:14px; }
+  @media (max-width: 980px){ .grid-4{grid-template-columns:1fr 1fr;} }
+  @media (max-width: 560px){ .grid-4{grid-template-columns:1fr;} }
+  .co { border-top:3px solid var(--series-1); }
+  .co.k { border-top-color:#2a78d6; }
+  .co.s { border-top-color:#0ca30c; }
+  .co.f { border-top-color:#fab219; }
+  .co.r { border-top-color:#d03b3b; }
+  .co .nm { font-size:16px; font-weight:700; }
+  .co .pa { font-size:12px; color:var(--text-muted); margin-bottom:6px; }
+  .co .one { font-size:13.5px; color:var(--text-secondary); }
+  .co dl { margin-top:10px; font-size:12.5px; }
+  .co dt { color:var(--text-muted); float:left; clear:left; width:64px; }
+  .co dd { margin-left:64px; margin-bottom:3px; }
+  .cmp th:first-child, .cmp td:first-child { position:sticky; left:0; background:var(--surface-1); font-weight:600; color:var(--text-secondary); }
+  .cmp th { white-space:normal; }
+  .cmp td { font-size:13px; }
+  .scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .cmp { min-width:760px; }
+  .pill { display:inline-block; font-size:10.5px; line-height:1.5; padding:0 6px; border-radius:99px; border:1px solid var(--border); color:var(--text-muted); margin-left:4px; white-space:nowrap; vertical-align:1px; }
+  .pill.self { border-color:var(--warning); color:#8a6100; }
+  .pill.pub { border-color:var(--good); color:var(--good-text); }
+  .pill.none { border-color:var(--baseline); }
+  @media (prefers-color-scheme: dark){ .pill.self{color:#fab219;} }
+  .yes { color:var(--good-text); font-weight:700; }
+  .no { color:var(--text-muted); }
+  .part { color:#8a6100; font-weight:600; }
+  @media (prefers-color-scheme: dark){ .part{color:#fab219;} }
+  .rowhl td { background: var(--accent-wash); }
+  .meter-row.k .meter-fill { background:#2a78d6; }
+  .meter-row.s .meter-fill { background:#0ca30c; }
+  .meter-row.f .meter-fill { background:#fab219; }
+  .meter-row.r .meter-fill { background:#d03b3b; }
+  .legend { display:flex; flex-wrap:wrap; gap:14px; font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .legend span::before { content:""; display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:5px; vertical-align:-1px; }
+  .legend .lk::before{background:#2a78d6;} .legend .ls::before{background:#0ca30c;}
+  .legend .lf::before{background:#fab219;} .legend .lr::before{background:#d03b3b;}
+  .blk { page-break-inside: avoid; }
+
+  td.down, .down { color: var(--critical); }
+
+  @media print {
+    .scroll { overflow: visible; }
+    .cmp { min-width: 0; font-size: 11px; }
+    .cmp td, .cmp th { padding: 5px 6px; }
+    .card, .co, .callout, section { page-break-inside: avoid; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ===== 速評卡（每公司一卡） ===== */
+  .vrow { display:flex; gap:10px; margin-top:10px; font-size:13.5px; }
+  .vrow > div { color:var(--text-primary); }
+  .vk { flex:0 0 auto; align-self:flex-start; font-size:11px; font-weight:700; line-height:1.6; padding:0 7px; border-radius:5px; margin-top:2px; }
+  .vk.plus { color:var(--good-text); background:rgba(12,163,12,0.10); border:1px solid rgba(12,163,12,0.35); }
+  .vk.minus { color:var(--critical); background:rgba(208,59,59,0.08); border:1px solid rgba(208,59,59,0.35); }
+  @media (prefers-color-scheme: dark){
+    .vk.plus { background:rgba(12,163,12,0.16); }
+    .vk.minus { background:rgba(208,59,59,0.16); }
+  }
+  .vtag { font-size:11.5px; font-weight:600; padding:1px 8px; border-radius:99px; margin-left:8px; vertical-align:2px; }
+  .vtag.good { color:var(--good-text); border:1px solid rgba(12,163,12,0.4); }
+  .vtag.warn { color:var(--critical); border:1px solid rgba(208,59,59,0.4); }
+
+  .vk.note { color:var(--series-1); background:var(--accent-wash); border:1px solid rgba(42,120,214,0.35); }
+  @media (prefers-color-scheme: dark){ .vk.note { border-color:rgba(57,135,229,0.45); } }
+
+  figure { margin:14px 0 6px; }
+  figure svg { display:block; color:var(--text-primary); }
+  figcaption { margin-top:6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="report-tag">大陸液冷廠商調研 · 14 · 合資架構分析</div>
+  <h1>東莞華珂電子<span class="code">奕東電子 301123 全資子公司｜可俐星 81% 股東</span></h1>
+  <p class="hero-sub">本次調研把華珂的底細翻清楚了：它<b>不是一家做液冷的工廠，而是奕東的「募投資產平台」</b>——註冊資本 4.67 億、總資產 5.2 億，但年營收只有 3,000 多萬且 2024 年虧損；法定代表人鄧可（奕東總經理、實際控制人之一），註冊地址就是奕東東城總部。與華珂談合資，實質上就是與奕東總部談。另一個要更正的認知：<b>可俐星不是奕東「收購」來的</b>，它從 2023 年報起就是華珂 100% 持有的孫公司，81% 是 2025–2026 兩次增資稀釋後的結果。本報告先講清華珂與可俐星、冠鼎的關係，再回答：若鑫鴻騰與華珂合資，奕東、冠鼎、可俐星怎麼分工才是利益最大化。</p>
+  <div class="badges">
+    <span class="badge">華珂本質：資產平台＋可俐星控股股東，非液冷營運主體</span>
+    <span class="badge">液冷營運主體：可俐星（東莞）＋冠鼎（深圳，奕東 51%）</span>
+    <span class="badge">談判對手實質：奕東總部（鄧可）</span>
+    <span class="badge threat">對手方治理紀錄：2024 警示函、2026 前期會計差錯更正</span>
+    <span class="badge">建議：合資公司當「台系客戶接單與品質主體」，製造委外可俐星／冠鼎</span>
+  </div>
+  <div class="meta-line">報告日期 2026-08-26｜資料來源以奕東電子深交所公告原文為主（商查平台全數被封，工商細節以公告交叉）｜幣別：人民幣｜標「<sup class="est">＊</sup>」為推論或估算｜本報告更正系列 07／08／11 中「奕東收購可俐星」之敘述</div>
+</header>
+
+<section class="blk">
+  <h2><span class="num">1</span>華珂關鍵數據</h2>
+  <div class="tiles">
+    <div class="tile"><div class="label">統一社會信用代碼</div><div class="value" style="font-size:14px">91441900MA54HARW36</div><div class="delta flat">2020-04-13 成立；2023-01 由「東莞市奕東科技」更名</div></div>
+    <div class="tile"><div class="label">註冊資本</div><div class="value">4.67 億</div><div class="delta up">▲ 2025-01 由 1 億債轉股增至 4.67 億</div></div>
+    <div class="tile"><div class="label">總資產（2025Q3）</div><div class="value">5.17 億</div><div class="delta flat">淨資產 4.67 億</div></div>
+    <div class="tile"><div class="label">營收（2024）</div><div class="value">3,185 萬</div><div class="delta down">▼ 淨利 −1,173 萬</div></div>
+    <div class="tile"><div class="label">2025 前三季</div><div class="value" style="font-size:18px">3,200 萬／+131 萬</div><div class="delta up">▲ 微幅轉盈（未審計）</div></div>
+    <div class="tile"><div class="label">法定代表人</div><div class="value" style="font-size:20px">鄧可</div><div class="delta flat">奕東總經理、實控人之一；可俐星法人同為鄧可</div></div>
+  </div>
+  <div class="callout warn" style="margin-top:14px">
+    <div class="t">數字在說什麼</div>
+    <p class="body">資產 5.2 億、營收 3,000 萬、淨資產占資產 90%——這是一家<b>幾乎沒有負債、資產很重、營運很輕</b>的公司。奕東 2024-12 把 3.67 億元募集資金債權轉成華珂股本，加上華珂地址就是奕東東城廠區，合理推斷華珂持有的是奕東募投項目（先進製造基地、研發中心）的廠房與設備<sup class="est">＊</sup>。年報把它歸為「生產加工」型子公司，但真正承接液冷訂單的是可俐星（公告明文：「可俐星為公司專注 AI 算力液冷散熱產品的業務主體」）。<b>對合資的意義：華珂能出的是廠房、設備、資金與奕東的背書；技術、產線、客戶在它的子公司可俐星與兄弟公司冠鼎手上。</b></p>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">2</span>集團結構——誰持有誰、誰做什麼</h2>
+  <figure>
+    <svg viewBox="0 0 920 360" role="img" aria-label="奕東集團液冷相關股權結構：奕東 100% 持有華珂，華珂 81% 持有可俐星（杰睿 9%、合創聚益即梁立壯方 10%），奕東另 51% 持有冠鼎（梁立壯 39%、邱萬盛 10%），梁立壯同時是冠鼎經營者與可俐星股東" style="max-width:100%;height:auto">
+      <defs>
+        <marker id="a14" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+        <marker id="a14r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d03b3b"/></marker>
+      </defs>
+      <g fill="none" stroke="currentColor" stroke-width="1.3">
+        <rect x="360" y="20" width="200" height="50" rx="8"/>
+        <rect x="140" y="140" width="200" height="56" rx="8"/>
+        <rect x="580" y="140" width="200" height="56" rx="8"/>
+        <rect x="140" y="270" width="200" height="56" rx="8"/>
+      </g>
+      <g font-size="13" fill="currentColor" text-anchor="middle">
+        <text x="460" y="41">奕東電子 301123</text>
+        <text x="460" y="58" font-size="11" opacity=".75">上市平台｜實控人 鄧玉泉／鄧可</text>
+        <text x="240" y="161">東莞華珂電子</text>
+        <text x="240" y="178" font-size="11" opacity=".75">募投資產平台｜資產 5.2 億·營收 0.3 億</text>
+        <text x="680" y="161">深圳冠鼎金屬科技</text>
+        <text x="680" y="178" font-size="11" opacity=".75">埋管冷板·釺焊高頻焊｜供 AVC、泰碩、英維克</text>
+        <text x="240" y="291">東莞可俐星電子</text>
+        <text x="240" y="308" font-size="11" opacity=".75">液冷業務主體｜冷板全製程·分水器</text>
+      </g>
+      <line x1="430" y1="72" x2="270" y2="138" stroke="currentColor" stroke-width="1.6" marker-end="url(#a14)"/>
+      <text x="318" y="98" font-size="12" fill="currentColor" font-weight="700">100%</text>
+      <line x1="490" y1="72" x2="650" y2="138" stroke="currentColor" stroke-width="1.6" marker-end="url(#a14)"/>
+      <text x="590" y="98" font-size="12" fill="currentColor" font-weight="700">51%</text>
+      <text x="606" y="114" font-size="11" fill="currentColor" opacity=".75">2025-11 以 6,120 萬取得</text>
+      <line x1="240" y1="198" x2="240" y2="268" stroke="currentColor" stroke-width="1.6" marker-end="url(#a14)"/>
+      <text x="250" y="238" font-size="12" fill="currentColor" font-weight="700">81%</text>
+      <!-- other shareholders -->
+      <g font-size="11.5" fill="currentColor">
+        <text x="360" y="288">其他股東：廣州杰睿 9%</text>
+        <text x="360" y="306">深圳合創聚益 10%（梁立壯方，出資 3,000 萬）</text>
+        <text x="360" y="324" fill="#d03b3b">└ 滿 5 年可按原價要求回購</text>
+        <text x="800" y="220" text-anchor="end">其他股東：梁立壯 39%</text>
+        <text x="800" y="238" text-anchor="end">邱萬盛 10%</text>
+        <text x="800" y="256" text-anchor="end" fill="#d03b3b">無業績承諾、無回購、無競業</text>
+      </g>
+      <!-- Liang cross link -->
+      <path d="M 700 198 C 700 240, 682 282, 652 302" fill="none" stroke="#d03b3b" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#a14r)"/>
+      <text x="440" y="348" font-size="11.5" fill="#d03b3b">梁立壯：冠鼎總經理＋可俐星 10% 股東（交叉持股）</text>
+    </svg>
+    <figcaption class="note">奕東的液冷版圖是「一個資產平台（華珂）＋兩個營運主體（可俐星、冠鼎）」，而冠鼎老闆梁立壯反向持有可俐星 10%——他是這個三角裡唯一同時站在兩個營運主體上的人。</figcaption>
+  </figure>
+
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:120px"></th><th>華珂</th><th>可俐星</th><th>冠鼎</th></tr></thead>
+    <tbody>
+      <tr><td>持股</td><td>奕東 100%</td><td>華珂 81%／杰睿 9%／合創聚益 10%</td><td>奕東 51%／梁立壯 39%／邱萬盛 10%</td></tr>
+      <tr><td>角色</td><td>資產平台、可俐星控股股東</td><td>液冷業務主體（公告明文）</td><td>埋管冷板、AVC 等既有客戶</td></tr>
+      <tr><td>最新財務</td><td>2025Q1–3 營收 3,200 萬、淨利 +131 萬；總資產 5.17 億</td><td>2025 年 1–9 月營收 7,405 萬、淨利 762 萬；總資產 9,700 萬、淨資產 1,915 萬</td><td>2025 年 1–8 月營收 6,746 萬、淨利 554 萬；2024 營收 4,790 萬、淨利 −85 萬</td></tr>
+      <tr><td>治理</td><td>法人鄧可</td><td>法人鄧可；增資後董事安排查無</td><td>不設董事會；執行董事與財務由奕東派、總經理由梁立壯提名</td></tr>
+      <tr><td>對我方意義</td><td>合資的簽約與出資對口（廠房、設備、資金、集團背書）</td><td>製造協力：釺焊＋氦氮雙檢＋C 掃＋6000W 雷射焊分水器</td><td>埋管冷板供件；AVC 直供盤不動</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">3</span>兩筆交易條款——看懂奕東怎麼做生意</h2>
+  <div class="grid-2">
+    <div class="card co k">
+      <div class="nm">可俐星增資（2025-11 決議、2026-04 完成）</div>
+      <div class="vrow"><span class="vk note">條款</span><div>梁立壯方以 3,000 萬認購 222.22 萬元新增資本（投後約 3 億），分兩期：2,000 萬於 2026-01-31 前、1,000 萬於 2028-12-31 前。</div></div>
+      <div class="vrow"><span class="vk minus">留意</span><div><b>五年原價回購權</b>：投資方滿 5 年可要求可俐星按實際出資額回購——等於給梁立壯一個零報酬保底退出；這筆 3,000 萬未來是可俐星的潛在現金流出。</div></div>
+      <div class="vrow"><span class="vk note">解讀</span><div>先減資（5,000→1,700 萬）再引資，估值從淨資產 1,900 萬跳到投後 3 億，<b>奕東擅長用估值談判而非現金換合作</b>。與我方談合資時，預期它會用同一套邏輯抬合資公司估值。</div></div>
+    </div>
+    <div class="card co r">
+      <div class="nm">冠鼎收購 51%（2025-11 決議、2026Q1 併表）</div>
+      <div class="vrow"><span class="vk note">條款</span><div>6,120 萬取得 51%（整體估值 1.2 億，對應淨資產僅 602 萬）；不設董事會，執行董事與財務人員由奕東派，總經理由梁立壯提名。</div></div>
+      <div class="vrow"><span class="vk minus">留意</span><div><b>無業績承諾、無回購、無競業</b>。唯一門檻：2026 扣非淨利 4,000 萬才給核心員工 20 萬股奕東股票——高於冠鼎 2025 前 8 月年化水準，<b>達標壓力會促使冠鼎積極搶單</b>，包括台系客戶的單。</div></div>
+      <div class="vrow"><span class="vk note">解讀</span><div>奕東要的是「控制財務＋保留原班人馬經營」，用股票激勵綁人。這也是它會拿來跟我方談的模板：<b>它控財務、我方管業務</b>。</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">4</span>雙方各要什麼——合資談判的底層</h2>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:130px"></th><th>奕東（透過華珂）要的</th><th>鑫鴻騰要的</th></tr></thead>
+    <tbody>
+      <tr><td>核心動機</td><td><b>液冷營收併表＋「台系散熱廠客戶」題材</b>。奕東連虧三年、市值靠液冷／CPO 題材撐著（02／11 報告），一個帶著雙鴻指定供應商身分進來的合資案，對它的資本市場敘事價值極高。</td><td>把雙鴻／美特的冷板、分水器訂單在大陸落地生產，同時<b>守住客戶窗口不被繞過</b>、圖面與 know-how 不外流。</td></tr>
+      <tr><td>能給的</td><td>華珂的廠房設備與資金、可俐星的製程、冠鼎的埋管冷板、集團採購與上市背書；馬來西亞產能選項。</td><td>雙鴻指定供應商資格、台灣端 NPI 與品保、圖面轉換、非紅供應鏈的台灣信任。</td></tr>
+      <tr><td>會堅持的</td><td>持股過半以便併表；財務人員由它派；估值用增資邏輯抬高。</td><td>客戶名單與件號歸屬寫死；圖面只授權合資公司使用；重大事項否決權；財務雙簽。</td></tr>
+      <tr><td>能讓的</td><td>總經理、業務由我方主導（冠鼎模板已示範）；製造委外給可俐星的定價機制。</td><td>股權不過半（換取併表給它）——前提是否決權與分工條款到位。</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">5</span>合資架構選項</h2>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:150px"></th><th>A｜與華珂新設合資公司<br><span class="note">（建議）</span></th><th>B｜入股可俐星</th><th>C｜我方控股新設、委外代工</th><th>D｜不合資，框架協議＋專屬產線</th></tr></thead>
+    <tbody>
+      <tr><td>結構</td><td>華珂 51%／鑫鴻騰 49%<sup class="est">＊</sup>；合資公司＝台系客戶接單、品質與交付主體；製造委外可俐星／冠鼎</td><td>鑫鴻騰增資可俐星取得 15–25%</td><td>鑫鴻騰 51%＋／華珂少數；全部製造委外</td><td>無股權；13 號報告的 B 軌</td></tr>
+      <tr><td>我方掌控</td><td class="yes">中高：總經理與業務由我方、否決權、圖面授權限合資公司</td><td class="down">低：奕東 81% 絕對控制，還有梁立壯 10% 與回購權在裡面</td><td class="yes">高</td><td>低：隨時可被繞過</td></tr>
+      <tr><td>奕東接受度</td><td class="yes">高（併表＋題材）</td><td>中（要稀釋自己）</td><td class="down">低（不能併表，違反其模式）</td><td>高</td></tr>
+      <tr><td>資本投入</td><td>中：華珂以廠房設備或資金出資，我方以現金＋客戶資源</td><td>中：3,000 萬起跳（對標梁立壯）</td><td>高：我方出大頭</td><td>低</td></tr>
+      <tr><td>主要風險</td><td>華珂資產若屬募投項目，實物出資須走上市公司程序——<b>改用租賃避開</b></td><td>被動小股東；可俐星既有 AVC 直供與我方客戶混在同一主體</td><td>奕東不配合時製造端卡住</td><td>無防繞過機制</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>建議架構（選項 A）——合資公司當「窗口＋品質」，製造留在集團既有主體</h3>
+  <figure>
+    <svg viewBox="0 0 920 420" role="img" aria-label="建議合資架構：鑫鴻騰與華珂合資成立台系客戶專屬公司，雙鴻與美特訂單經鑫鴻騰進入合資公司，合資公司委外可俐星製造、向冠鼎採購埋管冷板，冠鼎與可俐星對 AVC 的既有直供不變" style="max-width:100%;height:auto">
+      <defs>
+        <marker id="b14" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+        <marker id="b14g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0ca30c"/></marker>
+        <marker id="b14b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2a78d6"/></marker>
+      </defs>
+      <!-- boundary -->
+      <line x1="300" y1="20" x2="300" y2="400" stroke="currentColor" stroke-width="1" stroke-dasharray="6 5" opacity=".45"/>
+      <text x="288" y="36" font-size="12" text-anchor="end" fill="currentColor" opacity=".65">台灣</text>
+      <text x="312" y="36" font-size="12" fill="currentColor" opacity=".65">中國大陸</text>
+      <!-- boxes -->
+      <g fill="none" stroke="currentColor" stroke-width="1.3">
+        <rect x="40"  y="60"  width="200" height="50" rx="8"/>
+        <rect x="40"  y="200" width="200" height="50" rx="8"/>
+        <rect x="360" y="200" width="220" height="60" rx="8" stroke="#2a78d6" stroke-width="2"/>
+        <rect x="360" y="60"  width="220" height="50" rx="8"/>
+        <rect x="680" y="140" width="200" height="50" rx="8"/>
+        <rect x="680" y="260" width="200" height="50" rx="8"/>
+        <rect x="680" y="360" width="200" height="44" rx="8" stroke-dasharray="5 4"/>
+      </g>
+      <g font-size="13" fill="currentColor" text-anchor="middle">
+        <text x="140" y="81">台灣雙鴻／美特</text>
+        <text x="140" y="97" font-size="11" opacity=".75">鑫鴻騰為指定供應商</text>
+        <text x="140" y="221">鑫鴻騰 XHT</text>
+        <text x="140" y="237" font-size="11" opacity=".75">客戶窗口·NPI·品保·圖面</text>
+        <text x="470" y="81">東莞華珂（奕東 100%）</text>
+        <text x="470" y="97" font-size="11" opacity=".75">出資：廠房設備（租賃）＋資金</text>
+        <text x="470" y="223" fill="#2a78d6" font-weight="700">新設合資公司</text>
+        <text x="470" y="240" font-size="11.5" fill="#2a78d6">華珂 51%／XHT 49%</text>
+        <text x="470" y="253" font-size="10.5" fill="#2a78d6" opacity=".85">台系客戶接單·品質·交付主體</text>
+        <text x="780" y="161">可俐星</text>
+        <text x="780" y="177" font-size="11" opacity=".75">代工製造（釺焊·檢漏·分水器）</text>
+        <text x="780" y="281">冠鼎</text>
+        <text x="780" y="297" font-size="11" opacity=".75">埋管冷板供件</text>
+        <text x="780" y="379">AVC 等既有直供客戶</text>
+        <text x="780" y="394" font-size="11" opacity=".75">冠鼎／可俐星直供盤不動</text>
+      </g>
+      <!-- orders -->
+      <line x1="140" y1="112" x2="140" y2="198" stroke="currentColor" stroke-width="1.6" marker-end="url(#b14)"/>
+      <text x="150" y="160" font-size="11.5" fill="currentColor">訂單（總約框架）</text>
+      <line x1="242" y1="225" x2="358" y2="225" stroke="currentColor" stroke-width="1.6" marker-end="url(#b14)"/>
+      <text x="300" y="217" font-size="11.5" text-anchor="middle" fill="currentColor">下單</text>
+      <path d="M 358 240 L 242 240" stroke="#0ca30c" stroke-width="1.8" stroke-dasharray="7 5" marker-end="url(#b14g)"/>
+      <text x="300" y="256" font-size="11" text-anchor="middle" fill="#0ca30c">技術服務費＋股利</text>
+      <!-- equity -->
+      <line x1="470" y1="112" x2="470" y2="198" stroke="currentColor" stroke-width="1.3" stroke-dasharray="3 4" marker-end="url(#b14)"/>
+      <text x="480" y="160" font-size="11.5" fill="currentColor">出資 51%·併表</text>
+      <path d="M 200 252 C 200 300, 330 300, 400 262" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="3 4" marker-end="url(#b14)"/>
+      <text x="290" y="300" font-size="11.5" text-anchor="middle" fill="currentColor">出資 49%＋圖面授權（限合資公司使用）</text>
+      <!-- subcontract -->
+      <line x1="582" y1="215" x2="678" y2="172" stroke="currentColor" stroke-width="1.6" marker-end="url(#b14)"/>
+      <text x="628" y="184" font-size="11.5" fill="currentColor">委外製造合約</text>
+      <line x1="582" y1="245" x2="678" y2="278" stroke="currentColor" stroke-width="1.6" marker-end="url(#b14)"/>
+      <text x="614" y="272" font-size="11.5" fill="currentColor">採購埋管冷板</text>
+      <!-- existing direct -->
+      <line x1="780" y1="312" x2="780" y2="358" stroke="currentColor" stroke-width="1.6" marker-end="url(#b14)"/>
+      <path d="M 860 192 C 900 250, 900 320, 862 362" fill="none" stroke="currentColor" stroke-width="1.3" marker-end="url(#b14)"/>
+      <text x="905" y="280" font-size="11" fill="currentColor" opacity=".75" text-anchor="end">既有直供</text>
+    </svg>
+    <figcaption class="note">合資公司只做三件事：接台系客戶的單、管品質、負責交付；製造委外可俐星、埋管冷板向冠鼎採購。這樣不重複蓋產線、奕東得到併表與題材、我方握住客戶窗口與圖面邊界，而冠鼎／可俐星對 AVC 的既有直供盤完全不動——沒有人的既得利益被碰，才談得成。</figcaption>
+  </figure>
+</section>
+
+<section class="blk">
+  <h2><span class="num">6</span>四方分工——利益最大化的邏輯</h2>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:120px"></th><th>負責什麼</th><th>拿什麼</th><th>不碰什麼</th></tr></thead>
+    <tbody>
+      <tr class="rowhl"><td>鑫鴻騰</td><td>客戶窗口（雙鴻／美特／奇鋐台灣端）、NPI 與圖面轉換、品保標準、合資公司總經理與業務</td><td>49% 股利＋技術服務費；台灣端訂單價差</td><td>不自建大陸產線；不把圖面授權給合資公司以外的任何主體</td></tr>
+      <tr><td>奕東／華珂</td><td>出資（廠房設備以租賃方式提供、資金）、集團採購、財務人員、上市平台背書</td><td>51% 併表的液冷營收＋「台系客戶」題材；集團產能利用率</td><td>不介入客戶窗口；不把合資公司件號轉給集團其他主體自營</td></tr>
+      <tr><td>可俐星</td><td>合資公司的委外製造主體：釺焊、氦氮雙檢、C 掃、分水器雷射焊</td><td>穩定的代工量（填產能）；製造利潤按成本加成計價</td><td>不直接接觸合資公司的台系客戶；既有 AVC 業務照舊</td></tr>
+      <tr><td>冠鼎</td><td>埋管冷板供件；釺焊／高頻焊工藝支援</td><td>供件利潤；幫它衝 2026 扣非 4,000 萬門檻</td><td>不接觸合資公司客戶（它的 4,000 萬壓力是最大的繞過動機，要用競業條款鎖）</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout">
+    <div class="t">為什麼這樣分是最大化</div>
+    <p class="body">四方各自最痛的點：奕東要併表與題材、可俐星與冠鼎要產能填滿、我方要窗口不被繞過。這個架構讓<b>每一方拿到自己最在乎的東西，而且都不需要犧牲既得利益</b>——奕東不用出現金買客戶，只用它本來就閒置的廠房（華珂 5.2 億資產、3,000 萬營收）；可俐星與冠鼎多了訂單但不動它們的 AVC 盤；我方不蓋廠、不承擔奕東的財務風險（合資公司帳與奕東本體切開），卻拿到了大陸產能與集團背書。<b>唯一要防的是繞過</b>——而繞過的誘因集中在冠鼎的 4,000 萬門檻與可俐星的 AVC 關係上，所以競業與件號歸屬條款是這個架構的地基，不是附件。</p>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">7</span>談判條款清單與風險</h2>
+  <div class="grid-2">
+    <div class="card">
+      <div class="vrow"><span class="vk minus">必守</span><div><b>件號與客戶歸屬</b>：合資公司客戶名單（雙鴻、美特、奇鋐台灣端）寫進章程附件；奕東集團所有主體（含可俐星、冠鼎、未來新設）對該名單負競業義務，違約金與退出權掛鉤。</div></div>
+      <div class="vrow"><span class="vk minus">必守</span><div><b>圖面與治具</b>：所有權歸鑫鴻騰，僅授權合資公司使用；委外可俐星製造時以合資公司名義發包、圖面不落地可俐星系統（或以加密／編號件方式）。</div></div>
+      <div class="vrow"><span class="vk minus">必守</span><div><b>否決權</b>：客戶名單變更、委外對象變更、增資稀釋、關聯交易定價、分紅政策——五項須鑫鴻騰董事同意。財務雙簽（對標奕東派財務的模板，我方派財務副手）。</div></div>
+      <div class="vrow"><span class="vk minus">必守</span><div><b>華珂出資方式</b>：廠房設備以<b>租賃</b>而非實物出資——避開募投資產處置的上市公司程序，也避免資產估值爭議推高奕東的股比對價。</div></div>
+    </div>
+    <div class="card">
+      <div class="vrow"><span class="vk note">建議</span><div><b>退出與回購</b>：對標梁立壯的五年原價回購權，我方至少要拿到同等或更好的條款（例如奕東違反競業時的 put 權、估值以淨資產＋固定回報計）。</div></div>
+      <div class="vrow"><span class="vk note">建議</span><div><b>委外定價</b>：可俐星代工按「成本加成」而非市價，加成率寫死；冠鼎供件同理——否則合資公司的利潤會被集團內部定價吃掉。</div></div>
+      <div class="vrow"><span class="vk minus">風險</span><div><b>對手方治理紀錄</b>：2024-06 廣東證監局對奕東及鄧可等出具警示函（業績預告盈虧性質改變）；2026-04 前期會計差錯更正（在建工程未轉固、收入跨期，2024 淨利由 −4,520 萬改為 −6,558 萬）；連虧三年、經營現金流近零、一致行動人減持。<b>合資公司的財務必須與奕東本體隔離，且我方要有實質查帳權。</b></div></div>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:14px">
+    <div class="t">下一步（依序）</div>
+    <p class="body">① 向奕東確認華珂資產是否為募投項目實施主體、能否以租賃方式提供給合資公司（決定架構可行性）；② 取得可俐星增資後的董事與管理層安排、冠鼎併購商譽金額（公告未載）；③ 以「華珂 51%／鑫鴻騰 49%＋五項否決權＋競業附件」為底稿開談，估值以淨資產法起算、拒絕增資溢價邏輯；④ 同步與雙鴻確認：合資公司作為指定供應商的大陸交付主體是否可被接受（客戶稽核）；⑤ 等奕東 2026 中報（預期 8 月底）——看液冷併表數字與現金流，再決定出資節奏。</p>
+  </div>
+</section>
+
+<footer>
+  <h3 style="color:var(--text-secondary)">資料來源（檢索日期均 2026-08-26；商查平台全數被封，工商資料以奕東公告原文交叉）</h3>
+  <ul style="list-style:none">
+    <li><a href="http://static.cninfo.com.cn/finalpage/2025-11-26/1224828329.PDF">奕東公告 2025-066：對外投資（冠鼎 51%）與子公司增資（可俐星）</a>（交易對價、估值、治理安排、回購條款、冠鼎客戶與財務）</li>
+    <li><a href="https://file.finance.qq.com/finance/hs/pdf/2025/12/20/1224888508.PDF">奕東公告 2025-082：向華珂、可俐星提供銀行授信擔保</a>（華珂 2024 年度與 2025 前三季財務、工商資料、非失信聲明）</li>
+    <li><a href="http://file.finance.sina.com.cn/211.154.219.97:9494/MRGG/CNSESZ_STOCK/2025/2025-1/2025-01-03/10693704.PDF">公告 2025-002：華珂註冊資本 1 億→4.67 億（募集資金債權轉增資）</a>；<a href="http://file.finance.sina.com.cn/211.154.219.97:9494/MRGG/CNSESZ_STOCK/2023/2023-1/2023-01-10/8779363.PDF">公告 2023-001：東莞市奕東科技更名華珂</a></li>
+    <li><a href="http://notice.10jqka.com.cn/api/pdf/a6bb4cb6b196dece.pdf">公告 2025-031：可俐星減資</a>；<a href="http://file.finance.sina.com.cn/211.154.219.97:9494/MRGG/CNSESZ_STOCK/2025/2025-9/2025-09-09/11441868.PDF">2025-051：杰睿入股</a>；<a href="http://static.cninfo.com.cn/finalpage/2025-12-20/1224888512.PDF">2025-085</a>；<a href="http://file.finance.sina.com.cn/211.154.219.97:9494/MRGG/CNSESZ_STOCK/2026/2026-4/2026-04-02/12056876.PDF">2026-015：增資完成（合創聚益 10%）</a></li>
+    <li><a href="http://static.cninfo.com.cn/finalpage/2025-08-28/1224596407.PDF">奕東 2025 半年報</a>（主要子公司表：華珂上半年財務）；<a href="http://static.cninfo.com.cn/finalpage/2026-04-29/1225243543.PDF">2025 年報摘要</a>；<a href="http://static.cninfo.com.cn/finalpage/2026-06-26/1225391680.PDF">2024 年報（更正後重刊）</a></li>
+    <li><a href="http://static.cninfo.com.cn/finalpage/2026-04-29/1225243582.PDF">公告 2026-031：前期會計差錯更正</a>；<a href="https://m.21jingji.com/article/20240620/herald/ff05010df323c9efdce8a1ac3153fd79_zaker.html">21 世紀經濟報導：廣東證監局警示函（2024-06）</a>；<a href="https://file.finance.qq.com/finance/hs/pdf/2025/04/24/1223242146.PDF">保薦機構 2024 年現場檢查報告</a></li>
+    <li><a href="http://file.finance.sina.com.cn/cn/diaoyan/jgdy/2026/2026-05/2026-05-18/10181362_1.PDF">投資者關係記錄 2026-002（2026-05-18）</a>；<a href="https://finance.sina.com.cn/stock/aigc/jgdy/2026-05-06/doc-inhwxhnr3483443.shtml">機構調研 2026-05-06（冠鼎 Q1 併表、產能瓶頸）</a>；<a href="https://finance.sina.com.cn/stock/aigc/stockfs/2026-04-29/doc-inhwckrm1139012.shtml">2026 一季報解讀</a></li>
+    <li><a href="https://file.finance.qq.com/finance/hs/pdf/2025/11/12/1224799281.PDF">董事會換屆公告 2025-064（鄧可、鄧玉泉簡歷）</a>；<a href="https://m.dzsc.com/company/1032847/about.html">冠鼎舊官網簡介（釺焊／高頻焊）</a></li>
+  </ul>
+  <p style="margin-top:12px">查無：華珂參保人數、實繳、分支機構與完整對外投資清單、2025 年報全年單體數據；廣州杰睿與深圳合創聚益的背景；可俐星增資後董事安排；冠鼎商譽金額；三家公司的訴訟／處罰／出質（商查平台封鎖，屬「未查得」非「確認無」）；奕東 2026 中報（截至報告日尚未發布）。「華珂為募投項目實施主體」為依註冊資本來源與地址之推論<sup class="est">＊</sup>；建議股比與條款為談判底稿，非法律意見。</p>
+  <p style="margin-top:10px"><b>僅供內部策略參考。</b></p>
+</footer>
+
+</div>
+
+</body>
+</html>
