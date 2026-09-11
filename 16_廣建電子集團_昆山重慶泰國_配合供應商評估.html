@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>廣建電子集團 配合供應商評估（對照胜蓝泰國廠）｜鑫鴻騰</title><style>
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;      /* 卡片/圖表面 */
+    --page: #f9f9f7;           /* 頁面底 */
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;       /* 主色（藍） */
+    --series-1-track: #cde2fb; /* 藍 100，meter 未填軌 */
+    --seq-250: #86b6ef;
+    --seq-450: #2a78d6;
+    --seq-600: #184f95;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --accent-wash: rgba(42,120,214,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-1-track: #0d366b;
+      --seq-250: #1c5cab;
+      --seq-450: #3987e5;
+      --seq-600: #6da7ec;
+      --good-text: #0ca30c;
+      --accent-wash: rgba(57,135,229,0.12);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  /* ===== 頁首 ===== */
+  .report-tag { font-size:12px; letter-spacing:.12em; color:var(--text-muted); text-transform:uppercase; }
+  header.hero { padding: 8px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing:.01em; margin-top: 4px; }
+  h1 .code { font-weight: 400; font-size: 18px; color: var(--text-secondary); margin-left: 8px; }
+  .hero-sub { color: var(--text-secondary); margin-top: 6px; max-width: 72ch; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+  .badge { font-size:12.5px; padding:3px 10px; border-radius:99px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-secondary); }
+  .badge.threat { border-color: var(--critical); color: var(--critical); font-weight:600; }
+  .meta-line { margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+
+  /* ===== 區塊 ===== */
+  section { margin-bottom: 36px; }
+  h2 { font-size: 20px; font-weight: 700; padding-bottom: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h2 .num { color: var(--series-1); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 18px 0 8px; }
+  p.body { color: var(--text-primary); margin-bottom: 10px; max-width: 80ch; }
+  .note { font-size: 12.5px; color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .grid-3 { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+  @media (max-width: 760px){ .grid-2,.grid-3{grid-template-columns:1fr;} }
+
+  /* ===== 摘要統計磚 ===== */
+  .tiles { display:grid; grid-template-columns: repeat(6,1fr); gap:12px; }
+  @media (max-width: 900px){ .tiles{grid-template-columns: repeat(3,1fr);} }
+  @media (max-width: 560px){ .tiles{grid-template-columns: repeat(2,1fr);} }
+  .tile { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:14px 14px 12px; }
+  .tile .label { font-size:12px; color:var(--text-muted); }
+  .tile .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .tile .delta { font-size:12px; margin-top:2px; }
+  .delta.up { color: var(--good-text); }
+  .delta.down { color: var(--critical); }
+  .delta.flat { color: var(--text-muted); }
+
+  /* ===== 表格 ===== */
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-weight:600; color:var(--text-secondary); font-size:12.5px; padding:8px 10px; border-bottom:1px solid var(--baseline); white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:top; }
+  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom:none; }
+
+  /* ===== 時間軸 ===== */
+  .timeline { list-style:none; position:relative; padding-left:20px; }
+  .timeline::before { content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--grid); border-radius:1px; }
+  .timeline li { position:relative; padding:0 0 14px 12px; }
+  .timeline li::before { content:""; position:absolute; left:-20px; top:7px; width:8px; height:8px; border-radius:50%; background:var(--series-1); box-shadow: 0 0 0 2px var(--surface-1); }
+  .timeline .yr { font-weight:700; font-variant-numeric: tabular-nums; margin-right:8px; }
+  .timeline .desc { color:var(--text-secondary); }
+
+  /* ===== 圖表（純 HTML/CSS 橫條圖） ===== */
+  .chart { margin-top: 10px; }
+  .chart-title { font-size:13.5px; font-weight:600; }
+  .chart-sub { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .hbar-row { display:grid; grid-template-columns: 118px 1fr 120px; align-items:center; gap:10px; padding:5px 0; }
+  .hbar-row .cat { font-size:13px; color:var(--text-secondary); text-align:right; }
+  .hbar-track { position:relative; height:20px; }
+  .hbar-fill { position:absolute; left:0; top:0; height:20px; background:var(--series-1); border-radius:0 4px 4px 0; transition: opacity .15s; }
+  .hbar-row:hover .hbar-fill { opacity:.82; }
+  .hbar-row .val { font-size:13px; color:var(--text-primary); font-variant-numeric:tabular-nums; }
+  .hbar-row .val .pct { color:var(--text-muted); }
+  .axis-note { border-top:1px solid var(--baseline); margin-top:6px; padding-top:5px; font-size:11.5px; color:var(--text-muted); text-align:right; }
+
+  /* 縱向柱狀（年度趨勢，小倍數） */
+  .cols { display:flex; align-items:flex-end; gap:26px; height:170px; padding:0 6px; border-bottom:1px solid var(--baseline); }
+  .col-g { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
+  .col-bar { width:100%; max-width:44px; background:var(--series-1); border-radius:4px 4px 0 0; position:relative; transition: opacity .15s; }
+  .col-bar.est { background: var(--seq-250); }
+  .col-g:hover .col-bar { opacity:.82; }
+  .col-val { font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--text-primary); margin-bottom:4px; }
+  .col-x { display:flex; gap:26px; padding:6px 6px 0; }
+  .col-x div { flex:1; text-align:center; font-size:12px; color:var(--text-muted); }
+
+  /* ===== SWOT ===== */
+  .swot { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .swot{grid-template-columns:1fr;} }
+  .swot .card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+  .swot .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .swot ul { padding-left:18px; }
+  .swot li { margin-bottom:8px; color:var(--text-primary); }
+  .swot li b { font-weight:600; }
+
+  /* ===== 重點框 ===== */
+  .callout { background: var(--accent-wash); border:1px solid var(--border); border-left:3px solid var(--series-1); border-radius:8px; padding:14px 16px; margin:14px 0; }
+  .callout.warn { border-left-color: var(--critical); background: rgba(208,59,59,0.06); }
+  .callout .t { font-weight:700; font-size:13.5px; margin-bottom:4px; }
+
+  /* ===== 評分 meter ===== */
+  .meter-row { display:grid; grid-template-columns: 170px 1fr 56px; gap:12px; align-items:center; padding:6px 0; }
+  .meter-row .m-label { font-size:13.5px; color:var(--text-secondary); text-align:right; }
+  .meter-track { height:10px; border-radius:5px; background:var(--series-1-track); position:relative; overflow:hidden; }
+  .meter-fill { position:absolute; left:0; top:0; bottom:0; background:var(--series-1); border-radius:5px; }
+  .meter-row .m-val { font-size:13px; font-variant-numeric:tabular-nums; color:var(--text-primary); }
+
+  footer { border-top:1px solid var(--border); padding-top:16px; font-size:12.5px; color:var(--text-muted); }
+  footer a { color: var(--series-1); text-decoration:none; word-break:break-all; }
+  footer li { margin-bottom:4px; }
+  sup.est { color: var(--text-muted); }
+
+  /* ===== 本報告新增（四家橫向比較） ===== */
+  .grid-4 { display:grid; grid-template-columns: repeat(4,1fr); gap:14px; }
+  @media (max-width: 980px){ .grid-4{grid-template-columns:1fr 1fr;} }
+  @media (max-width: 560px){ .grid-4{grid-template-columns:1fr;} }
+  .co { border-top:3px solid var(--series-1); }
+  .co.k { border-top-color:#2a78d6; }
+  .co.s { border-top-color:#0ca30c; }
+  .co.f { border-top-color:#fab219; }
+  .co.r { border-top-color:#d03b3b; }
+  .co .nm { font-size:16px; font-weight:700; }
+  .co .pa { font-size:12px; color:var(--text-muted); margin-bottom:6px; }
+  .co .one { font-size:13.5px; color:var(--text-secondary); }
+  .co dl { margin-top:10px; font-size:12.5px; }
+  .co dt { color:var(--text-muted); float:left; clear:left; width:64px; }
+  .co dd { margin-left:64px; margin-bottom:3px; }
+  .cmp th:first-child, .cmp td:first-child { position:sticky; left:0; background:var(--surface-1); font-weight:600; color:var(--text-secondary); }
+  .cmp th { white-space:normal; }
+  .cmp td { font-size:13px; }
+  .scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .cmp { min-width:760px; }
+  .pill { display:inline-block; font-size:10.5px; line-height:1.5; padding:0 6px; border-radius:99px; border:1px solid var(--border); color:var(--text-muted); margin-left:4px; white-space:nowrap; vertical-align:1px; }
+  .pill.self { border-color:var(--warning); color:#8a6100; }
+  .pill.pub { border-color:var(--good); color:var(--good-text); }
+  .pill.none { border-color:var(--baseline); }
+  @media (prefers-color-scheme: dark){ .pill.self{color:#fab219;} }
+  .yes { color:var(--good-text); font-weight:700; }
+  .no { color:var(--text-muted); }
+  .part { color:#8a6100; font-weight:600; }
+  @media (prefers-color-scheme: dark){ .part{color:#fab219;} }
+  .rowhl td { background: var(--accent-wash); }
+  .meter-row.k .meter-fill { background:#2a78d6; }
+  .meter-row.s .meter-fill { background:#0ca30c; }
+  .meter-row.f .meter-fill { background:#fab219; }
+  .meter-row.r .meter-fill { background:#d03b3b; }
+  .legend { display:flex; flex-wrap:wrap; gap:14px; font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .legend span::before { content:""; display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:5px; vertical-align:-1px; }
+  .legend .lk::before{background:#2a78d6;} .legend .ls::before{background:#0ca30c;}
+  .legend .lf::before{background:#fab219;} .legend .lr::before{background:#d03b3b;}
+  .blk { page-break-inside: avoid; }
+
+  td.down, .down { color: var(--critical); }
+
+  @media print {
+    .scroll { overflow: visible; }
+    .cmp { min-width: 0; font-size: 11px; }
+    .cmp td, .cmp th { padding: 5px 6px; }
+    .card, .co, .callout, section { page-break-inside: avoid; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ===== 速評卡（每公司一卡） ===== */
+  .vrow { display:flex; gap:10px; margin-top:10px; font-size:13.5px; }
+  .vrow > div { color:var(--text-primary); }
+  .vk { flex:0 0 auto; align-self:flex-start; font-size:11px; font-weight:700; line-height:1.6; padding:0 7px; border-radius:5px; margin-top:2px; }
+  .vk.plus { color:var(--good-text); background:rgba(12,163,12,0.10); border:1px solid rgba(12,163,12,0.35); }
+  .vk.minus { color:var(--critical); background:rgba(208,59,59,0.08); border:1px solid rgba(208,59,59,0.35); }
+  @media (prefers-color-scheme: dark){
+    .vk.plus { background:rgba(12,163,12,0.16); }
+    .vk.minus { background:rgba(208,59,59,0.16); }
+  }
+  .vtag { font-size:11.5px; font-weight:600; padding:1px 8px; border-radius:99px; margin-left:8px; vertical-align:2px; }
+  .vtag.good { color:var(--good-text); border:1px solid rgba(12,163,12,0.4); }
+  .vtag.warn { color:var(--critical); border:1px solid rgba(208,59,59,0.4); }
+
+  .vk.note { color:var(--series-1); background:var(--accent-wash); border:1px solid rgba(42,120,214,0.35); }
+  @media (prefers-color-scheme: dark){ .vk.note { border-color:rgba(57,135,229,0.45); } }
+
+  figure { margin:14px 0 6px; }
+  figure svg { display:block; color:var(--text-primary); max-width:100%; height:auto; }
+  figcaption { margin-top:6px; font-size:12.5px; color:var(--text-secondary); }
+  h1 .code { display:block; margin-top:6px; }
+</style></head>
+<body><div class="wrap">
+
+<header class="hero">
+  <div class="report-tag">大陸／泰國配合供應商評估 · 16 · 廣建 ×（對照）胜蓝｜依三份公司簡報＋外部查證</div>
+  <h1>廣建電子集團<br><span class="code" style="margin-left:0">昆山 · 重慶 · 泰國（春武里 Ban Bueng）</span></h1>
+  <p class="hero-sub">廣建是一家<b>傳統消費電子機構件沖壓廠</b>——起家於昆山（2004），主力產能在重慶，2024 年與泰國模具廠 DCL 合資設立泰國廠。設備實力在沖壓與機構件這一塊是紮實的，<b>但外部查證找不到任何液冷／散熱相關的產品、客戶、專利或台系散熱廠往來跡象</b>。泰國廠目前只有沖壓線與清洗線，<b>沒有 CNC、沒有釺焊、沒有氦檢漏</b>——它是沖壓產能，不是液冷產能。</p>
+  <div class="badges">
+    <span class="badge threat">液冷能力：查無任何跡象 ✕（無產品／客戶／專利）</span>
+    <span class="badge">泰國廠 2024-07 設立｜登記資本 1,500 萬泰銖｜DBD 列微型企業</span>
+    <span class="badge">距雙鴻泰國廠 <b>約 77 km</b>／車程約 1.5 小時</span>
+    <span class="badge">泰方夥伴 DCL 反而紮實：2013 成立、淨值 1.51 億泰銖、大型企業</span>
+    <span class="badge">對照組 胜蓝泰國廠：120 km／約 1 小時 50 分｜不鏽鋼 UQD 與我方分水器同能力圈</span>
+  </div>
+  <div class="meta-line">報告日期 2026-09-11｜資料來源：對方 2026-02-12 兩份簡報＋泰國 DBD／creden 登記資料＋公開檢索｜幣別：人民幣／泰銖分別標示｜<b>凡標「自稱」者為簡報片面說法，未經第三方佐證</b></div>
+</header>
+
+<section class="blk">
+  <h2><span class="num">1</span>一眼看懂：三個廠區的落差</h2>
+  <div class="tiles">
+    <div class="tile"><div class="k">昆山廠（母體）</div><div class="v">45 <span style="font-size:14px">台沖床</span></div><div class="d">45T–200T｜5,000 ㎡｜150–200 人<sup class="est">＊</sup></div></div>
+    <div class="tile"><div class="k">重慶廠（主力）</div><div class="v">200 <span style="font-size:14px">台 CNC</span></div><div class="d">＋沖床 74 台｜20,000 ㎡｜300 人<sup class="est">＊</sup></div></div>
+    <div class="tile"><div class="k">泰國廠（新）</div><div class="v">36 <span style="font-size:14px">台設備</span></div><div class="d">含 2026-07 新增；擴充前僅 24 台</div></div>
+    <div class="tile"><div class="k">泰國廠登記資本</div><div class="v">฿1,500 <span style="font-size:14px">萬</span></div><div class="d">約新台幣 1,400 萬｜DBD 分類：微型</div></div>
+    <div class="tile"><div class="k">泰國廠投產</div><div class="v">2025 <span style="font-size:14px">Q3</span></div><div class="d">公司 2024-07-23 設立</div></div>
+    <div class="tile"><div class="k">距雙鴻泰國廠</div><div class="v">77 <span style="font-size:14px">km</span></div><div class="d">車程約 1.5 小時｜胜蓝約 1 小時 50 分</div></div>
+  </div>
+  <p class="note" style="margin-top:10px"><sup class="est">＊</sup>昆山／重慶的面積與人數為簡報自稱，外部查無佐證。簡報內部對昆山人數有 150 人與 200 人兩種說法。泰國廠設備數與登記資本則有外部登記資料可對。</p>
+</section>
+
+<section class="blk">
+  <h2><span class="num">2</span>集團結構——只有一家被證實真實存在</h2>
+  <figure>
+    <svg viewBox="0 0 920 300" role="img" aria-label="廣建集團結構：昆山廣建、重慶廣建、蘇州金銓鑫、泰國合資廠，其中僅重慶廣建有外部政府公告佐證" style="max-width:100%;height:auto">
+      <defs>
+        <marker id="g1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+      </defs>
+      <rect x="340" y="20" width="240" height="46" rx="8" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <text x="460" y="41" font-size="13" text-anchor="middle" fill="currentColor" font-weight="700">廣建集團（自稱）</text>
+      <text x="460" y="58" font-size="11" text-anchor="middle" fill="currentColor" opacity=".75">總經理 魏建飛｜外部查無此人資料</text>
+      <line x1="460" y1="66" x2="460" y2="92" stroke="currentColor" stroke-width="1.2"/>
+      <line x1="120" y1="92" x2="800" y2="92" stroke="currentColor" stroke-width="1.2"/>
+      <g stroke="currentColor" stroke-width="1.2">
+        <line x1="120" y1="92" x2="120" y2="118" marker-end="url(#g1)"/>
+        <line x1="345" y1="92" x2="345" y2="118" marker-end="url(#g1)"/>
+        <line x1="570" y1="92" x2="570" y2="118" marker-end="url(#g1)"/>
+        <line x1="800" y1="92" x2="800" y2="118" marker-end="url(#g1)"/>
+      </g>
+      <g fill="none" stroke-width="1.4">
+        <rect x="30"  y="120" width="180" height="86" rx="8" stroke="#d03b3b"/>
+        <rect x="255" y="120" width="180" height="86" rx="8" stroke="#0ca30c" stroke-width="2.2"/>
+        <rect x="480" y="120" width="180" height="86" rx="8" stroke="#d03b3b"/>
+        <rect x="710" y="120" width="180" height="86" rx="8" stroke="#e0a020"/>
+      </g>
+      <g font-size="12.5" text-anchor="middle" fill="currentColor">
+        <text x="120" y="142" font-weight="700">昆山廣建電子科技</text>
+        <text x="120" y="160" font-size="11">自稱 2004 成立</text>
+        <text x="120" y="178" font-size="11" fill="#d03b3b">✕ 精確搜尋零筆命中</text>
+        <text x="120" y="195" font-size="10.5" opacity=".7">無招聘·無認證·無專利·無新聞</text>
+
+        <text x="345" y="142" font-weight="700" fill="#0ca30c">重慶廣建金屬製品</text>
+        <text x="345" y="160" font-size="11">榮昌區｜總經理 魏建國</text>
+        <text x="345" y="178" font-size="11" fill="#0ca30c">✓ 三筆政府公告佐證</text>
+        <text x="345" y="195" font-size="10.5" opacity=".7">2021-12 專案核准·2022-03 區重點項目</text>
+
+        <text x="570" y="142" font-weight="700">蘇州金銓鑫自動化</text>
+        <text x="570" y="160" font-size="11">簡報自稱 2015 或 2017</text>
+        <text x="570" y="178" font-size="11" fill="#d03b3b">✕ 精確搜尋零筆命中</text>
+        <text x="570" y="195" font-size="10.5" opacity=".7">簡報自身年份就有矛盾</text>
+
+        <text x="800" y="142" font-weight="700">廣建電子（泰國）</text>
+        <text x="800" y="160" font-size="11">2024-07-23 設立</text>
+        <text x="800" y="178" font-size="11" fill="#e0a020">△ 登記存在，但股東未證實</text>
+        <text x="800" y="195" font-size="10.5" opacity=".7">統編 0205567045164</text>
+      </g>
+      <rect x="710" y="224" width="180" height="52" rx="8" fill="none" stroke="#2a78d6" stroke-width="1.6" stroke-dasharray="5 4"/>
+      <text x="800" y="244" font-size="12" text-anchor="middle" fill="#2a78d6" font-weight="700">DCL Mold &amp; Auto Parts</text>
+      <text x="800" y="262" font-size="11" text-anchor="middle" fill="#2a78d6">自稱各持 50%｜未證實</text>
+      <line x1="800" y1="206" x2="800" y2="222" stroke="#2a78d6" stroke-width="1.4" stroke-dasharray="4 3"/>
+      <text x="30" y="292" font-size="11.5" fill="currentColor">四家主體之間<tspan font-weight="700">是否真有股權關係，完全未經證實</tspan>——大陸常見數家同名公司由親屬分持、彼此無股權聯繫，僅對外稱「集團」。</text>
+    </svg>
+    <figcaption class="note">查證環境限制：天眼查、企查查、啟信寶與所有 .gov.cn 網域在本次檢索中均無法讀取，因此「查無」多數應理解為「本環境查不到」而非「不存在」。但同樣條件下重慶廠查得到、昆山廠一筆都沒有，這個<b>落差本身</b>就是要追問的點。</figcaption>
+  </figure>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:130px">主體</th><th>簡報自稱</th><th>外部查到什麼</th></tr></thead>
+    <tbody>
+      <tr><td>昆山廣建電子科技</td><td>2004 成立｜投資總額 RMB 2,000 萬｜廠區 5,000 ㎡（可擴 6,500）｜員工 150–200 人｜昆山市巴城鎮石牌益伸路 99 號 3 號樓</td><td class="no"><b>零足跡。</b>精確詞搜尋全部回傳「昆山广<b>兴</b>电子」（不同公司）。無統一社會信用代碼、無註冊資本、無參保人數可查</td></tr>
+      <tr class="rowhl"><td>重慶廣建金屬製品</td><td>投資總額約 RMB 9,000 萬｜廠區 20,000 ㎡｜員工 300 人｜2020 年榮昌區高新企業｜榮昌區昌州街道城南大道 715 號</td><td class="part"><b>存在性已證實。</b>重慶市規劃和自然資源局「新建廠房辦公樓及組裝模具」公告；榮昌區發改委 2021-12-10 專案核准；榮昌區 2022-03-18 列為區重點項目。<b>但面積／人數／投資額三個數字全未證實</b>，高企認定年度亦無法確認</td></tr>
+      <tr><td>蘇州金銓鑫自動化</td><td>2015 或 2017 成立（簡報自相矛盾）</td><td class="no"><b>零足跡</b></td></tr>
+      <tr class="rowhl"><td>廣建電子（泰國）</td><td>昆山廣建 50%／DCL 50%｜2025 Q3 投產｜集團首家海外基地</td><td class="part">泰國 DBD 登記<b>確實存在</b>：統編 0205567045164、<b>2024-07-23</b> 設立、登記資本 <b>฿1,500 萬</b>、淨值 ฿1,105 萬、TSIC 28230、狀態營運中、已申報兩年度財報。<b>但 DBD 分類為「微型企業」</b>；股東名冊與持股比例查無，50/50 未能證實</td></tr>
+      <tr><td>DCL Mold &amp; Auto Parts<br><span class="note">泰方合資夥伴</span></td><td>本地產業資源豐富、有模具中心</td><td class="yes"><b>這塊反而最紮實。</b>統編 0205556019001、<b>2013-06-13</b> 成立（營運 13 年）、登記資本 ฿3,500 萬、<b>淨值 ฿1.51 億（達資本 432%）</b>、DBD 分類<b>大型企業</b>、2021–2025 年度財報齊全。地址在同縣不同鎮（Nong Chak）</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">3</span>設備盤點——沖壓強、但泰國廠只有沖壓</h2>
+  <div class="grid-2">
+    <div class="card co k">
+      <div class="nm">昆山廠（自稱）</div>
+      <div class="vrow"><span class="vk note">沖壓</span><div>氣壓沖床 <b>45 台</b>：45T×4、60T×2、110T×21、160T×11（1 台雙軸）、協易 110T×6、200T×1</div></div>
+      <div class="vrow"><span class="vk note">自動線</span><div>110T×7 ONE BAR 二條、160T×7 ONE BAR 一條、110T×6 ONE BAR 一條、160&amp;110T×7 全優智能機械手一條</div></div>
+      <div class="vrow"><span class="vk note">檢測</span><div><b>AOI 光學自動檢測</b>（沖漏孔／結構錯誤／壓傷防呆）、<b>非接觸式雷射紅外線平面度檢測</b>、2.5D×2、鹽霧、維氏硬度、色差、光澤、膜厚</div></div>
+      <div class="vrow"><span class="vk plus">規劃</span><div>2026 Q2 自動紅外線 3D 量測；2026 Q3 增模修 3 台（沙迪克／慶鴻）；2026 元月 200T 雙軸架模</div></div>
+    </div>
+    <div class="card co s">
+      <div class="nm">重慶廠（自稱）— 集團真正的產能</div>
+      <div class="vrow"><span class="vk plus">沖壓</span><div>110T×45、160T 單軸×25、160T 雙軸×1、連續模 110T／60T／45T 各 1 台</div></div>
+      <div class="vrow"><span class="vk plus">CNC</span><div><b>CNC 精雕機 200 台</b>（巨岡／矩匠／泰德 T5/T6）＋ 6 軸機械臂 45 台＋ T450 機械臂 52 台</div></div>
+      <div class="vrow"><span class="vk plus">後段</span><div>熱壓機 10 台、7 工站自動水槽式清洗線 3 條、連線式自動清洗機 4 條</div></div>
+      <div class="vrow"><span class="vk plus">模具</span><div><b>日本沙迪克線割 6 台</b>（AQ325L／750L×2／537L／550L×2）、加工中心 4 台、磨床、搖臂鑽、銑床</div></div>
+    </div>
+  </div>
+
+  <h3>泰國廠設備清單（13 項／36 台，含 2026-07 新增）</h3>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:120px">項次</th><th>設備</th><th>規格／廠牌</th><th style="width:110px">數量</th><th style="width:110px">備註</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>沖床 PRESS</td><td>CN1-110Ton×7｜HIPRESS｜Auto (Robot)</td><td>7</td><td>現有自動線</td></tr>
+      <tr><td>2</td><td>沖床 PRESS</td><td>CN1-110Ton｜HIPRESS｜單機</td><td>1</td><td>現有</td></tr>
+      <tr class="rowhl"><td>3</td><td>沖床 PRESS</td><td>CN1-160Ton×10｜HIPRESS｜單機</td><td><b>10</b></td><td>現有</td></tr>
+      <tr><td>4</td><td>機械手 Robot</td><td>連杆式 ONE BAR｜冠盟</td><td>1</td><td>現有</td></tr>
+      <tr><td>5–8</td><td>雙層移載機／翻轉機／送料機／載帶包裝機</td><td>冠盟、翊銘、SHENGSIDA</td><td>6</td><td>現有</td></tr>
+      <tr class="rowhl"><td>9</td><td><b>清洗機</b></td><td>W1.2m｜力翰威｜Auto</td><td>1</td><td class="down"><b>2026-07 才新增</b></td></tr>
+      <tr class="rowhl"><td>10–12</td><td>沖床 110Ton×7＋送料機＋ONE BAR</td><td>HIPRESS／翊銘／冠盟</td><td>9</td><td class="down"><b>2026-07 新增第二條自動線</b></td></tr>
+      <tr class="rowhl"><td>13</td><td>沖床 PRESS</td><td><b>CN1-200Ton</b>｜HIPRESS｜單機</td><td>1</td><td class="down"><b>2026-07 新增</b></td></tr>
+      <tr><td colspan="3" style="text-align:right"><b>合計</b></td><td><b>36</b></td><td>擴充前僅約 24 台</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note" style="margin-top:8px">檢測端僅 <b>18 件</b>：2.5D 一台、花崗岩平台、卡尺／分厘卡／厚薄規／高度規、推拉力計、扭力計、膜厚儀、百格刀、鉛筆硬度儀、鹽霧試驗機 60B、維氏硬度計 HV-1000。<b>沒有三次元 CMM、沒有 AOI、沒有平面度自動檢測</b>——這幾項昆山廠有，泰國廠沒有。</p>
+  <div class="callout warn">
+    <div class="t">泰國廠的能力邊界：只有「沖壓＋清洗＋載帶包裝」</div>
+    <p class="body">泰國廠<b>一台 CNC 都沒有，也沒有任何鏟齒或焊接設備</b>，表面處理全部外協（電鍍、陽極、噴塗）。模具靠自主開發＋DCL 模具中心支援。二期規劃是再加 110T×7 一條自動線、200T 連續模、自動清洗線一條，自動化率 70%→90%。<b>方向仍然是把沖壓做大做自動——二期買的還是沖床，沒有一台鏟齒機或焊接設備。</b></p>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">4</span>能不能供雙鴻泰國？用「液冷零組件」的標準比</h2>
+  <p class="body">先把標準定對：<b>我方在大陸供雙鴻的也是零組件（例如不鏽鋼分水器），不是整個模組</b>，所以這裡要問的不是「能不能做一整片水冷板」，而是<b>能不能做液冷零組件</b>。對這類件，真正吃緊的是<b>鏟齒與焊接</b>，其次是洩漏測試與清洗——不是整套水冷板產線。雙鴻泰國一廠目前月產水冷板約 30 萬片、Manifold 約 3 千套，零組件的需求量跟著這個數走。逐項對照廣建泰國廠：</p>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:170px">液冷零組件要的製程</th><th style="width:120px">廣建泰國廠</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr class="rowhl"><td><b>鏟齒（skiving）</b></td><td class="no">✕ 完全沒有</td><td><b>這是第一關。</b>鰭片鏟齒、滾齒是液冷零組件的核心加工，廣建三個廠的設備清單裡<b>沒有任何鏟齒或滾齒設備</b>——昆山、重慶、泰國都沒有</td></tr>
+      <tr class="rowhl"><td><b>焊接（TIG／雷射／釺焊）</b></td><td class="no">✕ 完全沒有</td><td><b>第二關。</b>不鏽鋼分水器、管路件、鰭片與底板的接合都靠焊。泰國廠 13 項設備<b>沒有任何焊接設備</b>；昆山廠僅有模具維修用的電焊機與氬弧焊機各 1 台，<b>那是修模具不是產線焊接</b></td></tr>
+      <tr class="rowhl"><td>洩漏測試（氣密／氦檢）</td><td class="no">✕ 完全沒有</td><td>液冷件出貨必檢。泰國廠檢測清單 18 件裡<b>沒有任何洩漏測試設備</b></td></tr>
+      <tr><td>不鏽鋼加工經驗</td><td class="part">△ 有，但是外觀件</td><td>做過 SUS304 拉絲＋電鍍的化妝盒外觀件——<b>是沖壓＋表面處理，不是管路與焊接</b></td></tr>
+      <tr><td>清洗（去油、去屑）</td><td class="part">△ 2026-07 才有</td><td>W1.2m 清洗機一台，剛裝機。液冷件對清潔度要求遠高於機構件</td></tr>
+      <tr><td>CNC 加工</td><td class="no">✕ 泰國無</td><td>接口、配合面加工需要。泰國廠一台都沒有（重慶廠 200 台，但在中國）</td></tr>
+      <tr class="rowhl"><td><b>精密沖壓</b></td><td class="yes">✓ 這是強項</td><td>110T×15、160T×10、200T×1，兩條 ONE BAR 自動線，連續模經驗完整</td></tr>
+      <tr class="rowhl"><td><b>沖壓件量測</b></td><td class="part">△ 基本夠</td><td>2.5D 一台＋常規量具。<b>但無 CMM</b>，複雜形位公差件會吃力</td></tr>
+      <tr><td>表面處理</td><td class="part">△ 外協</td><td>電鍍、陽極、噴塗均為本地外協，非自有</td></tr>
+      <tr><td>模具開發</td><td class="yes">✓ 有</td><td>自主開發＋DCL 模具中心支援；新機種模具到樣品 <b>28–35 工作天</b>、量產 1–2 週（自稱）</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="grid-2" style="margin-top:14px">
+    <div class="card co s">
+      <div class="nm">它做得了的：沖壓機構件</div>
+      <div class="vrow"><span class="vk plus">可供</span><div><b>結構補強板、支架、扣具、彈片、屏蔽罩</b>——這是它 20 年的本業</div></div>
+      <div class="vrow"><span class="vk plus">可供</span><div><b>Manifold 的沖壓外殼件、鈑金支撐件、固定板</b>（非流道本體）</div></div>
+      <div class="vrow"><span class="vk plus">可供</span><div><b>風扇蓋、機殼鈑金、散熱模組的外圍鈑件</b>——簡報有「電腦風扇蓋類（納米塗層料）」的實績</div></div>
+      <div class="vrow"><span class="vk plus">材料</span><div>做過 <b>AZ31B 鎂鋁合金 T=0.3mm</b>、<b>RC5052 回收鋁</b>、SUS304——薄料經驗完整</div></div>
+    </div>
+    <div class="card co r">
+      <div class="nm">它現在做不了的：液冷零組件</div>
+      <div class="vrow"><span class="vk minus">不行</span><div><b>不鏽鋼分水器這類管路件</b>——缺焊接、缺洩漏測試。這正是我方在大陸供雙鴻的品項</div></div>
+      <div class="vrow"><span class="vk minus">不行</span><div><b>鏟齒鰭片</b>——三個廠都沒有鏟齒／滾齒設備</div></div>
+      <div class="vrow"><span class="vk minus">不行</span><div><b>任何需要保壓、洩漏測試的件</b></div></div>
+      <div class="vrow"><span class="vk note">提醒</span><div>若洽談中對方主動宣稱有液冷能力，請直接問<b>鏟齒機與焊接設備</b>的廠牌台數，並要求出示具體料號、客戶與產線照片。<b>鏟齒與焊接跟沖壓是兩套製程，沖壓廠不會自然具備</b>——這比問「有沒有做過液冷」有用得多</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">5</span>對照組：胜蓝泰國廠能不能供雙鴻？</h2>
+  <p class="body">同樣用<b>液冷零組件</b>的標準來看，不是用「有沒有液冷底子」。胜蓝泰國廠目前的產線是<b>連接器與線束</b>，<b>鏟齒與焊接這兩項都不在它泰國廠裡</b>。但兩家的性質差很多：廣建要做液冷零組件是<b>從零新增一套製程</b>；胜蓝的集團在大陸<b>已經量產不鏽鋼 UQD</b>——不鏽鋼件的精密加工與密封焊接本來就是它的本業，<b>移到泰國是設備搬遷與認證的問題，不是能力問題</b>。</p>
+
+  <div class="grid-2">
+    <div class="card co s">
+      <div class="nm">胜蓝泰國廠——簡報與登記完全對得上</div>
+      <div class="vrow"><span class="vk plus">主體</span><div><b>SHENGLAN TECHNOLOGY (THAILAND)</b>｜統編 <b>0105566096785</b>｜登記資本 <b>฿2.2 億</b>｜股東 富强精工 99%／伍麒霖 1%（<b>深交所公告已證實</b>）</div></div>
+      <div class="vrow"><span class="vk plus">位置</span><div><b>7/611 Moo 6, Map Yang Phon, Pluak Daeng, Rayong 21140</b>——<b>Amata City Rayong 工業區</b>。簡報寫的「羅勇府布羅登縣馬陽坡鎮安美德工業區 6 組 7/611 號」與 DBD 登記地址<b>逐字吻合</b></div></div>
+      <div class="vrow"><span class="vk plus">規模</span><div>占地 <b>34,000 ㎡</b>｜廠房規劃 <b>50,000 ㎡ 分 5 期</b>｜前期投資 1 億港元、<b>2026 年追加 1 億港元</b></div></div>
+      <div class="vrow"><span class="vk plus">節奏</span><div>2023 註冊並啟動購地與一期 → <b>2025 正式投產、同年二期投入</b> → <b>2026 三期投建中</b></div></div>
+      <div class="vrow"><span class="vk note">產線</span><div>目前 <b>9,000 ㎡、7 條線束產線、280 名一線員工</b>；計畫 2026 年內擴至 <b>30 條線束與連接器產線、500 人</b></div></div>
+      <div class="vrow"><span class="vk note">認證</span><div>ISO 9001／14001／45001／<b>RBA</b>（廣建無 RBA）</div></div>
+    </div>
+    <div class="card co r">
+      <div class="nm">泰國廠目前不含液冷零組件產線——三個獨立證據</div>
+      <div class="vrow"><span class="vk minus">1</span><div>簡報裡 <b>UQD、金屬壓鑄、CNC 那幾頁全放在「集團能力」段落</b>，泰國廠自己的產線描述是「9,000 ㎡、7 條<b>線束</b>產線」——<b>沒有鏟齒、沒有焊接</b></div></div>
+      <div class="vrow"><span class="vk minus">2</span><div>泰國 DBD <b>登記經營範圍</b>：連接器、線纜組件、汽車零件、<b>新能源汽車充電控制模組及充電樁</b>——沒有液冷</div></div>
+      <div class="vrow"><span class="vk minus">3</span><div>2025 年報、2026 Q1、跟蹤評級報告、投資人問答中，<b>液冷／UQD 全部指向大陸廠區</b>；投資人問答只說泰國建成「高頻高速連接器<b>配套</b>產線」</div></div>
+      <div class="vrow"><span class="vk minus">財務</span><div>2024 全年營收 <b>0 元</b>；2025 前三季營收 1,015 萬人民幣、<b>淨損 816 萬</b>、2025-09-30 <b>淨資產為負 554 萬</b>——新廠爬坡期，不是成熟基地</div></div>
+    </div>
+  </div>
+
+  <h3>兩家並排看</h3>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:140px">項目</th><th>廣建電子（泰國）</th><th>胜蓝科技（泰國）</th></tr></thead>
+    <tbody>
+      <tr><td>泰國統編</td><td>0205567045164</td><td>0105566096785</td></tr>
+      <tr><td>設立</td><td>2024-07-23</td><td>2023（DBD 約 05-16／公告 08-10，<b>兩者矛盾</b>）</td></tr>
+      <tr class="rowhl"><td>登記資本</td><td class="down">฿1,500 萬｜DBD 列<b>微型企業</b></td><td class="yes"><b>฿2.2 億（14.7 倍）</b></td></tr>
+      <tr><td>股東結構</td><td class="down">昆山廣建 50%／DCL 50%，<b>查無佐證</b></td><td class="yes">富强精工 99%／伍麒霖 1%，<b>公告已證實</b></td></tr>
+      <tr class="rowhl"><td>母公司</td><td class="down">未上市；<b>昆山母體外部零足跡</b></td><td class="yes">深交所 <b>300843</b>｜註冊資本 16 億元｜員工 3,500</td></tr>
+      <tr><td>位置</td><td>春武里府 Ban Bueng（EEC）</td><td>羅勇府 Pluak Daeng，<b>Amata City Rayong</b>（EEC）</td></tr>
+      <tr><td>土地／廠房</td><td>未揭露</td><td>占地 34,000 ㎡；廠房 50,000 ㎡ 分 5 期</td></tr>
+      <tr><td>投資額</td><td>未揭露</td><td>前期 1 億港元＋2026 追加 1 億港元</td></tr>
+      <tr class="rowhl"><td><b>核心製程</b></td><td><b>精密沖壓</b>（110T×15、160T×10、200T×1，兩條 ONE BAR 自動線）</td><td><b>線束</b>（裁線→焊接→端子壓接→組裝→測試，7 條線）</td></tr>
+      <tr><td>擴產計畫</td><td>二期：+110T×7 一條、200T 連續模、自動清洗線；自動化率 70%→90%</td><td>2026 年內 7→<b>30 條產線</b>、280→<b>500 人</b>；三期廠房投建中</td></tr>
+      <tr><td>CNC（泰國）</td><td class="no">✕ 無</td><td class="no">✕ 無（集團 CNC 1,400 台＋車床 400 台<b>在大陸</b>）</td></tr>
+      <tr class="rowhl"><td><b>鏟齒／焊接（泰國）</b></td><td class="no">✕ 兩項都無</td><td class="no">✕ 兩項都無（<b>但集團在大陸已量產不鏽鋼 UQD</b>）</td></tr>
+      <tr><td>認證</td><td>ISO9001／14001／IATF16949（<b>全為自稱</b>）</td><td>ISO 9001／14001／45001／<b>RBA</b></td></tr>
+      <tr><td>財務可見度</td><td class="down">無任何財務揭露；淨值 ฿1,105 萬</td><td class="part">上市公司逐季揭露，但泰國子公司<b>仍在虧損、淨值為負</b></td></tr>
+      <tr class="rowhl"><td><b>到雙鴻車程</b></td><td class="part"><b>77 km／約 1.5 小時</b></td><td class="down"><b>120 km／約 1 小時 50 分</b>（遠 43 km，但<b>只多約 20 分</b>）</td></tr>
+      <tr><td>主要客戶</td><td>群光、廣達、致伸（自稱）</td><td>大金、FLUENCE、莫仕、<b>建准 Sunon</b>、<b>尼得科 Nidec</b>（後兩家買 Radiator Wire Harness）</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout warn">
+    <div class="t">真正的差別：一家要從零學，一家只是還沒搬過去</div>
+    <p class="body"><b>廣建集團——沖壓是本業，鏟齒與焊接都不在能力圈內。</b>三個廠的設備清單都沒有鏟齒／滾齒；焊接只有昆山廠兩台修模用的電焊機與氬弧焊機。外部查證也無任何液冷產品、客戶或專利。<b>要做液冷零組件，等於新增一條它沒做過的製程線。</b></p>
+    <p class="body" style="margin-top:8px"><b>胜蓝集團——不鏽鋼液冷零組件已經在賣，而且跟我方同一個能力圈。</b>它的 UQD 是<b>不鏽鋼殼體＋EPDM 密封圈</b>——<b>不鏽鋼精密件的加工與密封焊接，正是我方做不鏽鋼分水器的同一套本事</b>，這是需要特別注意的重疊。UQD 產品線齊全（UQD、UQDB、BMQC、NVQD、彎頭連接 UQD、ONE-INCH-QD），規格為<b>不鏽鋼殼體、EPDM 密封圈、工作壓力 0~1.6 MPa、工作溫度 −40~+125°C、等效通徑 3/5/7/10mm</b>（盲插 3/5mm），應用涵蓋 CDU↔Manifold、Server↔Manifold、Cold Plate↔Manifold。集團設備：精密沖壓 25~300T <b>145 台</b>、注塑 <b>256 台</b>、自動／半自動組裝機 <b>1,098 台</b>、CNC 加工中心 <b>285 台</b>、壓鑄 <b>101 台</b>、電鍍 <b>12 條線</b>、模具治具加工精度 0.001mm；研發 200+ 人、173 件專利。</p>
+    <p class="body" style="margin-top:8px"><b>但這些全部在大陸，泰國一台都沒有</b>——所以短期內它在泰國還接不了液冷零組件的單。液冷板 2025-08 的官方口徑仍是「僅處於小批量試產階段」；公開的送樣驗證名單是台達、廣達、泰碩、英業達、富士康，另與 Cooler Master 深度合作、阿里超節點 UQD 已供貨——<b>名單裡沒有雙鴻，也沒有奇鋐</b>。</p>
+  </div>
+
+  <div class="grid-2" style="margin-top:14px">
+    <div class="card co k">
+      <div class="nm">兩家對我方是完全不同的東西</div>
+      <div class="vrow"><span class="vk note">廣建</span><div>是<b>潛在的沖壓配合供應商</b>——它補的是我方在泰國缺的沖壓件產能，本身不構成競爭</div></div>
+      <div class="vrow"><span class="vk minus">胜蓝</span><div>是<b>正面競爭者，而且打在我方的主力品項上</b>——它的不鏽鋼 UQD 與我方的不鏽鋼分水器是同一個材料與製程家族。它在大陸已量產，泰國廠是它把「非中國原產地」補上的那塊拼圖</div></div>
+      <div class="vrow"><span class="vk note">解讀</span><div>把兩家放在同一張表上比，比的不是「誰比較適合當供應商」，而是<b>「泰國這塊棋盤上各自站在哪」</b>——廣建是可能補我方沖壓缺口的人，胜蓝是可能搶我方分水器訂單的人</div></div>
+    </div>
+    <div class="card co r">
+      <div class="nm">要盯的訊號（胜蓝）</div>
+      <div class="vrow"><span class="vk minus">錢</span><div><b>2025-12 那筆 1 億港元增資</b>是首期授權額（5,000 萬港元）的兩倍，另加 2,000 萬港元財務資助——投在 AI 液冷需求外溢東南亞的時間點上</div></div>
+      <div class="vrow"><span class="vk minus">人</span><div>產線 7→<b>30 條</b>、人力 280→<b>500 人</b>，都是 2026 年內的目標</div></div>
+      <div class="vrow"><span class="vk minus">觸發</span><div>最該盯的是<b>泰國廠出現焊接、鏟齒或洩漏測試設備</b>的招募或公告訊號——那代表液冷零組件要落地泰國。在那之前，它在泰國對我方是<b>錯位；在大陸則已經是正面對手</b></div></div>
+      <div class="vrow"><span class="vk note">關係</span><div>注意它泰國廠的客戶已有 <b>建准（Sunon）與尼得科（Nidec）</b>——雖然買的是散熱器線束不是液冷件，但<b>散熱客戶的關係基礎已經建立</b></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">6</span>距離：廣建 77 公里約 1.5 小時、胜蓝 120 公里約 1 小時 50 分</h2>
+  <div class="callout warn">
+    <div class="t">先更正兩件事</div>
+    <div class="vrow"><span class="vk minus">地址</span><div>簡報寫的 <b>「Amphoe Ban Bang」是拼寫錯誤</b>，春武里府底下沒有這個縣。正確是 <b>Ban Bueng（บ้านบึง）</b>——泰國 DBD 登記地址為 11/8 หมู่ 4 ต.บ้านบึง อ.บ้านบึง จ.ชลบุรี 20170，門牌「11/8」「Moo 4」與簡報完全吻合。中文建議寫「班蒙縣」或直接用 Ban Bueng，不要沿用簡報的「班邦」。</div></div>
+    <div class="vrow"><span class="vk minus">雙鴻</span><div><b>雙鴻泰國廠不在 EEC、不在春武里府</b>，而在<b>北欖府（Samut Prakan）挽富工業區（Bangpoo Industrial Estate）</b>——泰鴻科技 THAI-HORNG TECHNOLOGY，統編 0115563014273，廠址 216 Moo 4, Soi 5B, Tambon Phraeksa, Mueang Samut Prakan。若我們的佈局假設是「跟著雙鴻進 EEC」，<b>這個前提要修正</b>。</div></div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 920 640" role="img" aria-label="泰國曼谷東南部地理關係：雙鴻在北欖府挽富工業區、廣建在春武里府Ban Bueng、胜蓝在羅勇府Amata City，三地相對位置與距離" style="max-width:100%;height:auto">
+      <defs>
+        <marker id="t1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2a78d6"/></marker>
+      </defs>
+      <path d="M 30 250 C 120 300, 200 380, 250 500 C 275 545, 290 575, 295 600 L 30 600 Z" fill="currentColor" opacity=".06"/>
+      <text x="60" y="520" font-size="12" fill="currentColor" opacity=".5">泰國灣</text>
+      <text x="30" y="140" font-size="11.5" fill="currentColor" opacity=".55">北欖府 Samut Prakan</text>
+      <text x="330" y="300" font-size="11.5" fill="currentColor" opacity=".55">春武里府 Chonburi（EEC）</text>
+
+      <line x1="107" y1="158" x2="350" y2="329" stroke="#2a78d6" stroke-width="3"/>
+      <text x="130" y="262" font-size="13" fill="#2a78d6" font-weight="700">77 km</text>
+      <text x="130" y="280" font-size="11" fill="#2a78d6">車程約 1.5 小時</text>
+
+      <line x1="107" y1="158" x2="175" y2="93" stroke="currentColor" stroke-width="1.3" stroke-dasharray="5 4"/>
+      <text x="126" y="112" font-size="10.5" fill="currentColor" opacity=".75">36 km</text>
+      <line x1="350" y1="329" x2="260" y2="470" stroke="currentColor" stroke-width="1.3" stroke-dasharray="5 4"/>
+      <text x="322" y="404" font-size="10.5" fill="currentColor" opacity=".75">51 km</text>
+      <line x1="107" y1="158" x2="260" y2="470" stroke="currentColor" stroke-width="1" stroke-dasharray="2 5" opacity=".5"/>
+      <text x="150" y="300" font-size="10.5" fill="currentColor" opacity=".5" text-anchor="end">99 km</text>
+      <path d="M 107 158 C 250 300, 330 420, 399 534" fill="none" stroke="#e0a020" stroke-width="2.2"/>
+      <text x="248" y="338" font-size="12.5" fill="#e0a020" font-weight="700" text-anchor="end">120 km</text>
+      <text x="248" y="355" font-size="10.5" fill="#e0a020" text-anchor="end">約 1 小時 50 分</text>
+      <line x1="390" y1="536" x2="270" y2="478" stroke="currentColor" stroke-width="1.3" stroke-dasharray="5 4"/>
+      <text x="300" y="522" font-size="10.5" fill="currentColor" opacity=".75">35 km</text>
+      <text x="452" y="618" font-size="11.5" fill="currentColor" opacity=".55">羅勇府 Rayong（EEC）</text>
+
+      <g>
+        <circle cx="175" cy="93" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <text x="190" y="90" font-size="12.5" fill="currentColor">蘇凡納布機場 BKK</text>
+        <text x="190" y="106" font-size="10.5" fill="currentColor" opacity=".7">空運出口門戶</text>
+
+        <circle cx="107" cy="158" r="9" fill="#0ca30c"/>
+        <text x="122" y="152" font-size="13.5" fill="#0ca30c" font-weight="700">雙鴻（泰鴻科技）</text>
+        <text x="122" y="169" font-size="11" fill="#0ca30c">挽富工業區·北欖府</text>
+        <text x="122" y="184" font-size="10.5" fill="currentColor" opacity=".7">一廠 2023 量產｜二廠 2026 完工</text>
+
+        <circle cx="350" cy="329" r="9" fill="#d03b3b"/>
+        <text x="366" y="323" font-size="13.5" fill="#d03b3b" font-weight="700">廣建（泰國）</text>
+        <text x="366" y="340" font-size="11" fill="#d03b3b">Ban Bueng·春武里府</text>
+        <text x="366" y="355" font-size="10.5" fill="currentColor" opacity=".7">2025 Q3 投產</text>
+
+        <circle cx="260" cy="470" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <text x="246" y="467" font-size="12.5" fill="currentColor" text-anchor="end">林查班港 Laem Chabang</text>
+        <text x="246" y="483" font-size="10.5" fill="currentColor" opacity=".7" text-anchor="end">海運出口門戶</text>
+
+        <circle cx="399" cy="542" r="9" fill="#e0a020"/>
+        <text x="415" y="536" font-size="13.5" fill="#e0a020" font-weight="700">胜蓝（泰國）</text>
+        <text x="415" y="553" font-size="11" fill="#e0a020">Amata City·羅勇府</text>
+        <text x="415" y="568" font-size="10.5" fill="currentColor" opacity=".7">2025 投產｜2026 三期投建</text>
+      </g>
+
+      <g font-size="11.5" fill="currentColor">
+        <text x="560" y="60" font-weight="700" font-size="13">主要路線</text>
+        <text x="560" y="82">挽富工業區 → Sukhumvit（3 號）</text>
+        <text x="560" y="102">→ Bang Na–Trat（34 號）向東南</text>
+        <text x="560" y="122">→ Chonburi Bypass（361 號）</text>
+        <text x="560" y="142">→ Chonburi–Ban Bueng（344 號）</text>
+        <text x="560" y="166" opacity=".7">替代：Motorway 7 至春武里交流道轉 344，</text>
+        <text x="560" y="184" opacity=".7">里程相近（80–85 km），尖峰較順</text>
+        <text x="560" y="216" font-weight="700" font-size="13">關鍵落差</text>
+        <text x="560" y="238">雙鴻＝<tspan font-weight="700">靠機場</tspan>（BKK 36 km／39 分）</text>
+        <text x="560" y="258">廣建＝<tspan font-weight="700">靠海港</tspan>（林查班 51 km／43 分）</text>
+        <text x="560" y="278">胜蓝＝<tspan font-weight="700">最靠港</tspan>（林查班 35 km），但離雙鴻最遠</text>
+        <text x="560" y="298" fill="#d03b3b">雙鴻不在 EEC 三府，享不到 EEC 租稅優惠</text>
+        <text x="560" y="326" font-size="11" opacity=".7">里程為 OSRM 實際路網計算；車程以 Google Maps</text>
+        <text x="560" y="344" font-size="11" opacity=".7">實查為準（廣建 1.5 小時、胜蓝 1 小時 50 分）。</text>
+        <text x="560" y="362" font-size="11" opacity=".7">端點採概略座標，誤差約 ±3–5 km；尖峰各再加 20–40 分。</text>
+      </g>
+    </svg>
+    <figcaption class="note">兩條路線的後半段都要走 <b>Bang Na–Trat（34 號）</b>，尖峰壅塞對兩家一視同仁，各再加 20–40 分。廣建 <b>約 1.5 小時</b>、胜蓝 <b>約 1 小時 50 分</b>——<b>兩家其實只差 20 分鐘左右</b>。這代表<b>廣建的距離優勢比里程看起來小得多</b>：里程少 43 km，車程只少 20 分，而且<b>兩家都不在當日多趟往返的半徑內</b>，都只適合計畫性批量交付。若要就近支援雙鴻的挑選、重工或急件，<b>77 km 這個距離同樣不夠近</b>。</figcaption>
+  </figure>
+
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:160px">到哪裡</th><th>雙鴻（北欖府 挽富）</th><th>廣建（春武里 Ban Bueng）</th><th>胜蓝（羅勇 Amata City）</th></tr></thead>
+    <tbody>
+      <tr class="rowhl"><td><b>到雙鴻</b></td><td>—</td><td class="part"><b>77.0 km</b><br><b>約 1.5 小時</b>（Google 實查）</td><td class="down"><b>120.2 km</b><br><b>約 1 小時 50 分</b>（Google 實查）</td></tr>
+      <tr><td>林查班港</td><td>99 km／86 分</td><td>51 km／43 分</td><td class="yes"><b>35 km／48 分</b></td></tr>
+      <tr><td>蘇凡納布機場 BKK</td><td class="yes"><b>36 km／39 分</b></td><td>77 km／57 分</td><td>121 km／102 分</td></tr>
+      <tr><td>烏塔堡機場 UTP</td><td>153 km／135 分</td><td>94 km／88 分</td><td class="yes"><b>51 km／66 分</b></td></tr>
+      <tr><td>EEC 租稅優惠</td><td class="no">✕ 北欖府不在 EEC</td><td class="yes">✓ 春武里府屬 EEC</td><td class="yes">✓ 羅勇府屬 EEC</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note" style="margin-top:8px">簡報稱「臨近林查班港、EEC 核心」——<b>方向對，用詞偏樂觀</b>：Ban Bueng 在春武里府內陸，離林查班 51 km。簡報稱「群光、廣達、致伸也坐落於此」——這三家泰國廠主要在 Sriracha／Bo Win 一帶的 WHA ESIE1、Pinthong 工業區，<b>同府為真，同地點則不精確</b>（距 Ban Bueng 約 30–45 km）。</p>
+</section>
+
+<section class="blk">
+  <h2><span class="num">7</span>產品線與客戶——看得出它是誰的供應商</h2>
+  <div class="grid-2">
+    <div class="card co k">
+      <div class="nm">產品實績（簡報圖示）</div>
+      <div class="vrow"><span class="vk note">筆電</span><div>外觀件＋拉絲／陽極、<b>鍵盤類沉深件</b>（AZ31B 鎂鋁 T=0.3mm／RC5052 回收鋁）、TP 類、結構件、外殼、鍵盤機箱背板</div></div>
+      <div class="vrow"><span class="vk note">其他 3C</span><div>桌上鍵盤、TV-P/C、<b>屏蔽罩</b>、<b>電腦風扇蓋（納米塗層料）</b>、平板外殼、車載顯示框、顯示／攝像頭模組、喇叭網</div></div>
+      <div class="vrow"><span class="vk note">陽極／電鍍</span><div>羅技遙控器、SONY 電子筆、西門子工業電腦、出口化妝盒（SUS304 拉絲＋電鍍）</div></div>
+      <div class="vrow"><span class="vk note">新方向</span><div><b>新能源部件</b>（簡報僅一頁圖示，無文字說明）</div></div>
+    </div>
+    <div class="card co r">
+      <div class="nm">客戶名單：16 家，第三方佐證 0 家</div>
+      <div class="vrow"><span class="vk note">蘇州廠</span><div>光寶（常州）、同方國際、群光 IPD、昆山博雅、嘉彰集團、蘇州州巧、常州威馬、華碩（和聯永碩）</div></div>
+      <div class="vrow"><span class="vk note">重慶廠</span><div>重慶東矩、群光電子（重慶）、巨騰電子、重慶大泰、和碩（名碩／凱碩）、德國凱馳、杰爾精密、海康威視</div></div>
+      <div class="vrow"><span class="vk note">泰國廠</span><div>群光電子、廣達電腦、致伸科技</div></div>
+      <div class="vrow"><span class="vk minus">判讀</span><div>招標公告、供應商名錄、新聞、海關資料全部查無。<b>但這不代表是假的</b>——消費電子二階沖壓供應關係本來就極少公開披露，對未上市陸系中小沖壓廠而言<b>查無佐證是常態</b>。只是這份名單目前<b>對我們沒有獨立驗證價值</b>。</div></div>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="t">從客戶名單反推：它是 NB／周邊機構件供應鏈的廠</div>
+    <p class="body">群光、光寶、和碩、華碩、巨騰、廣達、致伸——<b>全部指向筆電與周邊機構件</b>，沒有一家是散熱廠。加上 IATF16949 與德國凱馳汽車部件業務，廣建的第二條腿是<b>汽車零件</b>，不是液冷。這與我們在液冷賽道的需求<b>基本錯位</b>。</p>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">8</span>對我方的意涵</h2>
+  <div class="meter-row"><div class="meter-k">泰國沖壓機構件代工</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="meter-v">4 / 5</div></div>
+  <div class="meter-row"><div class="meter-k">液冷零組件（分水器／鏟齒件）</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="meter-v">1 / 5</div></div>
+  <div class="meter-row"><div class="meter-k">泰國 JIT 就近供貨雙鴻</div><div class="meter-track"><div class="meter-fill" style="width:30%"></div></div><div class="meter-v">1.5 / 5</div></div>
+  <div class="meter-row"><div class="meter-k">公司體質與可查證度</div><div class="meter-track"><div class="meter-fill" style="width:40%"></div></div><div class="meter-v">2 / 5</div></div>
+  <p class="note">評分邏輯：沖壓設備與模具能力紮實給高分；液冷零組件所需的鏟齒、焊接、洩漏測試三項全缺給最低；77 km／約 1.5 小時不構成 JIT 半徑，且僅比胜蓝近 20 分；泰國主體登記資本僅 ฿1,500 萬且列微型企業、昆山母體零足跡，體質分數壓低。</p>
+
+  <div class="callout">
+    <div class="t">核心結論</div>
+    <p class="body">廣建<b>不是液冷零組件供應商，是沖壓供應商</b>。缺的不是「液冷經驗」這種抽象的東西，而是<b>鏟齒與焊接這兩套具體製程</b>。把它當成液冷夥伴會失望；把它當成<b>泰國在地的沖壓與模具產能</b>，則是一張可用的牌——它有 160T×10、110T×15、200T×1 與兩條 ONE BAR 自動線，2026-07 再擴一條，薄料與鎂鋁合金經驗完整，模具 28–35 天到樣品。<b>我方若要在泰國承接雙鴻的液冷零組件，鏟齒、焊接與洩漏測試必須自己帶進去或另找，廣建補的是沖壓件那一段。</b>而且 77 km／約 1.5 小時的距離決定了它適合做<b>計畫性配送的沖壓件</b>，不適合做需要日配或急件反應的關鍵件——<b>它比胜蓝只近 20 分鐘，距離不構成決定性優勢</b>。</p>
+  </div>
+
+  <div class="grid-2" style="margin-top:14px">
+    <div class="card co s">
+      <div class="nm">如果要往下談，先要這五份文件</div>
+      <div class="vrow"><span class="vk plus">1</span><div><b>昆山廣建的營業執照影本（含統一社會信用代碼）</b>。拿到代碼在大陸境內 30 秒可核實。<b>若對方迴避提供代碼，視為高度警訊</b></div></div>
+      <div class="vrow"><span class="vk plus">2</span><div>四家主體的<b>股權結構圖</b>＋工商登記佐證。目前「集團」關係完全未經證實，簽約相對人可能只是其中一家小主體</div></div>
+      <div class="vrow"><span class="vk plus">3</span><div>泰國 <b>DBD 股東名冊（บอจ.5）</b>與最近年度財報，證實昆山廣建 50%／DCL 50%</div></div>
+      <div class="vrow"><span class="vk plus">4</span><div><b>ISO9001／ISO14001／IATF16949 證書編號與發證機構</b>——目前全部僅為自稱，零佐證</div></div>
+      <div class="vrow"><span class="vk plus">5</span><div>2–3 家指標客戶的<b>近期 PO／出貨單／對帳單</b>（可遮價格），或安排客戶端窗口 reference call。以我方在同產業的位置，群光、光寶、和碩體系應有可側面求證的人脈</div></div>
+    </div>
+    <div class="card co r">
+      <div class="nm">必補的盡調缺口</div>
+      <div class="vrow"><span class="vk minus">司法</span><div><b>大陸司法與信用紀錄完全未查證</b>——執行信息公開網、裁判文書網、信用中國在本次檢索環境全數無法連線。<b>本報告不得被引用為「廣建無不良紀錄」的依據</b>，須委託當地徵信或律師補做，一兩天可完成</div></div>
+      <div class="vrow"><span class="vk minus">實地</span><div>泰國廠登記資本 ฿1,500 萬、DBD 列微型企業，與簡報給人的量產基地印象落差大。<b>建議實地查廠</b>，確認 36 台設備是否真的到位</div></div>
+      <div class="vrow"><span class="vk minus">產能</span><div>重慶廠的擴產證據停在 2022 年，<b>之後四年無任何新的擴產、招聘或投資跡象</b>，無法判斷目前產能利用率</div></div>
+      <div class="vrow"><span class="vk note">替代</span><div>談判時值得留意：<b>泰方夥伴 DCL 才是這個案子裡體質最好的一塊</b>（13 年、淨值 ฿1.51 億、大型企業、有模具中心）。若目的是取得泰國在地沖壓與模具能力，<b>直接評估 DCL 也是一個選項</b></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><b>資料來源。</b>對方提供之兩份廣建簡報（Company Profile 20260212 共 74 頁、Thailand Company Profile 共 43 頁，日期 2026-02-12）與《泰国胜蓝 介绍2026-CHS》簡報（37 頁，建檔 2026-05-19）提供：三廠設備清單、產品圖示、客戶名單、組織架構、二期規劃、聯絡人。外部查證來源：泰國 DBD 商業登記（經 creden.co、dataforthai、ConnectBizs）提供廣建泰國、DCL、泰鴻科技之統編／設立日／資本額／地址／規模分類；雙鴻公開說明書與鉅亨、MoneyDJ、經濟日報、時報資訊之重大訊息報導提供泰鴻科技廠址、二廠自地委建契約（฿9.45 億、完工 2025-12-04）與產能進度；重慶市規劃和自然資源局、榮昌區發改委（2021-12-10）、榮昌區政府（2022-03-18）之公開公告標題提供重慶廣建之存在性與擴產佐證；OSRM／OpenStreetMap 路網提供兩廠及港口機場之實際道路里程；Wikipedia 與泰國郵遞區號資料提供 Ban Bueng、Phraeksa 之行政區與座標；胜蓝部分另據深交所公告（2023-044 泰國子公司註冊、2025-12-12 增資 1 億港元、2025-12-24 財務資助 2,000 萬港元）、胜蓝 2025 年報與 2026 Q1 報告、泰國工業區管理局 IEAT 之 Amata City Rayong 官方地址，以及陸媒對液冷送樣名單之報導。</p>
+  <p style="margin-top:10px"><b>估算值與未驗證事項。</b><sup class="est">＊</sup>昆山與重慶之廠區面積、員工人數、投資總額均為簡報自稱，外部查無佐證；簡報內部對昆山人數（150／200）與蘇州金銓鑫成立年（2015／2017）自相矛盾。三項認證、16 家客戶、泰國合資 50/50 持股比例，<b>全部僅為自稱</b>。距離與車程為 OSRM（OpenStreetMap 真實路網）計算：廣建→雙鴻 76,981.8 m／3,648 s（61 分）、胜蓝→雙鴻 120,151.8 m／6,449.6 s（108 分）。<b>惟車程一律以使用者之 Google Maps 實查為準：廣建約 1.5 小時、胜蓝約 1 小時 50 分。</b>OSRM 自由流時間對胜蓝路線（大段走 Motorway 7 高速）估得準（108 分 vs 實查 110 分），對廣建路線（344 號、春武里外環等平面道路占比高）則明顯低估（61 分 vs 實查 90 分），故不採用。<b>先前版本曾以廣建路線推導壅塞係數再外推至胜蓝而得「2.3–2.9 小時」、又以 OSRM 自由流推得廣建「60–75 分」，兩者皆已更正。</b>兩條路線後半段共用 Bang Na–Trat（34 號），尖峰各再加 20–40 分。端點採概略座標，門牌精度誤差約 ±3–5 km。胜蓝泰國廠之設立日期在 DBD（約 2023-05-16）與深交所公告（2023-08-10）間存在矛盾；其 BOI 優惠、廠房面積、員工人數、客戶名單均查無。本次查證環境無法連線天眼查、企查查、啟信寶及所有 .gov.cn 網域，<b>「查無」多數應理解為「本環境查不到」而非「不存在」</b>——工商登記、參保人數、司法紀錄三項必須另行委託境內資源補做。</p>
+  <p style="margin-top:10px"><b>僅供內部策略參考。</b></p>
+</footer>
+
+</div>
+</body></html>
