@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>蘇州東拓應用材料 合資夥伴評估｜鑫鴻騰</title><style>
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;      /* 卡片/圖表面 */
+    --page: #f9f9f7;           /* 頁面底 */
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;       /* 主色（藍） */
+    --series-1-track: #cde2fb; /* 藍 100，meter 未填軌 */
+    --seq-250: #86b6ef;
+    --seq-450: #2a78d6;
+    --seq-600: #184f95;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --accent-wash: rgba(42,120,214,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-1-track: #0d366b;
+      --seq-250: #1c5cab;
+      --seq-450: #3987e5;
+      --seq-600: #6da7ec;
+      --good-text: #0ca30c;
+      --accent-wash: rgba(57,135,229,0.12);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  /* ===== 頁首 ===== */
+  .report-tag { font-size:12px; letter-spacing:.12em; color:var(--text-muted); text-transform:uppercase; }
+  header.hero { padding: 8px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing:.01em; margin-top: 4px; }
+  h1 .code { font-weight: 400; font-size: 18px; color: var(--text-secondary); margin-left: 8px; }
+  .hero-sub { color: var(--text-secondary); margin-top: 6px; max-width: 72ch; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+  .badge { font-size:12.5px; padding:3px 10px; border-radius:99px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-secondary); }
+  .badge.threat { border-color: var(--critical); color: var(--critical); font-weight:600; }
+  .meta-line { margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+
+  /* ===== 區塊 ===== */
+  section { margin-bottom: 36px; }
+  h2 { font-size: 20px; font-weight: 700; padding-bottom: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h2 .num { color: var(--series-1); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 18px 0 8px; }
+  p.body { color: var(--text-primary); margin-bottom: 10px; max-width: 80ch; }
+  .note { font-size: 12.5px; color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .grid-3 { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+  @media (max-width: 760px){ .grid-2,.grid-3{grid-template-columns:1fr;} }
+
+  /* ===== 摘要統計磚 ===== */
+  .tiles { display:grid; grid-template-columns: repeat(6,1fr); gap:12px; }
+  @media (max-width: 900px){ .tiles{grid-template-columns: repeat(3,1fr);} }
+  @media (max-width: 560px){ .tiles{grid-template-columns: repeat(2,1fr);} }
+  .tile { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:14px 14px 12px; }
+  .tile .label { font-size:12px; color:var(--text-muted); }
+  .tile .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .tile .delta { font-size:12px; margin-top:2px; }
+  .delta.up { color: var(--good-text); }
+  .delta.down { color: var(--critical); }
+  .delta.flat { color: var(--text-muted); }
+
+  /* ===== 表格 ===== */
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-weight:600; color:var(--text-secondary); font-size:12.5px; padding:8px 10px; border-bottom:1px solid var(--baseline); white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:top; }
+  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom:none; }
+
+  /* ===== 時間軸 ===== */
+  .timeline { list-style:none; position:relative; padding-left:20px; }
+  .timeline::before { content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--grid); border-radius:1px; }
+  .timeline li { position:relative; padding:0 0 14px 12px; }
+  .timeline li::before { content:""; position:absolute; left:-20px; top:7px; width:8px; height:8px; border-radius:50%; background:var(--series-1); box-shadow: 0 0 0 2px var(--surface-1); }
+  .timeline .yr { font-weight:700; font-variant-numeric: tabular-nums; margin-right:8px; }
+  .timeline .desc { color:var(--text-secondary); }
+
+  /* ===== 圖表（純 HTML/CSS 橫條圖） ===== */
+  .chart { margin-top: 10px; }
+  .chart-title { font-size:13.5px; font-weight:600; }
+  .chart-sub { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .hbar-row { display:grid; grid-template-columns: 118px 1fr 120px; align-items:center; gap:10px; padding:5px 0; }
+  .hbar-row .cat { font-size:13px; color:var(--text-secondary); text-align:right; }
+  .hbar-track { position:relative; height:20px; }
+  .hbar-fill { position:absolute; left:0; top:0; height:20px; background:var(--series-1); border-radius:0 4px 4px 0; transition: opacity .15s; }
+  .hbar-row:hover .hbar-fill { opacity:.82; }
+  .hbar-row .val { font-size:13px; color:var(--text-primary); font-variant-numeric:tabular-nums; }
+  .hbar-row .val .pct { color:var(--text-muted); }
+  .axis-note { border-top:1px solid var(--baseline); margin-top:6px; padding-top:5px; font-size:11.5px; color:var(--text-muted); text-align:right; }
+
+  /* 縱向柱狀（年度趨勢，小倍數） */
+  .cols { display:flex; align-items:flex-end; gap:26px; height:170px; padding:0 6px; border-bottom:1px solid var(--baseline); }
+  .col-g { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
+  .col-bar { width:100%; max-width:44px; background:var(--series-1); border-radius:4px 4px 0 0; position:relative; transition: opacity .15s; }
+  .col-bar.est { background: var(--seq-250); }
+  .col-g:hover .col-bar { opacity:.82; }
+  .col-val { font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--text-primary); margin-bottom:4px; }
+  .col-x { display:flex; gap:26px; padding:6px 6px 0; }
+  .col-x div { flex:1; text-align:center; font-size:12px; color:var(--text-muted); }
+
+  /* ===== SWOT ===== */
+  .swot { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .swot{grid-template-columns:1fr;} }
+  .swot .card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+  .swot .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .swot ul { padding-left:18px; }
+  .swot li { margin-bottom:8px; color:var(--text-primary); }
+  .swot li b { font-weight:600; }
+
+  /* ===== 重點框 ===== */
+  .callout { background: var(--accent-wash); border:1px solid var(--border); border-left:3px solid var(--series-1); border-radius:8px; padding:14px 16px; margin:14px 0; }
+  .callout.warn { border-left-color: var(--critical); background: rgba(208,59,59,0.06); }
+  .callout .t { font-weight:700; font-size:13.5px; margin-bottom:4px; }
+
+  /* ===== 評分 meter ===== */
+  .meter-row { display:grid; grid-template-columns: 170px 1fr 56px; gap:12px; align-items:center; padding:6px 0; }
+  .meter-row .m-label { font-size:13.5px; color:var(--text-secondary); text-align:right; }
+  .meter-track { height:10px; border-radius:5px; background:var(--series-1-track); position:relative; overflow:hidden; }
+  .meter-fill { position:absolute; left:0; top:0; bottom:0; background:var(--series-1); border-radius:5px; }
+  .meter-row .m-val { font-size:13px; font-variant-numeric:tabular-nums; color:var(--text-primary); }
+
+  footer { border-top:1px solid var(--border); padding-top:16px; font-size:12.5px; color:var(--text-muted); }
+  footer a { color: var(--series-1); text-decoration:none; word-break:break-all; }
+  footer li { margin-bottom:4px; }
+  sup.est { color: var(--text-muted); }
+
+  /* ===== 本報告新增（四家橫向比較） ===== */
+  .grid-4 { display:grid; grid-template-columns: repeat(4,1fr); gap:14px; }
+  @media (max-width: 980px){ .grid-4{grid-template-columns:1fr 1fr;} }
+  @media (max-width: 560px){ .grid-4{grid-template-columns:1fr;} }
+  .co { border-top:3px solid var(--series-1); }
+  .co.k { border-top-color:#2a78d6; }
+  .co.s { border-top-color:#0ca30c; }
+  .co.f { border-top-color:#fab219; }
+  .co.r { border-top-color:#d03b3b; }
+  .co .nm { font-size:16px; font-weight:700; }
+  .co .pa { font-size:12px; color:var(--text-muted); margin-bottom:6px; }
+  .co .one { font-size:13.5px; color:var(--text-secondary); }
+  .co dl { margin-top:10px; font-size:12.5px; }
+  .co dt { color:var(--text-muted); float:left; clear:left; width:64px; }
+  .co dd { margin-left:64px; margin-bottom:3px; }
+  .cmp th:first-child, .cmp td:first-child { position:sticky; left:0; background:var(--surface-1); font-weight:600; color:var(--text-secondary); }
+  .cmp th { white-space:normal; }
+  .cmp td { font-size:13px; }
+  .scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .cmp { min-width:760px; }
+  .pill { display:inline-block; font-size:10.5px; line-height:1.5; padding:0 6px; border-radius:99px; border:1px solid var(--border); color:var(--text-muted); margin-left:4px; white-space:nowrap; vertical-align:1px; }
+  .pill.self { border-color:var(--warning); color:#8a6100; }
+  .pill.pub { border-color:var(--good); color:var(--good-text); }
+  .pill.none { border-color:var(--baseline); }
+  @media (prefers-color-scheme: dark){ .pill.self{color:#fab219;} }
+  .yes { color:var(--good-text); font-weight:700; }
+  .no { color:var(--text-muted); }
+  .part { color:#8a6100; font-weight:600; }
+  @media (prefers-color-scheme: dark){ .part{color:#fab219;} }
+  .rowhl td { background: var(--accent-wash); }
+  .meter-row.k .meter-fill { background:#2a78d6; }
+  .meter-row.s .meter-fill { background:#0ca30c; }
+  .meter-row.f .meter-fill { background:#fab219; }
+  .meter-row.r .meter-fill { background:#d03b3b; }
+  .legend { display:flex; flex-wrap:wrap; gap:14px; font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .legend span::before { content:""; display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:5px; vertical-align:-1px; }
+  .legend .lk::before{background:#2a78d6;} .legend .ls::before{background:#0ca30c;}
+  .legend .lf::before{background:#fab219;} .legend .lr::before{background:#d03b3b;}
+  .blk { page-break-inside: avoid; }
+
+  td.down, .down { color: var(--critical); }
+
+  @media print {
+    .scroll { overflow: visible; }
+    .cmp { min-width: 0; font-size: 11px; }
+    .cmp td, .cmp th { padding: 5px 6px; }
+    .card, .co, .callout, section { page-break-inside: avoid; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ===== 速評卡（每公司一卡） ===== */
+  .vrow { display:flex; gap:10px; margin-top:10px; font-size:13.5px; }
+  .vrow > div { color:var(--text-primary); }
+  .vk { flex:0 0 auto; align-self:flex-start; font-size:11px; font-weight:700; line-height:1.6; padding:0 7px; border-radius:5px; margin-top:2px; }
+  .vk.plus { color:var(--good-text); background:rgba(12,163,12,0.10); border:1px solid rgba(12,163,12,0.35); }
+  .vk.minus { color:var(--critical); background:rgba(208,59,59,0.08); border:1px solid rgba(208,59,59,0.35); }
+  @media (prefers-color-scheme: dark){
+    .vk.plus { background:rgba(12,163,12,0.16); }
+    .vk.minus { background:rgba(208,59,59,0.16); }
+  }
+  .vtag { font-size:11.5px; font-weight:600; padding:1px 8px; border-radius:99px; margin-left:8px; vertical-align:2px; }
+  .vtag.good { color:var(--good-text); border:1px solid rgba(12,163,12,0.4); }
+  .vtag.warn { color:var(--critical); border:1px solid rgba(208,59,59,0.4); }
+
+  .vk.note { color:var(--series-1); background:var(--accent-wash); border:1px solid rgba(42,120,214,0.35); }
+  @media (prefers-color-scheme: dark){ .vk.note { border-color:rgba(57,135,229,0.45); } }
+
+  figure { margin:14px 0 6px; }
+  figure svg { display:block; color:var(--text-primary); max-width:100%; height:auto; }
+  figcaption { margin-top:6px; font-size:12.5px; color:var(--text-secondary); }
+  h1 .code { display:block; margin-top:6px; }
+</style></head>
+<body><div class="wrap">
+
+<header class="hero">
+  <div class="report-tag">泰國廠中廠合資夥伴評估 · 17 · 蘇州東拓應用｜承接順達、雙鴻訂單</div>
+  <h1>蘇州東拓應用材料<br><span class="code" style="margin-left:0">ACME｜江蘇張家港｜台灣團隊「東拓頂尖科技」在大陸的生產主體</span></h1>
+  <p class="hero-sub"><b>評估目的同報告 16：我方要在泰國以「廠中廠」方式與大陸供應商合資，承接順達、雙鴻的訂單。</b>東拓的名字很容易誤導——它<b>不是半導體設備、也不是材料商，而是做均溫板（VC）、3DVC、散熱模組與水冷板的散熱件廠</b>。團隊<b>自 2012 年起研發生產散熱器</b>，2020 年引入台灣清華團隊，<b>2023 年才在張家港成立現在這個法人</b>。製程家族跟我方的沖壓／不鏽鋼分水器<b>相鄰但不重疊</b>，互補性看起來不錯；<b>但它在泰國完全沒有主體與廠房</b>，規模也很小——法人成立兩年、註冊資本 RMB 3,000 萬、員工不到 50 人。</p>
+  <div class="badges">
+    <span class="badge threat">泰國佈局：零 ✕（無法人、無廠、無建廠計畫）</span>
+    <span class="badge">產品：VC／3DVC／散熱模組／水冷板（自稱 2025 量產 60 萬套網通 VC）</span>
+    <span class="badge">團隊 2012 起做散熱器｜法人 2023-09 成立｜RMB 3,000 萬｜員工 &lt; 50</span>
+    <span class="badge">台灣母體：東拓頂尖科技｜桃園｜8 人｜台灣熱管理協會會員</span>
+    <span class="badge">A 輪投資方：新三板華芯微電子（871451）出資 1,500 萬、持股 24%</span>
+    <span class="badge">具名客戶線索：台達（中達電子江蘇）｜與雙鴻、奇鋐查無往來</span>
+  </div>
+  <div class="meta-line">報告日期 2026-10-05｜資料來源：公司官網、企查詢工商資料、台灣公司登記、台灣熱管理協會名錄、開業新聞、招聘公告｜<b>凡標「自稱」者為公司片面說法，未經第三方佐證</b>｜本環境無法連線天眼查、企查查、啟信寶與泰國 DBD 查詢站</div>
+</header>
+
+<section class="blk">
+  <h2><span class="num">1</span>一眼看懂</h2>
+  <div class="tiles">
+    <div class="tile"><div class="k">起步</div><div class="v">2012 <span style="font-size:14px">年</span></div><div class="d">團隊開始研發生產散熱器；蘇州法人 2023-09-18 成立</div></div>
+    <div class="tile"><div class="k">註冊資本</div><div class="v">RMB 3,000 <span style="font-size:14px">萬</span></div><div class="d">2023 年 A 輪時為 1,000 萬，之後增資</div></div>
+    <div class="tile"><div class="k">員工</div><div class="v">&lt; 50 <span style="font-size:14px">人</span></div><div class="d">2025-02 一次招 40 人（普工 30）</div></div>
+    <div class="tile"><div class="k">主力產品</div><div class="v">VC <span style="font-size:14px">均溫板</span></div><div class="d">自稱 2025 量產 60 萬套網通 VC</div></div>
+    <div class="tile"><div class="k">泰國主體</div><div class="v">無</div><div class="d">無法人、無廠房、無 BOI、無海外職缺</div></div>
+    <div class="tile"><div class="k">專利</div><div class="v">1 <span style="font-size:14px">件</span><sup class="est">＊</sup></div><div class="d">官網自稱 30+，相差 30 倍</div></div>
+  </div>
+  <p class="note" style="margin-top:10px"><sup class="est">＊</sup>第三方平台 innoHere 顯示 1 件；Google Patents 以蘇州與台灣兩個公司名為專利權人皆查無。官網「30+ 專利、68+ 合作客戶、26+ 年經驗」均無法以第三方驗證，其中「26 年」指團隊經驗而非公司歷史。</p>
+</section>
+
+<section class="blk">
+  <h2><span class="num">2</span>公司主體——名字會誤導，實際是台灣團隊的大陸生產廠</h2>
+  <figure>
+    <svg viewBox="0 0 920 330" role="img" aria-label="東拓的兩岸主體：台灣東拓頂尖科技為團隊與技術來源，蘇州市東拓應用材料為大陸生產主體，具名客戶線索為台達；另列三家名稱相近但無關的公司" style="max-width:100%;height:auto">
+      <defs>
+        <marker id="d1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+      </defs>
+      <line x1="460" y1="14" x2="460" y2="46" stroke="currentColor" stroke-width="1" stroke-dasharray="6 5" opacity=".4"/>
+      <line x1="460" y1="182" x2="460" y2="200" stroke="currentColor" stroke-width="1" stroke-dasharray="6 5" opacity=".4"/>
+      <text x="448" y="30" font-size="12" text-anchor="end" fill="currentColor" opacity=".6">台灣</text>
+      <text x="472" y="30" font-size="12" fill="currentColor" opacity=".6">中國大陸</text>
+
+      <rect x="40" y="50" width="330" height="130" rx="10" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <g font-size="12" fill="currentColor">
+        <text x="58" y="76" font-size="14" font-weight="700">東拓頂尖科技股份有限公司</text>
+        <text x="58" y="94" opacity=".75">Acme Thermal Technology｜統編 83777978</text>
+        <text x="58" y="116">2020-07-21 設立｜資本額 NT$2,000 萬（全實收）</text>
+        <text x="58" y="134">董事長 陳水清、監察人 陳昀菲，<tspan font-weight="700">兩人合計 100%</tspan></text>
+        <text x="58" y="152">員工 8 人｜桃園平鎮登記、中壢高鐵站前辦公</text>
+        <text x="58" y="170" opacity=".75">台灣熱管理協會會員 A111｜主業散熱模組、VC</text>
+      </g>
+
+      <rect x="550" y="50" width="330" height="130" rx="10" fill="none" stroke="#2a78d6" stroke-width="2"/>
+      <g font-size="12" fill="currentColor">
+        <text x="568" y="76" font-size="14" font-weight="700" fill="#2a78d6">苏州市东拓应用材料有限公司</text>
+        <text x="568" y="94" opacity=".75">ACME｜統一社會信用代碼 91320582MACWKWD90Q</text>
+        <text x="568" y="116">2023-09-18 成立｜註冊資本 RMB 3,000 萬</text>
+        <text x="568" y="134">法定代表人／董事長 <tspan font-weight="700">陈建豪</tspan>｜員工 &lt; 50</text>
+        <text x="568" y="152">張家港市錦豐鎮興南路 6 號 6 幢（另租 7 幢）</text>
+        <text x="568" y="170" opacity=".75">A 輪：華芯微電子 24%｜控股股東：豪創散熱</text>
+      </g>
+
+      <line x1="372" y1="104" x2="546" y2="104" stroke="currentColor" stroke-width="1.6" marker-end="url(#d1)"/>
+      <text x="459" y="96" font-size="11.5" text-anchor="middle" fill="currentColor">團隊與技術來源</text>
+      <line x1="372" y1="140" x2="546" y2="140" stroke="#e0a020" stroke-width="1.4" stroke-dasharray="5 4"/>
+      <text x="459" y="157" font-size="11" text-anchor="middle" fill="#e0a020">股權關係未證實</text>
+      <text x="459" y="172" font-size="11" text-anchor="middle" fill="#e0a020">陳水清 vs 陈建豪？</text>
+
+      <rect x="610" y="214" width="270" height="52" rx="8" fill="none" stroke="#0ca30c" stroke-width="1.6"/>
+      <text x="745" y="235" font-size="12.5" text-anchor="middle" fill="#0ca30c" font-weight="700">具名客戶線索：台達電</text>
+      <text x="745" y="253" font-size="11" text-anchor="middle" fill="currentColor" opacity=".8">中達電子（江蘇）派員以「客戶代表」出席開業</text>
+      <line x1="745" y1="182" x2="745" y2="212" stroke="#0ca30c" stroke-width="1.4" stroke-dasharray="4 3"/>
+
+      <g font-size="11.5" fill="currentColor">
+        <text x="40" y="232" font-weight="700">名稱相近、應排除的公司</text>
+        <text x="40" y="252" opacity=".8">✕ 苏州东拓化工（吳江，阻燃劑）</text>
+        <text x="40" y="270" opacity=".8">✕ 東拓企業（台灣，貨運承攬）</text>
+        <text x="40" y="288" opacity=".8">✕ Applied Materials 應用材料（美商半導體設備）</text>
+        <text x="40" y="316" opacity=".7">企查詢檢索「东拓」＋蘇州／張家港僅此一家；「东拓应用材料科技」「东拓应用技术」等名稱均查無存在。</text>
+      </g>
+    </svg>
+    <figcaption class="note">注意全名是「苏州<b>市</b>东拓应用材料」。工商登記的經營範圍寫「電子專用材料製造／研發／銷售、特種陶瓷製品製造」，與實際的散熱件業務不完全對應——這正是名字誤導的根源。<b>陈建豪（蘇州法人）與陳水清（台灣董事長）的關係未見任何公開說明</b>，官方聯絡信箱為 aaron_chen@acmedt.com，疑與陈建豪對應。</figcaption>
+  </figure>
+
+  <div class="callout">
+    <div class="t">解讀：小、新、台灣根</div>
+    <p class="body">團隊<b>從 2012 年就在做散熱器</b>，有十多年的技術累積；<b>2023 年才到張家港成立現在這個生產法人</b>，被當地冶金園列為「重點招引的總部項目」。台灣母體只有 8 人、資本 NT$2,000 萬、由兩人持有 100%——<b>決策極度集中，規模在報告 07–16 評過的所有公司裡最小</b>。好處是<b>台灣團隊、溝通成本低、信任基礎好</b>；風險是<b>資本與體系的承載力</b>。</p>
+  </div>
+
+  <h3>股權與投資方——新三板公司的公告揭露了三件事</h3>
+  <div class="grid-2">
+    <div class="card co s">
+      <div class="nm">蘇州華芯微電子（新三板 871451）的 A 輪公告</div>
+      <div class="vrow"><span class="vk plus">投資</span><div>2023-11-27 公告（2023-034）：「擬投資 <b>1,500 萬元</b>參與蘇州市東拓應用材料有限公司的 A 輪融資，占此輪融資後 <b>24%</b> 的股權」</div></div>
+      <div class="vrow"><span class="vk plus">控股</span><div>公告寫明控股股東為<b>「蘇州市豪創散熱科技有限公司」</b>——這家公司在網上查不到任何資料，<b>最終受益人是否為陳家需調工商資料確認</b></div></div>
+      <div class="vrow"><span class="vk plus">技術</span><div>公告原文：「蘇州東拓<b>團隊和技術均來自台灣東拓頂尖科技股份有限公司</b>」——這是第一份由第三方上市公司寫出的佐證，不再只是東拓自稱</div></div>
+      <div class="vrow"><span class="vk note">資本</span><div>公告時註冊資本 <b>1,000 萬元</b>，現在工商登記為 3,000 萬元，<b>中間有增資</b></div></div>
+    </div>
+    <div class="card co r">
+      <div class="nm">它是財務投資方，不是客戶</div>
+      <div class="vrow"><span class="vk minus">關聯</span><div>華芯微在 2024、2025 年報裡，東拓這一欄寫的是「與公司從事業務的<b>關聯性：無</b>」——<b>不會帶來訂單</b></div></div>
+      <div class="vrow"><span class="vk minus">帳面</span><div>華芯微對東拓的長期股權投資，2023 年底 689.7 萬元 → 2024 年底 1,146.9 萬元（持續投入）</div></div>
+      <div class="vrow"><span class="vk minus">虧損</span><div>華芯微 2024 年權益法投資收益 <b>−137.9 萬元</b>。<b>若主要來自東拓</b>，以 24% 回推，<b>東拓 2024 年約虧 570 萬元</b><sup class="est">＊</sup></div></div>
+      <div class="vrow"><span class="vk note">判讀</span><div>方向是<b>仍在燒錢、營收規模有限</b>——與台灣母體只有 8 人、資本 NT$2,000 萬的規模相符。<b>這直接影響它在泰國合資的出資能力</b></div></div>
+    </div>
+  </div>
+  <p class="note" style="margin-top:8px"><sup class="est">＊</sup>華芯微未將權益法損益按被投資公司拆開，570 萬元為推論值，僅供方向參考。工商平台 innoHere 另記載東拓目前為 A+ 輪、累計 2 輪，A+ 輪投資方查無。</p>
+</section>
+
+<section class="blk">
+  <h2><span class="num">3</span>做什麼——VC 與散熱模組為主，水冷板只是自稱</h2>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:170px">產品</th><th style="width:150px">進度</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr class="rowhl"><td><b>均溫板 VC</b></td><td class="yes">量產（自稱）</td><td>官網稱 2025 年量產 <b>60 萬套網通 VC</b>。這是它最主要、也最可能是真的業務</td></tr>
+      <tr class="rowhl"><td><b>3DVC（兩相流）</b></td><td class="part">小批量→初期量產</td><td>2024 自研 3DVC 模組小批量交付；2025 首次交付定製高階散熱模組</td></tr>
+      <tr><td>散熱模組（含鰭片組）</td><td class="yes">有（自稱）</td><td>核心產品之一，應用於網通伺服器、AI 伺服器、新能源車、筆電、低空經濟</td></tr>
+      <tr class="rowhl"><td><b>水冷板／液冷板</b></td><td class="down">僅官網列名</td><td>「高效水冷板」列為核心產品，<b>但進度、產能、客戶一律未公開</b>。在大陸液冷供應鏈盤點名單中<b>完全未出現</b></td></tr>
+      <tr><td>分水器／Manifold</td><td class="no">查無</td><td>官網未提</td></tr>
+      <tr><td>快接頭 UQD</td><td class="no">查無</td><td>艾邦《UQD 液冷快接頭 20 家核心供應商》無東拓</td></tr>
+      <tr><td>熱管</td><td class="no">查無</td><td>官網未單列</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <h3>發展沿革（官網自稱）</h3>
+  <ul class="timeline">
+    <li><span class="yr">2012–2022</span><b>開始研發生產散熱器。</b>獲「科研成果價值創造計劃」「唯一」入選團隊；憑十餘年散熱技術沉澱，加上 <b>2020 年引入的台灣清華團隊</b>，實現 <b>3DVC 兩相流散熱技術突破</b>，並稱在<b>伺服器 CDU 領域行業領先</b>，核心產品適配下一代 AI 伺服器<br><span class="desc">註：台灣東拓頂尖科技 2020-07 設立、蘇州法人 2023-09 設立，2012–2020 期間由哪個主體營運，公開資料查不到</span></li>
+    <li><span class="yr">2023</span>成功導入多家電子大廠，跨足網通伺服器、新能源汽車等高成長領域<br><span class="desc">蘇州法人 2023-09-18 成立；2024-05-18 開業</span></li>
+    <li><span class="yr">2024</span>跨足網通、AI 伺服器、新能源汽車、低空經濟；<b>自研 3DVC 模組小批量交付</b>，同步配合客戶做系統性能驗證</li>
+    <li><span class="yr">2025</span>聚焦全球高端散熱需求；<b>首次交付定製高階散熱模組，量產 60 萬套網通 VC</b></li>
+    <li><span class="yr">2026</span>取得全年訂單，<b>啟動二期生產線籌備</b>（張家港原址擴產，非海外）</li>
+  </ul>
+  <div class="callout">
+    <div class="t">它的入鏈路徑跟雙鴻不同一條</div>
+    <p class="body">唯一具名的客戶線索是<b>台達電</b>——2024-05-18 開業典禮上，中達電子（江蘇）的協調人以「客戶代表」身分出席。台達是系統／電源／液冷基礎設施廠，<b>東拓走的是「台達／網通系統廠」這條鏈，不是雙鴻、奇鋐這類散熱模組廠</b>。與雙鴻、奇鋐、泰碩、超眾、建准<b>全部查無任何公開往來</b>。官網自稱「成功導入多家電子大廠、68+ 合作客戶」，均未點名，<b>不可推定為雙鴻或順達</b>。</p>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">4</span>液冷零組件製程——公開資料全部查無，只能從產品反推</h2>
+  <p class="body">同報告 16 的標準：<b>液冷零組件要的是鏟齒與焊接，其次是洩漏測試與清洗</b>。東拓的官網、招聘、環評公示都<b>沒有任何設備清單</b>——張家港市與蘇州市生態環境局的建設項目環評公示也查無「东拓」條目，而環評通常是取得設備清單最好的來源。</p>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:180px">液冷零組件要的製程</th><th style="width:130px">公開資料</th><th>從「量產 60 萬套 VC」反推（<b>推論，非查證</b>）</th></tr></thead>
+    <tbody>
+      <tr class="rowhl"><td><b>鏟齒（skiving）／滾齒</b></td><td class="no">查無</td><td>VC 模組的鰭片多為扣 FIN 或焊接鰭片，<b>不一定需要鏟齒</b>——這一項無法從產品反推，<b>最該現場確認</b></td></tr>
+      <tr class="rowhl"><td><b>焊接（真空封口焊／釺焊）</b></td><td class="part">△ 產品頁標題有線索</td><td class="yes">VC 必須真空封口與周邊密封焊接——<b>若 60 萬套量產屬實，這項能力應該存在</b>；另有官網產品頁直接寫「<b>不鏽鋼…熱管焊接</b>」（見下方）</td></tr>
+      <tr class="rowhl"><td>洩漏測試（氦檢）</td><td class="no">查無</td><td class="yes">VC 封口後必檢——<b>應該存在</b></td></tr>
+      <tr><td>燒結／注液除氣</td><td class="no">查無</td><td class="yes">VC 銅粉燒結或編織網芯、注液除氣是必經製程——<b>應該存在</b></td></tr>
+      <tr><td>清洗線</td><td class="no">查無</td><td class="part">應該有，等級未知</td></tr>
+      <tr><td>CNC</td><td class="no">查無</td><td class="part">水冷板若真在做就需要；目前無證據</td></tr>
+      <tr><td>沖壓</td><td class="no">查無</td><td class="part">VC 上下蓋多為沖壓成形，可能有小噸位沖床</td></tr>
+      <tr><td>無塵室</td><td class="no">查無</td><td>未提及</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout" style="margin-top:14px">
+    <div class="t">唯一直接的公開線索：官網產品頁寫了「不鏽鋼」＋「焊接」</div>
+    <p class="body">官網產品頁 <b>acmedt-group.com/product/12</b> 的標題是：「<b>不銹鋼高強度遊戲機熱管焊接散熱器</b>，風冷模組，主要用於便攜式設備」。這是目前<b>唯一一條直接指向它有不鏽鋼焊接能力</b>的公開資料——比從 VC 產品反推更直接，而<b>不鏽鋼＋焊接正是我方不鏽鋼分水器需要的製程</b>。</p>
+    <p class="body" style="margin-top:8px">限制：頁面內容要 JavaScript 載入，<b>只讀得到搜尋引擎收錄的標題</b>，看不到規格、焊接方式（TIG／雷射／釺焊）與照片。另一個產品頁 /product/31 的標題是「水冷散熱器——礦機」。<b>查廠時建議直接要這兩項的樣品與焊接製程說明</b>。</p>
+  </div>
+  <div class="grid-2" style="margin-top:14px">
+    <div class="card co s">
+      <div class="nm">如果反推成立，它補的正是我方的缺口</div>
+      <div class="vrow"><span class="vk plus">焊接</span><div>VC 的<b>真空封口與密封焊接</b>，跟不鏽鋼分水器、水冷板的密封焊接是<b>同一類製程知識</b>——這是廣建完全沒有的</div></div>
+      <div class="vrow"><span class="vk plus">檢漏</span><div>VC 出貨必做洩漏測試，<b>它應該已經有氦檢與檢漏流程</b></div></div>
+      <div class="vrow"><span class="vk plus">熱設計</span><div>官網自稱具<b>熱流仿真分析</b>能力，可做到打樣與量產一站式——對承接雙鴻的設變與 NPI 有幫助</div></div>
+    </div>
+    <div class="card co r">
+      <div class="nm">但人力結構顯示它偏組裝後段</div>
+      <div class="vrow"><span class="vk minus">招聘</span><div>2025-02 一次招 40 人：<b>普工 30</b>、IPQC 5、SQE 1、PMC 2、倉管文員 2。技能要求只有 ERP、量具、ISO9001／IATF16949</div></div>
+      <div class="vrow"><span class="vk minus">缺</span><div>招聘裡<b>沒有焊接技師、鏟齒操作、CNC 程式</b>等字樣；官網另列的制程工程師、研發工程師未寫設備需求</div></div>
+      <div class="vrow"><span class="vk note">判讀</span><div><b>人力以普工＋品管為主，不像重機加工廠</b>。焊接與檢漏能力是「應該有」，<b>不是「確定有」</b>——現場稽核是前提</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">5</span>泰國佈局——零。廠中廠模式在它身上不成立</h2>
+  <p class="body">官網只有一個實體地址（張家港）；自稱在<b>台灣、上海、深圳</b>設有研發中心及辦事處，但無地址電話。招聘職缺<b>全部在張家港</b>；2026 年的「二期生產線」指原址擴產。中英文與泰國相關關鍵字多輪搜尋<b>零命中</b>（搜到的 ACME 泰國公司均為不相關的同名企業）。泰國 DBD 直查來源本環境全部無法連線，<b>此項請以泰國當地查詢補做</b>，但所有旁證一致指向：<b>它在東南亞沒有任何主體</b>。</p>
+  <figure>
+    <svg viewBox="0 0 920 250" role="img" aria-label="兩種合資結構比較：廠中廠需要夥伴已有泰國廠房，東拓沒有，因此須改為由我方或第三方取得廠房、東拓以技術入股" style="max-width:100%;height:auto">
+      <defs>
+        <marker id="d2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+      </defs>
+      <text x="40" y="26" font-size="13" font-weight="700" fill="currentColor">A. 廠中廠（報告 16 的設定）</text>
+      <rect x="40" y="40" width="380" height="120" rx="10" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <text x="58" y="62" font-size="12" fill="currentColor" opacity=".75">夥伴已有的泰國廠房</text>
+      <rect x="120" y="76" width="220" height="64" rx="8" fill="none" stroke="#2a78d6" stroke-width="2"/>
+      <text x="230" y="102" font-size="12.5" text-anchor="middle" fill="#2a78d6" font-weight="700">我方產線進駐</text>
+      <text x="230" y="122" font-size="11" text-anchor="middle" fill="currentColor">鏟齒／焊接／檢漏</text>
+      <text x="40" y="186" font-size="12" fill="#d03b3b" font-weight="700">東拓 ✕ 沒有泰國廠房，前提不成立</text>
+      <text x="40" y="206" font-size="11" fill="currentColor" opacity=".75">廣建（Ban Bueng）、胜蓝（Amata City Rayong）才有這個條件</text>
+
+      <text x="500" y="26" font-size="13" font-weight="700" fill="currentColor">B. 東拓能參與的結構</text>
+      <rect x="500" y="40" width="380" height="120" rx="10" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <text x="518" y="62" font-size="12" fill="currentColor" opacity=".75">我方或第三方（如廣建／DCL）取得的泰國廠房</text>
+      <rect x="518" y="76" width="168" height="64" rx="8" fill="none" stroke="#2a78d6" stroke-width="2"/>
+      <text x="602" y="102" font-size="12" text-anchor="middle" fill="#2a78d6" font-weight="700">我方：沖壓</text>
+      <text x="602" y="122" font-size="11" text-anchor="middle" fill="currentColor">分水器、結構件</text>
+      <rect x="696" y="76" width="168" height="64" rx="8" fill="none" stroke="#0ca30c" stroke-width="2"/>
+      <text x="780" y="102" font-size="12" text-anchor="middle" fill="#0ca30c" font-weight="700">東拓：技術入股</text>
+      <text x="780" y="122" font-size="11" text-anchor="middle" fill="currentColor">VC／焊接／檢漏線</text>
+      <text x="500" y="186" font-size="12" fill="#0ca30c" font-weight="700">好處：可自由選址——例如直接靠近雙鴻挽富工業區</text>
+      <text x="500" y="206" font-size="11" fill="currentColor" opacity=".75">代價：廠房、BOI、人力全部要我方主導從零建立</text>
+      <text x="500" y="226" font-size="11" fill="currentColor" opacity=".75">東拓規模小，出資能力有限，多半只能以技術與設備入股</text>
+    </svg>
+    <figcaption class="note">結構 B 有一個廣建、胜蓝都給不了的好處：<b>選址自由</b>。報告 16 已確認雙鴻泰國廠在北欖府挽富工業區，廣建約 1.5 小時、胜蓝約 1 小時 50 分；若新設廠，可以直接選在挽富附近。但這也代表<b>落地的工作量全部回到我方身上</b>。</figcaption>
+  </figure>
+</section>
+
+<section class="blk">
+  <h2><span class="num">6</span>當合資對象看，東拓適不適合？</h2>
+  <div class="meter-row"><div class="meter-k">泰國落地基礎</div><div class="meter-track"><div class="meter-fill" style="width:20%"></div></div><div class="meter-v">1 / 5</div></div>
+  <div class="meter-row"><div class="meter-k">製程互補（補我方鏟齒／焊接缺口）</div><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><div class="meter-v">3 / 5</div></div>
+  <div class="meter-row"><div class="meter-k">合資談判可行性</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="meter-v">4 / 5</div></div>
+  <div class="meter-row"><div class="meter-k">客戶無衝突</div><div class="meter-track"><div class="meter-fill" style="width:70%"></div></div><div class="meter-v">3.5 / 5</div></div>
+  <div class="meter-row"><div class="meter-k">溝通與信任成本</div><div class="meter-track"><div class="meter-fill" style="width:80%"></div></div><div class="meter-v">4 / 5</div></div>
+  <div class="meter-row"><div class="meter-k">公司體質與可查證度</div><div class="meter-track"><div class="meter-fill" style="width:30%"></div></div><div class="meter-v">1.5 / 5</div></div>
+  <p class="note">評分邏輯：泰國零主體給最低；製程互補給中分——<b>焊接與檢漏從 VC 量產推定應有，且官網產品頁有「不鏽鋼熱管焊接」線索；鏟齒無從推定；全部未經現場確認</b>；法人新、規模小、需擴產，談判空間大；客戶為台達系、與雙鴻無往來，但台達關係須釐清；台灣團隊溝通成本低；團隊雖自 2012 起累積技術，但法人成立僅兩年、資本 RMB 3,000 萬、專利數自稱與第三方差 30 倍，體質與可查證度壓低。</p>
+
+  <div class="callout">
+    <div class="t">核心結論：東拓是「技術合夥人」候選，不是「廠中廠」對象</div>
+    <p class="body">廠中廠的前提是對方在泰國已有廠房——<b>東拓沒有，所以這個模式在它身上不成立</b>。它能扮演的角色是<b>技術合夥人</b>：在我方（或廣建、DCL）取得的泰國廠房裡，以 VC／焊接／檢漏的製程與設備入股，成為第二條線。它最大的價值是<b>補焊接與檢漏的製程知識</b>，以及<b>台灣團隊帶來的溝通與信任便利</b>——這兩點廣建都給不了。</p>
+    <p class="body" style="margin-top:8px">但三個前提必須先過：<b>① 現場確認焊接、檢漏、鏟齒的實際設備與產能</b>（目前除產品頁標題外，全是推論）；<b>② 確認它的出資與擴產承載力</b>——法人成立兩年、資本 RMB 3,000 萬、依投資方財報推估 2024 年仍虧損約 570 萬元、自己還在籌備二期，同時要在泰國投入，資金可能吃緊；<b>③ 釐清與台達的關係</b>，確認合資承接雙鴻、順達的訂單不會牽動它既有的客戶線。</p>
+  </div>
+</section>
+
+<footer>
+  <p><b>資料來源（檢索日期 2026-10-05）。</b>蘇州東拓官網 acmedt-group.com（首頁、聯絡我們、產業應用、品質、招聘頁：公司簡介、2012 起之發展沿革（含 2020 年引入台灣清華團隊、3DVC 突破、CDU 領域）、產品線、ISO9001／IATF16949、RBA 承諾、30+ 專利／68+ 客戶／26+ 年自稱、2025 量產 60 萬套 VC、2026 二期產線、唯一實體地址）；企查詢 7icp.com（統一社會信用代碼 91320582MACWKWD90Q、法人陈建豪、成立 2023-09-18、註冊資本 3,000 萬、地址、經營範圍、ICP 備案 苏ICP备2024094833号-1）；innoHere（員工 &lt;50、A+ 輪、專利 1 件、「團隊與技術來自台灣東拓頂尖科技」）；台灣公司網 twincn.com 與 alltwcompany.com（東拓頂尖科技統編 83777978、資本額、董監持股）；台灣熱管理協會會員名錄（A111、8 人、散熱模組／VC）；搜狐轉載江蘇冶金園開業報導（2024-05-18、董事長陈建豪、中達電子（江蘇）客戶代表出席）；事業單位招聘網 sydw8.com（2025-02 招聘 40 人明細與公司自述）；艾邦《UQD 液冷快接頭 20 家核心供應商盤點》（反面證據：無東拓）。蘇州華芯微電子（新三板 871451）2023-034 號公告（A 輪出資 1,500 萬元、持股 24%、控股股東蘇州市豪創散熱科技、團隊技術來自台灣東拓頂尖）與 2024、2025 年報（關聯性：無；長期股權投資與權益法投資收益）；東拓官網產品頁 /product/12、/product/31 之搜尋引擎收錄標題。排除之相近公司：苏州东拓化工（eastop-chem.com）、東拓企業（統編 97019259）。</p>
+  <p style="margin-top:10px"><b>估算值與未驗證事項。</b><sup class="est">＊</sup>專利件數：官網自稱 30+、innoHere 1 件、Google Patents 查無，以第三方為準。員工數、A+ 輪各僅 1 源；註冊資本 2023 年 1,000 萬（華芯微公告）→ 現 3,000 萬（企查詢）。東拓 2024 年虧損約 570 萬元係以華芯微權益法投資收益除以 24% 回推，華芯微未按被投資公司拆分，僅供參考。產品頁 /product/12 僅讀得到標題。製程設備全部 11 項查無公開資料，第 4 節右欄為<b>從產品反推的推論，非查證</b>。泰國 DBD 查詢來源（creden、dataforthai、matchlink、connectbizs）本環境全部無法存取，「無泰國主體」係依官網、招聘、多輪關鍵字搜尋之旁證判斷。天眼查、企查查、啟信寶、國家企業信用信息公示系統、中國執行信息公開網本環境無法讀取，<b>「查無負面資訊」不等於「確認無負面紀錄」</b>。官網「導入多家電子大廠」等未點名表述，<b>不可推定為雙鴻、順達或奇鋐</b>，須以產業人脈驗證。</p>
+  <p style="margin-top:10px"><b>僅供內部策略參考。</b></p>
+</footer>
+
+</div>
+</body></html>
