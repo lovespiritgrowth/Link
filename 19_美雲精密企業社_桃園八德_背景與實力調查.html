@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>美雲精密企業社 背景調查｜鑫鴻騰</title><style>
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;      /* 卡片/圖表面 */
+    --page: #f9f9f7;           /* 頁面底 */
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;       /* 主色（藍） */
+    --series-1-track: #cde2fb; /* 藍 100，meter 未填軌 */
+    --seq-250: #86b6ef;
+    --seq-450: #2a78d6;
+    --seq-600: #184f95;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --accent-wash: rgba(42,120,214,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-1-track: #0d366b;
+      --seq-250: #1c5cab;
+      --seq-450: #3987e5;
+      --seq-600: #6da7ec;
+      --good-text: #0ca30c;
+      --accent-wash: rgba(57,135,229,0.12);
+    }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  /* ===== 頁首 ===== */
+  .report-tag { font-size:12px; letter-spacing:.12em; color:var(--text-muted); text-transform:uppercase; }
+  header.hero { padding: 8px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  h1 { font-size: 30px; font-weight: 700; letter-spacing:.01em; margin-top: 4px; }
+  h1 .code { font-weight: 400; font-size: 18px; color: var(--text-secondary); margin-left: 8px; }
+  .hero-sub { color: var(--text-secondary); margin-top: 6px; max-width: 72ch; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+  .badge { font-size:12.5px; padding:3px 10px; border-radius:99px; border:1px solid var(--border); background:var(--surface-1); color:var(--text-secondary); }
+  .badge.threat { border-color: var(--critical); color: var(--critical); font-weight:600; }
+  .meta-line { margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+
+  /* ===== 區塊 ===== */
+  section { margin-bottom: 36px; }
+  h2 { font-size: 20px; font-weight: 700; padding-bottom: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h2 .num { color: var(--series-1); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 18px 0 8px; }
+  p.body { color: var(--text-primary); margin-bottom: 10px; max-width: 80ch; }
+  .note { font-size: 12.5px; color: var(--text-muted); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .grid-3 { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+  @media (max-width: 760px){ .grid-2,.grid-3{grid-template-columns:1fr;} }
+
+  /* ===== 摘要統計磚 ===== */
+  .tiles { display:grid; grid-template-columns: repeat(6,1fr); gap:12px; }
+  @media (max-width: 900px){ .tiles{grid-template-columns: repeat(3,1fr);} }
+  @media (max-width: 560px){ .tiles{grid-template-columns: repeat(2,1fr);} }
+  .tile { background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:14px 14px 12px; }
+  .tile .label { font-size:12px; color:var(--text-muted); }
+  .tile .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .tile .delta { font-size:12px; margin-top:2px; }
+  .delta.up { color: var(--good-text); }
+  .delta.down { color: var(--critical); }
+  .delta.flat { color: var(--text-muted); }
+
+  /* ===== 表格 ===== */
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-weight:600; color:var(--text-secondary); font-size:12.5px; padding:8px 10px; border-bottom:1px solid var(--baseline); white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid var(--grid); vertical-align:top; }
+  td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom:none; }
+
+  /* ===== 時間軸 ===== */
+  .timeline { list-style:none; position:relative; padding-left:20px; }
+  .timeline::before { content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--grid); border-radius:1px; }
+  .timeline li { position:relative; padding:0 0 14px 12px; }
+  .timeline li::before { content:""; position:absolute; left:-20px; top:7px; width:8px; height:8px; border-radius:50%; background:var(--series-1); box-shadow: 0 0 0 2px var(--surface-1); }
+  .timeline .yr { font-weight:700; font-variant-numeric: tabular-nums; margin-right:8px; }
+  .timeline .desc { color:var(--text-secondary); }
+
+  /* ===== 圖表（純 HTML/CSS 橫條圖） ===== */
+  .chart { margin-top: 10px; }
+  .chart-title { font-size:13.5px; font-weight:600; }
+  .chart-sub { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .hbar-row { display:grid; grid-template-columns: 118px 1fr 120px; align-items:center; gap:10px; padding:5px 0; }
+  .hbar-row .cat { font-size:13px; color:var(--text-secondary); text-align:right; }
+  .hbar-track { position:relative; height:20px; }
+  .hbar-fill { position:absolute; left:0; top:0; height:20px; background:var(--series-1); border-radius:0 4px 4px 0; transition: opacity .15s; }
+  .hbar-row:hover .hbar-fill { opacity:.82; }
+  .hbar-row .val { font-size:13px; color:var(--text-primary); font-variant-numeric:tabular-nums; }
+  .hbar-row .val .pct { color:var(--text-muted); }
+  .axis-note { border-top:1px solid var(--baseline); margin-top:6px; padding-top:5px; font-size:11.5px; color:var(--text-muted); text-align:right; }
+
+  /* 縱向柱狀（年度趨勢，小倍數） */
+  .cols { display:flex; align-items:flex-end; gap:26px; height:170px; padding:0 6px; border-bottom:1px solid var(--baseline); }
+  .col-g { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
+  .col-bar { width:100%; max-width:44px; background:var(--series-1); border-radius:4px 4px 0 0; position:relative; transition: opacity .15s; }
+  .col-bar.est { background: var(--seq-250); }
+  .col-g:hover .col-bar { opacity:.82; }
+  .col-val { font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--text-primary); margin-bottom:4px; }
+  .col-x { display:flex; gap:26px; padding:6px 6px 0; }
+  .col-x div { flex:1; text-align:center; font-size:12px; color:var(--text-muted); }
+
+  /* ===== SWOT ===== */
+  .swot { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .swot{grid-template-columns:1fr;} }
+  .swot .card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+  .swot .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .swot ul { padding-left:18px; }
+  .swot li { margin-bottom:8px; color:var(--text-primary); }
+  .swot li b { font-weight:600; }
+
+  /* ===== 重點框 ===== */
+  .callout { background: var(--accent-wash); border:1px solid var(--border); border-left:3px solid var(--series-1); border-radius:8px; padding:14px 16px; margin:14px 0; }
+  .callout.warn { border-left-color: var(--critical); background: rgba(208,59,59,0.06); }
+  .callout .t { font-weight:700; font-size:13.5px; margin-bottom:4px; }
+
+  /* ===== 評分 meter ===== */
+  .meter-row { display:grid; grid-template-columns: 170px 1fr 56px; gap:12px; align-items:center; padding:6px 0; }
+  .meter-row .m-label { font-size:13.5px; color:var(--text-secondary); text-align:right; }
+  .meter-track { height:10px; border-radius:5px; background:var(--series-1-track); position:relative; overflow:hidden; }
+  .meter-fill { position:absolute; left:0; top:0; bottom:0; background:var(--series-1); border-radius:5px; }
+  .meter-row .m-val { font-size:13px; font-variant-numeric:tabular-nums; color:var(--text-primary); }
+
+  footer { border-top:1px solid var(--border); padding-top:16px; font-size:12.5px; color:var(--text-muted); }
+  footer a { color: var(--series-1); text-decoration:none; word-break:break-all; }
+  footer li { margin-bottom:4px; }
+  sup.est { color: var(--text-muted); }
+
+  /* ===== 本報告新增（四家橫向比較） ===== */
+  .grid-4 { display:grid; grid-template-columns: repeat(4,1fr); gap:14px; }
+  @media (max-width: 980px){ .grid-4{grid-template-columns:1fr 1fr;} }
+  @media (max-width: 560px){ .grid-4{grid-template-columns:1fr;} }
+  .co { border-top:3px solid var(--series-1); }
+  .co.k { border-top-color:#2a78d6; }
+  .co.s { border-top-color:#0ca30c; }
+  .co.f { border-top-color:#fab219; }
+  .co.r { border-top-color:#d03b3b; }
+  .co .nm { font-size:16px; font-weight:700; }
+  .co .pa { font-size:12px; color:var(--text-muted); margin-bottom:6px; }
+  .co .one { font-size:13.5px; color:var(--text-secondary); }
+  .co dl { margin-top:10px; font-size:12.5px; }
+  .co dt { color:var(--text-muted); float:left; clear:left; width:64px; }
+  .co dd { margin-left:64px; margin-bottom:3px; }
+  .cmp th:first-child, .cmp td:first-child { position:sticky; left:0; background:var(--surface-1); font-weight:600; color:var(--text-secondary); }
+  .cmp th { white-space:normal; }
+  .cmp td { font-size:13px; }
+  .scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .cmp { min-width:760px; }
+  .pill { display:inline-block; font-size:10.5px; line-height:1.5; padding:0 6px; border-radius:99px; border:1px solid var(--border); color:var(--text-muted); margin-left:4px; white-space:nowrap; vertical-align:1px; }
+  .pill.self { border-color:var(--warning); color:#8a6100; }
+  .pill.pub { border-color:var(--good); color:var(--good-text); }
+  .pill.none { border-color:var(--baseline); }
+  @media (prefers-color-scheme: dark){ .pill.self{color:#fab219;} }
+  .yes { color:var(--good-text); font-weight:700; }
+  .no { color:var(--text-muted); }
+  .part { color:#8a6100; font-weight:600; }
+  @media (prefers-color-scheme: dark){ .part{color:#fab219;} }
+  .rowhl td { background: var(--accent-wash); }
+  .meter-row.k .meter-fill { background:#2a78d6; }
+  .meter-row.s .meter-fill { background:#0ca30c; }
+  .meter-row.f .meter-fill { background:#fab219; }
+  .meter-row.r .meter-fill { background:#d03b3b; }
+  .legend { display:flex; flex-wrap:wrap; gap:14px; font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .legend span::before { content:""; display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:5px; vertical-align:-1px; }
+  .legend .lk::before{background:#2a78d6;} .legend .ls::before{background:#0ca30c;}
+  .legend .lf::before{background:#fab219;} .legend .lr::before{background:#d03b3b;}
+  .blk { page-break-inside: avoid; }
+
+  td.down, .down { color: var(--critical); }
+
+  @media print {
+    .scroll { overflow: visible; }
+    .cmp { min-width: 0; font-size: 11px; }
+    .cmp td, .cmp th { padding: 5px 6px; }
+    .card, .co, .callout, section { page-break-inside: avoid; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ===== 速評卡（每公司一卡） ===== */
+  .vrow { display:flex; gap:10px; margin-top:10px; font-size:13.5px; }
+  .vrow > div { color:var(--text-primary); }
+  .vk { flex:0 0 auto; align-self:flex-start; font-size:11px; font-weight:700; line-height:1.6; padding:0 7px; border-radius:5px; margin-top:2px; }
+  .vk.plus { color:var(--good-text); background:rgba(12,163,12,0.10); border:1px solid rgba(12,163,12,0.35); }
+  .vk.minus { color:var(--critical); background:rgba(208,59,59,0.08); border:1px solid rgba(208,59,59,0.35); }
+  @media (prefers-color-scheme: dark){
+    .vk.plus { background:rgba(12,163,12,0.16); }
+    .vk.minus { background:rgba(208,59,59,0.16); }
+  }
+  .vtag { font-size:11.5px; font-weight:600; padding:1px 8px; border-radius:99px; margin-left:8px; vertical-align:2px; }
+  .vtag.good { color:var(--good-text); border:1px solid rgba(12,163,12,0.4); }
+  .vtag.warn { color:var(--critical); border:1px solid rgba(208,59,59,0.4); }
+
+  .vk.note { color:var(--series-1); background:var(--accent-wash); border:1px solid rgba(42,120,214,0.35); }
+  @media (prefers-color-scheme: dark){ .vk.note { border-color:rgba(57,135,229,0.45); } }
+
+  figure { margin:14px 0 6px; }
+  figure svg { display:block; color:var(--text-primary); max-width:100%; height:auto; }
+  figcaption { margin-top:6px; font-size:12.5px; color:var(--text-secondary); }
+  h1 .code { display:block; margin-top:6px; }
+</style></head>
+<body><div class="wrap">
+
+<header class="hero">
+  <div class="report-tag">同業背景調查 · 19 · 美雲精密企業社｜桃園八德</div>
+  <h1>美雲精密企業社<br><span class="code" style="margin-left:0">MEIYUN PRECISE CO.｜統編 37796780｜合夥商號｜登記新北新莊・實際作業地桃園八德</span></h1>
+  <p class="hero-sub"><b>結論：美雲精密是約 50 人的外包代工廠，主業是電子零組件的挑選（Sorting）、重工（Rework）、組裝、檢驗、包裝，並兼做人力派遣。</b>名字有「精密」，但公開資料裡<b>看不到沖壓、CNC 等金屬加工設備，也沒有登記工廠</b>。2016 年的法院判決證實，它曾以協力廠商身分派人進 HTC 產線做全檢、重工。2026 年 3 月增資到 NT$750 萬，8 月更換合夥人，近期有變動。</p>
+  <div class="badges">
+    <span class="badge threat">金屬加工製程：查無（無登記工廠）</span>
+    <span class="badge">主業：Sorting／Rework／組立／檢驗／包裝</span>
+    <span class="badge">員工約 50 人（518 人力銀行）</span>
+    <span class="badge">資本額 NT$750 萬（2026-03 增資）</span>
+    <span class="badge">合夥商號：合夥人負連帶無限責任</span>
+  </div>
+  <div class="meta-line">報告日期 2026-10-20｜資料來源：商工登記、財政部稅籍、國貿署、司法院判決、人力銀行（檢索 2026-10-20）｜幣別：新臺幣（NT$）｜公開資料未涵蓋營收、客戶與設備，相關判斷標「推論」</div>
+</header>
+
+<section class="blk">
+  <h2><span class="num">1</span>關鍵數據</h2>
+  <div class="tiles">
+    <div class="tile"><div class="k">設立</div><div class="v">2013</div><div class="d">2013-02-22 核准，已營運 13 年</div></div>
+    <div class="tile"><div class="k">資本額</div><div class="v">NT$750 <span style="font-size:14px">萬</span></div><div class="d"><span style="color:var(--good)">▲ 2026-03 自 350 萬增資</span></div></div>
+    <div class="tile"><div class="k">員工</div><div class="v">≈50 <span style="font-size:14px">人</span></div><div class="d">518 人力銀行公司頁自填</div></div>
+    <div class="tile"><div class="k">登記工廠</div><div class="v" style="color:var(--critical)">0</div><div class="d">本身及關係企業皆無</div></div>
+    <div class="tile"><div class="k">組織型態</div><div class="v">合夥</div><div class="d">非公司組織，不需公開財報</div></div>
+    <div class="tile"><div class="k">訴訟（當事人）</div><div class="v">0</div><div class="d">僅以協力廠商身分出現於 1 件判決</div></div>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">2</span>登記資料與沿革</h2>
+  <div>
+    <div class="card">
+      <div class="nm">基本登記</div>
+      <table class="cmp">
+        <tbody>
+          <tr><td style="width:96px">名稱</td><td>美雲精密企業社（MEIYUN PRECISE CO.）</td></tr>
+          <tr><td>統編</td><td>37796780</td></tr>
+          <tr><td>型態</td><td><b>合夥</b>；登記機關新北市政府經濟發展局</td></tr>
+          <tr><td>負責人</td><td>王天霖</td></tr>
+          <tr><td>合夥人</td><td>王美雲、蔡慧潔（2026-08 變更）</td></tr>
+          <tr><td>登記地址</td><td>新北市新莊區西盛街 163 號 5 樓</td></tr>
+          <tr><td>實際作業地</td><td><b>桃園市八德區永安街 25 巷 6 號</b>（徵才資料）；電話 03-3749978、傳真 03-3749976</td></tr>
+          <tr><td>營業項目</td><td>電子材料、電器、電信器材、電腦批發；電子零組件、電腦週邊、通訊器材製造；國際貿易；<b>人力派遣業</b></td></tr>
+          <tr><td>財稅營業項目</td><td>電子器材、電子設備批發；其他電子、通訊設備及零組件批發</td></tr>
+          <tr><td>進出口</td><td>國貿署登記有進、出口資格（2023-06 換發）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="nm">沿革</div>
+      <ul class="timeline">
+        <li><span class="yr">2009</span>同一負責人在新莊西盛街設「美雲企業社」（合夥，資本 20 萬，2017-07 撤銷）</li>
+        <li><span class="yr">2011</span>同址再設「宏天企業社」（獨資，20 萬，已歇業）</li>
+        <li><span class="yr">2013-02</span><b>美雲精密企業社設立</b>，登記於桃園市桃園區大原路，資本 20 萬</li>
+        <li><span class="yr">2016</span>以協力廠商身分派人進 HTC 產線，做手機閃光燈鏡片全檢、重工（見第 4 節）</li>
+        <li><span class="yr">2018-10</span>登記地址遷到新北新莊西盛街 163 號 5 樓</li>
+        <li><span class="yr">2019-12</span>資本 20 萬 → <b>350 萬</b></li>
+        <li><span class="yr">2020-09</span>另設「美雲精密電子企業社」（龜山，獨資，20 萬）</li>
+        <li><span class="yr">2021-08</span>負責人另設「邑美精密股份有限公司」（300 萬，金屬加工類）</li>
+        <li><span class="yr">2026-03</span>資本 350 萬 → <b>750 萬</b>；同月卸下邑美精密董事長</li>
+        <li><span class="yr">2026-08</span>合夥人變更為王美雲、蔡慧潔</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="t">解讀：登記在新北，人和產線在桃園</div>
+    <p class="body">登記地址 2018 年起掛在新莊一棟大樓的 5 樓，同址還有兩家已歇業的同負責人商號和其他公司，<b>比較像通訊登記地址</b>（推論）。實際作業在桃園：電話是 03 區碼，徵才地點都是八德永安街。<b>這種「登記地與作業地分開」、多個小商號並存的型態，在挑選重工、人力承攬業很常見。</b></p>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">3</span>它實際在做什麼？</h2>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:150px">證據</th><th>內容</th><th style="width:150px">指向</th></tr></thead>
+    <tbody>
+      <tr class="rowhl"><td>518 人力銀行公司頁</td><td>經營項目：「3C 產品／電子零組件／專業成型／<b>Sorting／Rework</b>／組立／維修／檢驗／包裝」；員工 50 人</td><td class="part">挑選重工、組裝</td></tr>
+      <tr><td>1111 人力銀行公司頁</td><td>「本公司主要從事電子零件加工組裝檢驗」</td><td class="part">組裝檢驗</td></tr>
+      <tr class="rowhl"><td>徵才（518、小雞上工）</td><td>八德日班作業員：「現場電子產品組裝、檢驗、包裝出貨」；無經驗可，時薪約 NT$190、<b>領現金</b>、每次需求 5 人</td><td class="part">勞力密集後段作業</td></tr>
+      <tr><td>登記營業項目</td><td>含「人力派遣業」；財稅項目只有電子器材批發</td><td class="part">承攬、派遣</td></tr>
+      <tr class="rowhl"><td>2016 判決</td><td>派人進 HTC 產線，兩班 24 小時做全檢與重工，出具聲明書作為勞務費用憑證</td><td class="part">現場全檢人力</td></tr>
+      <tr><td>工廠登記</td><td>本身、美雲精密電子、邑美精密<b>都沒有登記工廠</b></td><td class="no">無自有製造廠證據</td></tr>
+      <tr><td>沖壓／CNC／模具</td><td>公開資料、徵才都沒有機台操作或技術職缺</td><td class="no">查無</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note" style="margin-top:8px">「專業成型」字樣只出現在 518 的自填經營項目，沒有設備或職缺佐證，無法判斷是自有還是轉包。</p>
+</section>
+
+<section class="blk">
+  <h2><span class="num">4</span>2016 年 HTC 全檢案——唯一可查的實戰紀錄</h2>
+  <div class="grid-2">
+    <div class="card co s">
+      <div class="nm">案情（桃園地院 105 年度重訴字 326 號）</div>
+      <div class="vrow"><span class="vk note">當事人</span><div>原告豐昱精密（射出成形廠）、被告大昱光電（光學元件商）。<b>美雲精密不是當事人</b></div></div>
+      <div class="vrow"><span class="vk note">事件</span><div>大昱光電替 HTC 開發手機閃光燈鏡片，委託豐昱精密射出；因料管清洗不完全造成混料，穿透率不足，影響雷射對焦</div></div>
+      <div class="vrow"><span class="vk plus">美雲的角色</span><div>大昱光電找<b>人力派遣公司與協力廠商</b>進 HTC 產線，2016-04-11 至 06-08 兩班 24 小時全檢 <b>424,679 顆</b>，挑出不良 32,273 顆。法院採用的外部人員勞務費約 NT$195 萬，憑證之一是<b>「美雲精密企業社聲明書」</b></div></div>
+      <div class="vrow"><span class="vk note">判決</span><div>2017-09-08，大昱光電須付豐昱精密 NT$437,390；與美雲無關</div></div>
+    </div>
+    <div class="card co k">
+      <div class="nm">這件事說明什麼</div>
+      <div class="vrow"><span class="vk plus">能力</span><div><b>能在短時間內調人進客戶產線</b>，配合兩班 24 小時的緊急全檢——這是挑選重工廠的核心賣點</div></div>
+      <div class="vrow"><span class="vk plus">客戶層級</span><div>2016 年就做過品牌大廠（HTC）專案，雖然是二、三手轉包</div></div>
+      <div class="vrow"><span class="vk minus">定位</span><div>它賣的是<b>人力與時間</b>，不是製程。出問題的零件是別人做的，它負責挑出來、重工</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">5</span>關係企業——同一負責人的五個商號</h2>
+  <figure>
+    <svg viewBox="0 0 720 250" role="img" aria-label="負責人王天霖名下五個商號：美雲精密企業社、美雲精密電子企業社、邑美精密股份有限公司（已卸任）、美雲企業社（撤銷）、宏天企業社（歇業）" style="width:100%;height:auto;display:block">
+      <rect x="285" y="10" width="150" height="44" rx="8" fill="none" stroke="currentColor" stroke-width="1.2"/>
+      <text x="360" y="30" text-anchor="middle" font-size="13" fill="currentColor">負責人</text>
+      <text x="360" y="47" text-anchor="middle" font-size="14" fill="currentColor" font-weight="700">王天霖</text>
+      <g stroke="currentColor" stroke-width="1" opacity=".5" fill="none">
+        <path d="M360 54 V78 H76 V100"/><path d="M360 78 H218 V100"/><path d="M360 78 V100"/><path d="M360 78 H502 V100"/><path d="M360 78 H644 V100"/>
+      </g>
+      <rect x="10" y="100" width="132" height="128" rx="8" fill="#2a78d6" fill-opacity=".14" stroke="#2a78d6" stroke-width="2"/>
+      <rect x="152" y="100" width="132" height="128" rx="8" fill="none" stroke="currentColor" stroke-width="1.2"/>
+      <rect x="294" y="100" width="132" height="128" rx="8" fill="none" stroke="currentColor" stroke-width="1.2"/>
+      <rect x="436" y="100" width="132" height="128" rx="8" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="5 4" opacity=".6"/>
+      <rect x="578" y="100" width="132" height="128" rx="8" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="5 4" opacity=".6"/>
+      <g font-size="12" text-anchor="middle" fill="currentColor">
+        <text x="76" y="124"><tspan font-weight="700">美雲精密企業社</tspan></text>
+        <text x="76" y="144">本報告對象</text>
+        <text x="76" y="164">2013｜合夥</text>
+        <text x="76" y="184">NT$750 萬</text>
+        <text x="76" y="204">營業中</text>
+
+        <text x="218" y="124"><tspan font-weight="700">美雲精密電子企業社</tspan></text>
+        <text x="218" y="144">桃園龜山</text>
+        <text x="218" y="164">2020｜獨資</text>
+        <text x="218" y="184">NT$20 萬</text>
+        <text x="218" y="204">營業中・同電話</text>
+
+        <text x="360" y="124"><tspan font-weight="700">邑美精密(股)</tspan></text>
+        <text x="360" y="144">現址新北板橋</text>
+        <text x="360" y="164">2021｜NT$300 萬</text>
+        <text x="360" y="184">金屬加工類</text>
+        <text x="360" y="204">2026-03 卸任董事長</text>
+      </g>
+      <g font-size="12" text-anchor="middle" fill="currentColor" opacity=".65">
+        <text x="502" y="124"><tspan font-weight="700">美雲企業社</tspan></text>
+        <text x="502" y="144">新莊西盛街同址</text>
+        <text x="502" y="164">2009｜合夥</text>
+        <text x="502" y="184">NT$20 萬</text>
+        <text x="502" y="204">2017 撤銷</text>
+
+        <text x="644" y="124"><tspan font-weight="700">宏天企業社</tspan></text>
+        <text x="644" y="144">新莊西盛街同址</text>
+        <text x="644" y="164">2011｜獨資</text>
+        <text x="644" y="184">NT$20 萬</text>
+        <text x="644" y="204">歇業</text>
+      </g>
+    </svg>
+    <figcaption>實線框為營業中，虛線框為已歇業或撤銷；藍框為本報告對象。</figcaption>
+  </figure>
+  <div class="callout">
+    <div class="t">值得注意：邑美精密是唯一的金屬加工線索</div>
+    <p class="body">邑美精密的財稅營業項目是「<b>未分類其他金屬加工處理、其他未分類金屬製品製造</b>」，所營事業也有鋁鑄造、鋁擠型、螺絲、其他金屬製品——是這群商號裡唯一跟金屬件沾得上邊的。但它同樣<b>沒有登記工廠</b>，2024–2025 年地址從龜山搬到樹林、再到板橋一樓，<b>2026-03 王天霖卸任，改由陳星豪任董事長、持股 80%</b>。若美雲承接金屬件，<b>貨是否經由邑美或其他加工廠轉做</b>，值得追。</p>
+  </div>
+  <p class="note" style="margin-top:8px">另有兩筆政府標案（2009 年台電深澳電廠清潔工作）登記在「美雲企業社」名下，但標案公告早於該商號 2009-11 的設立日，<b>應是同名的另一家</b>，本報告不採用。</p>
+</section>
+
+<section class="blk">
+  <h2><span class="num">6</span>實力評估</h2>
+  <div class="meter-row"><div class="meter-k">金屬加工製程（沖壓／CNC）</div><div class="meter-track"><div class="meter-fill" style="width:10%"></div></div><div class="meter-v">0.5 / 5</div></div>
+  <div class="meter-row"><div class="meter-k">挑選、重工、組裝人力</div><div class="meter-track"><div class="meter-fill" style="width:70%"></div></div><div class="meter-v">3.5 / 5</div></div>
+  <div class="meter-row"><div class="meter-k">規模</div><div class="meter-track"><div class="meter-fill" style="width:30%"></div></div><div class="meter-v">1.5 / 5</div></div>
+  <div class="meter-row"><div class="meter-k">品質體系（ISO／IATF）</div><div class="meter-track"><div class="meter-fill" style="width:10%"></div></div><div class="meter-v">查無</div></div>
+  <div class="meter-row"><div class="meter-k">法律結構與透明度</div><div class="meter-track"><div class="meter-fill" style="width:30%"></div></div><div class="meter-v">1.5 / 5</div></div>
+  <div class="meter-row"><div class="meter-k">履約紀錄</div><div class="meter-track"><div class="meter-fill" style="width:60%"></div></div><div class="meter-v">3 / 5</div></div>
+  <p class="note">評分邏輯：金屬加工無任何設備、工廠或職缺證據；挑選重工有 HTC 案佐證，且徵才持續；約 50 人、資本 750 萬，規模小；查不到任何 ISO 認證；合夥商號不公開財報，登記地與作業地分離；13 年營業、本身無訴訟，履約紀錄中等。</p>
+
+  <div class="callout">
+    <div class="t">核心結論：它強在調人，不在製程</div>
+    <p class="body">美雲精密的真正能力是<b>快速調度作業員做挑選、重工、組裝、包裝</b>，在桃園八德有作業點、約 50 人，13 年來穩定營業；2016 年也有進客戶產線做緊急全檢重工的紀錄。<b>在挑選、重工這類後段作業上</b>，它的人力調度速度和工時單價，很可能比我方有競爭力。</p>
+    <p class="body" style="margin-top:8px">它的弱點在<b>製程</b>：沒有沖壓、CNC、模具，也查不到焊接、清洗或洩漏測試設備與品質認證。<b>如果重工只需要挑選、外觀修整、重新包裝，它做得來；如果要再加工、補焊、清洗或氣密測試，它就得轉外包或借用客戶的設備</b>——這是我方可以切入的地方。</p>
+  </div>
+</section>
+
+<section class="blk">
+  <h2><span class="num">7</span>對我方的意涵</h2>
+  <div class="scroll">
+  <table class="cmp">
+    <thead><tr><th style="width:150px">面向</th><th>建議</th></tr></thead>
+    <tbody>
+      <tr class="rowhl"><td><b>競爭定位</b></td><td>挑選、重工是它的本業。<b>單純比工時單價和調人速度，我方不佔優勢</b>；要比的是「懂製程、能從根因修」</td></tr>
+      <tr><td><b>先確認重工內容</b></td><td>向客戶問清楚重工要做什麼：<br>・只是挑選、外觀修整、重新包裝 → 它做得來<br>・需要去毛邊、再加工、補焊、清洗、氣密／洩漏測試 → <b>它查無相關設備</b>，會轉外包或借用客戶設備，品質與追溯多一層風險</td></tr>
+      <tr class="rowhl"><td><b>若重工對象是我方出貨的零件</b></td><td>不良原因分析與 8D 應由我方主導；請客戶提供重工規範、重工後的檢驗數據與不良統計，避免第三方重工後責任歸屬不清，也能掌握我方產品的實際問題</td></tr>
+      <tr><td>向客戶可強調的差異</td><td>我方懂原始製程，可以<b>製造＋重工一條龍</b>、從根因改善，而不只是挑出來；我方是公司組織、有登記工廠與品質認證；它是<b>合夥商號、無登記工廠、查無 ISO</b></td></tr>
+      <tr><td>也可以反過來合作</td><td>它有桃園八德作業點、約 50 人、能進客戶產線做全檢——若我方日後需要短期重工或全檢人力，它可以是外包選項（推論，需實地確認）</td></tr>
+      <tr><td>時間點</td><td>2026-03 增資到 750 萬、2026-08 換合夥人——是否和接新客戶擴編有關，值得留意（推論）</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<footer>
+  <p><b>資料來源（檢索日期 2026-10-20）。</b><a href="https://www.twincn.com/item.aspx?no=37796780">台灣公司網：美雲精密企業社</a>（商工登記、資本與合夥人變更、財政部稅籍、國貿署進出口資格、同負責人與同地址商號）；<a href="https://www.twincn.com/item.aspx?no=91111526">邑美精密股份有限公司</a>（董監事、地址變更、財稅營業項目）；<a href="https://www.twincn.com/item.aspx?no=87399511">美雲精密電子企業社</a>；<a href="https://www.twincn.com/item.aspx?no=30302869">美雲企業社</a>；<a href="https://www.twincn.com/item.aspx?no=26534487">宏天企業社</a>；<a href="https://www.lawsq.com/book/782028722">桃園地院 105 年度重訴字 326 號判決</a>（HTC 全檢案）；<a href="https://www.518.com.tw/company-xWRZXM.html">518 熊班公司頁</a>（經營項目、員工人數）；<a href="https://www.518.com.tw/job-LkM9bY.html">518 職缺</a>與<a href="https://www.chickpt.com.tw/job-Qkz1GPNEP58v">小雞上工職缺</a>（八德作業地、工作內容、時薪）；<a href="https://www.1111.com.tw/corp/69038999">1111 人力銀行公司頁</a>（頁面有驗證機制，僅採用搜尋結果摘要）。</p>
+  <p style="margin-top:10px"><b>未驗證事項。</b>營收、主要客戶、八德作業點是自有或租用、是否有任何成型或加工機台、是否有 ISO 認證，公開資料均查不到。518 公司頁的資本額仍是舊的 350 萬，員工 50 人為公司自填、更新日期不明。小雞上工職缺顯示刊登於約 10 個月前。另有一筆 2024 年消費者債務更生案的判決書出現本公司名稱，屬個人案件、非公司債務，本報告未採用。建議以產業人脈或實地拜訪確認作業點規模與設備。</p>
+  <p style="margin-top:10px"><b>僅供內部策略參考。</b></p>
+</footer>
+
+</div>
+</body></html>
